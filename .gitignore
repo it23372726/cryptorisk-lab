@@ -1,0 +1,47 @@
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+.DS_Store
+Thumbs.db
+.env
+*.key
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Python environments
+.venv/
+venv/
+env/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Secrets
+.env.*
+!.env.example
+*.pem
+*.p12
+
+# macOS and editors
+.DS_Store
+.idea/
+.vscode/
+
+# Temporary outputs
+*.log
+*.zip
+build/
+dist/
+data/raw/
+
+# Private working material
+private/
+ai_evidence/
+transcripts/
+submission/
