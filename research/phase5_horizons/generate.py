@@ -276,7 +276,7 @@ def generate():
             assert rolling>0 and np.isfinite(rolling)
             available=[h for h in HORIZONS if origin+dt.timedelta(days=h)<=cut]
             projections=model_shocks(filt["ewma"],filt["garch"],max(available),
-                        seed_e=year*10000+idx*1009+101,
+                        seed_e=(20251124 if year==2025 else 20261124)+idx*1009+101,
                         seed_g=(20251124 if year==2025 else 20261124)+idx*1009+211,
                         omega=GARCH_FIT[0],alpha=GARCH_FIT[1],beta=GARCH_FIT[2])
             # Keep published 2026 EWMA streams consistent with original 2026
