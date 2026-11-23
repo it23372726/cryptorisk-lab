@@ -23,7 +23,7 @@ class ForecastChart {
   canvas.addEventListener("pointermove",e=>this.onPointerMove(e));
   canvas.addEventListener("pointerup",e=>this.onPointerUp(e));
   canvas.addEventListener("pointercancel",e=>this.onPointerUp(e,true));
-  canvas.addEventListener("lostpointercapture",e=>this.onPointerUp(e,true));
+  canvas.addEventListener("lostpointercapture",e=>{if(this.pointers.has(e.pointerId))this.onPointerUp(e,true);});
   canvas.addEventListener("pointerleave",()=>{if(!this.drag&&!this.pinch){this.cursor=null;this.crosshairPrice=null;this.tooltip.style.display="none";this.queueDraw();}});
   canvas.addEventListener("dblclick",e=>{if(this.inPriceAxis(this.local(e))){this.resetPriceScale();}else this.resetZoom();});
   canvas.addEventListener("click",e=>{
