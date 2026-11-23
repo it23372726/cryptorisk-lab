@@ -55,6 +55,11 @@ try:
         page.wait_for_function("() => window.CRLApp.result && window.CRLApp.result.models.gbm.n === 1000", timeout=30000)
         assert first == page.locator("#kpiGbm").inner_text(), "Same seed/settings did not reproduce GBM output"
         print("PASS: Reproducible Monte Carlo probabilities", flush=True)
+        # Capture the full 30-day forecast fan and sample trajectories, not a half-drawn frame.
+        page.locator("#revealBtn").click()
+        page.locator("#dayScrub").evaluate("(e) => { e.value = 30; e.dispatchEvent(new Event('input',{bubbles:true})); }")
+        page.evaluate("() => window.scrollTo(0, 0)")
+        page.wait_for_timeout(200)
         page.screenshot(path="browser-verification.png", full_page=True)
         page.locator("#resetBtn").click()
         assert page.locator("#kpiGbm").inner_text() == "—"
