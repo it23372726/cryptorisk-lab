@@ -70,6 +70,9 @@ try:
         page.screenshot(path="browser-verification-unified-2025.png",full_page=False)
         page.locator('button[data-holdout-threshold="20"]').click()
         assert "8 actual" in page.locator("#holdoutSample").inner_text()
+        assert "≥20%" in page.locator("#holdoutEventLabel").inner_text()
+        assert "≥20%" in page.locator("#holdoutBestLabel").inner_text()
+        assert "8 / 335" in page.locator("#holdoutEventHeadline").inner_text()
         page.locator('button[data-holdout-threshold="35"]').click()
         assert page.locator("#holdoutFindLoss").is_disabled()
         page.locator('button[data-holdout-threshold="10"]').click()
@@ -171,6 +174,8 @@ try:
                       exploratory:document.getElementById("holdoutInferenceTable").textContent.includes("Exploratory")};
                 }""")
                 assert evidence["n"]==counts[year][h],evidence
+                assert str(counts[2025][h]) in page.locator('[data-validation-year="2025"] span').inner_text()
+                assert str(counts[2026][h]) in page.locator('[data-validation-year="2026"] span').inner_text()
                 assert evidence["year"]==year and evidence["horizon"]==h
                 assert evidence["first"]==f"{year}-01-01"
                 assert evidence["actualLast"]==("2025-12-31" if year==2025 else "2026-10-31")
