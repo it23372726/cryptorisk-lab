@@ -14,7 +14,7 @@ permissions:
   contents: write
 
 jobs:
-  2026-holdout:
+  holdout-2026:
     name: Verify and execute frozen 2026 model comparison
     runs-on: ubuntu-latest
     timeout-minutes: 35
