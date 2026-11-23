@@ -2,7 +2,7 @@
 
 ## Purpose
 
-This website section makes the assignment's central claim testable: whether a two-state Markov volatility model estimated 30-day Bitcoin downside risk more reliably than constant-volatility GBM. EWMA is retained as an exploratory comparison, not retroactively elevated to the original primary research question.
+This website section makes the original study's central research question testable: whether a two-state Markov volatility model estimated 30-day Bitcoin downside risk more reliably than constant-volatility GBM. EWMA is retained as an exploratory comparison, not retroactively elevated to the original primary research question.
 
 ## Original, notebook-executed data
 

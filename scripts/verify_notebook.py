@@ -17,6 +17,8 @@ required_markers = [
     "# M2: Model-selection experiment",
     "# M3: Verify the entire",
     "# M4: Retrospective risk diagnostics",
+    "# X2: Independently measured Monte Carlo error scaling",
+    "# X5: Explicit 95% paired-seed intervals",
 ]
 cells = ["".join(c.get("source", "")) for c in nb.cells]
 for marker in required_markers:
@@ -161,6 +163,8 @@ for item in [
     "PASS: EWMA candidate selection completed using 2024 validation only",
     "PASS: Three-model 2025 validation, historical benchmark and dependence-aware uncertainty completed",
     "PASS: Terminal risk, daily-close touches, max drawdown and exploratory observed-path checks completed",
+    "PASS: Independent N^(-1/2) Monte Carlo error-scaling experiment completed",
+    "PASS: X5 paired sensitivity confidence intervals completed",
 ]:
     assert item in text_output, f"Missing expected verification: {item}"
 print("PASS: Full notebook executed without errors", flush=True)
@@ -184,6 +188,23 @@ phase1_results = json.loads(phase1_json_line.group(1))
 assert len(phase1_results["candidate_markov_2024_ranking"]) == 12
 assert len(phase1_results["ewma_2024_ranking"]) == 4
 assert len(phase1_results["retrospective_2025_comparison"]) == 15
+# Save measured extension statistics in the public verification artifact.
+x2_line = next((line.split("X2_ERROR_SCALING_JSON=", 1)[1] for line in text_output.splitlines()
+                if "X2_ERROR_SCALING_JSON=" in line), None)
+assert x2_line, "Missing measured X2 Monte Carlo error-scaling evidence"
+x2_evidence = json.loads(x2_line)
+assert len(x2_evidence["rows"]) == 4
+assert x2_evidence["repeats_per_n"] == 120
+assert -0.85 < x2_evidence["observed_slope"] < -0.15
+report["x2_error_scaling"] = x2_evidence
+x5_line = next((line.split("X5_SENSITIVITY_CI_JSON=", 1)[1] for line in text_output.splitlines()
+                if "X5_SENSITIVITY_CI_JSON=" in line), None)
+assert x5_line, "Missing measured X5 sensitivity confidence intervals"
+x5_evidence = json.loads(x5_line)
+assert len(x5_evidence) == 14
+assert all(row["95% lower"] <= row["Effect"] <= row["95% upper"] for row in x5_evidence)
+report["x5_sensitivity_confidence_intervals"] = x5_evidence
+print("PASS: Machine-readable X2 scaling and X5 uncertainty evidence exported", flush=True)
 report["phase1_results"] = phase1_results
 calibration_json_line = re.search(r"WEB_CALIBRATION_JSON=(\{[^\n]+\})", text_output)
 assert calibration_json_line, "Missing notebook-derived browser calibration state"
