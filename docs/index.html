@@ -6,13 +6,15 @@
 <meta name="description" content="Explore historical Bitcoin prices and compare reproducible 30-day downside-risk simulations under GBM, Markov switching and EWMA volatility.">
 <title>CryptoRisk Lab · Bitcoin Risk Simulation Terminal</title>
 <link rel="stylesheet" href="./v2.css">
+<link rel="stylesheet" href="./v2-validation.css">
 <script defer src="./v2-history.js"></script><script defer src="./v2-models.js"></script>
-<script defer src="./v2-chart.js"></script><script defer src="./v2-app.js"></script>
+<script defer src="./v2-validation-data.js"></script><script defer src="./v2-chart.js"></script><script defer src="./v2-app.js"></script>
+<script defer src="./v2-validation.js"></script>
 </head>
 <body>
 <header class="topbar"><div class="wrap top-inner">
 <a class="brand" href="#simulation" aria-label="CryptoRisk Lab, home"><span class="mark">₿</span><span><strong>CryptoRisk Lab</strong><small>SCIENTIFIC SIMULATION TERMINAL</small></span></a>
-<nav class="nav" aria-label="Main sections"><a class="active" href="#simulation">Simulation Lab</a><a href="#comparison">Risk Comparison</a><a href="#validation">2025 Validation</a><a href="#methodology">Methodology</a></nav>
+<nav class="nav" aria-label="Main sections"><a class="active" href="#simulation">Simulation Lab</a><a href="#comparison">Risk Comparison</a><a href="#validation">Predictions vs Reality</a><a href="#methodology">Methodology</a></nav>
 <div class="top-right"><span class="pill"><span class="live-dot"></span>Historical research · Not live</span><button class="top-help" id="helpOpen" type="button">How it works <span aria-hidden="true">?</span></button></div>
 </div></header>
 <main class="wrap">
@@ -60,6 +62,7 @@
  <div class="kpi kpi--markov"><small>MARKOV · TERMINAL LOSS ≥ <span class="thresholdName">10</span>%</small><strong class="color-markov" id="kpiMarkov">—</strong><p id="kpiMarkovCi">Two-state calm/volatile model</p></div>
  <div class="kpi kpi--ewma"><small>EWMA · TERMINAL LOSS ≥ <span class="thresholdName">10</span>%</small><strong class="color-ewma" id="kpiEwma">—</strong><p id="kpiEwmaCi">Dynamic variance · notebook-calibrated</p></div>
 </div>
+<p class="validation-linkline"><strong>Did the models get it right?</strong> <a href="#validation">Compare 335 historical 2025 forecasts with actual Bitcoin losses and Brier scores</a></p>
 <div class="insight" id="insight" role="status"><strong>Explore how risk evolves.</strong> Run the experiment to animate genuine simulations. Pale forecast bands represent projected price percentiles, not observed prices or confidence intervals for estimates.</div>
 </div></div>
 <section class="section" id="comparison"><div class="section-heading"><div><div class="overline">01 · Scenario Analysis</div><h2>Risk comparison</h2><p>Identical horizon, investment and thresholds; all metrics are calculated from simulated paths.</p></div><span class="pill">INTERACTIVE OUTPUTS</span></div>
@@ -77,7 +80,7 @@
  <div class="card"><div class="card-head"><div><h2>Terminal return distribution</h2><p>Actual Monte Carlo final returns; custom threshold is highlighted</p></div></div><div class="content-pad"><canvas id="distribution" class="canvas-small" aria-label="Comparison of simulated terminal return histograms"></canvas><p class="risk-note">Shaded bars show the share of outcomes in each return bin. A model's plotted dispersion is not proof of its historical accuracy.</p></div></div>
  </div>
 </section>
-<section class="section" id="validation"><div class="section-heading"><div><div class="overline">02 · Historical evidence</div><h2>2025 retrospective validation</h2><p>Frozen notebook results, independent of sliders above. The 335 origins overlap and are not independent trials.</p></div><span class="pill">RESEARCH EVIDENCE</span></div>
+<section class="section" id="validation"><div class="section-heading"><div><div class="overline">02 · Historical evidence</div><h2>Predictions vs Reality</h2><p>Explore all 335 dated, 30-day 2025 forecasts from the executed notebook and see what Bitcoin actually did.</p></div><span class="pill">RESEARCH EVIDENCE</span></div>
  <div class="card"><div class="card-head"><div><h2>30-day terminal loss probabilities</h2><p>Observed frequency versus average model forecast · Binance 2025</p></div><span class="pill">FIXED BACKTEST</span></div>
   <div class="content-pad table-scroll"><table><thead><tr><th>Threshold</th><th>Observed</th><th>Historical freq.</th><th class="color-gbm">GBM</th><th class="color-markov">Markov</th><th class="color-ewma">EWMA</th></tr></thead>
  <tbody><tr><td>≥10% loss</td><td>18.51% (62/335)</td><td>19.23%</td><td>21.35%</td><td>20.05%</td><td>11.91%</td></tr>
