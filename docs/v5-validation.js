@@ -107,14 +107,14 @@ function metadata(){
  $("holdoutReplaySlider").value=String(state.day);
  setText("validationYearTag",year+" · "+(original?(is2025?"ORIGINAL + EXPLORATORY":"FROZEN HOLDOUT"):"EXPLORATORY HORIZON"));
  setText("validationHorizonTag",h+" DAYS · "+(original?"ORIGINAL":"EXPLORATORY"));
- setText("validationPeriodDates",rows.length+" complete "+h+"-day forecasts · "+(is2025?"2025":"Jan–Oct 2026"));
+ setText("validationPeriodDates",rows.length+" forecasts · "+h+"-day complete outcomes · "+(is2025?"2025":"Jan–Oct 2026"));
  setText("holdoutDateLeft","1 January "+year);
  setText("holdoutDateRight",rows.at(-1).origin);
  setText("holdoutOriginCount",rows.length+" complete origins");
  for(let letter of ["A","B","C","D","E","F"])setText("validationHorizonDays"+letter,String(h));
  setText("validationYearStatus",
   original?
-   (is2025?"2025 original 30-day GBM, Markov and EWMA probabilities remain unchanged; the added Adaptive GBM/GARCH 2025 models are exploratory."
+   (is2025?"2025 original 30-day GBM, Markov and EWMA probabilities remain unchanged; the added Adaptive GBM/GARCH 2025 models are post-hoc exploratory."
           :"2026 original fixed-protocol 30-day retrospective holdout, including its original Holm-adjusted primary comparisons."):
    (year+" · "+h+"-day exploratory retrospective evaluation. All five model forecasts use information available through each origin only. This is not new independent statistical confirmation."));
  setText("holdoutProvenance",
