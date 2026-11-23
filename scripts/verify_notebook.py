@@ -35,7 +35,15 @@ print("WEB_CALIBRATION_JSON=" + _crl_export_json.dumps({
   "markov_sigma": [float(x) for x in regime_sigma],
   "markov_transition": [[float(x) for x in row] for row in transition_matrix],
   "ewma_decay": float(M7_SELECTED_DECAY),
-  "ewma_initial_variance": float(m9_origin_var)
+  "ewma_initial_variance": float(m9_origin_var),
+  "ewma_variance_by_decay": {
+    f"{i/100:.2f}": float(pd.Series(
+      ewma_nextday_variances(price_df["log_return"].to_numpy(), mu_cal,
+                             i/100, sigma_cal**2),
+      index=price_df["date"]
+    ).loc[pd.Timestamp("2024-12-31", tz="UTC")])
+    for i in range(80, 100)
+  }
 }, separators=(",", ":")))
 """
 print("Notebook source:", source, "cells", len(nb.cells), flush=True)
