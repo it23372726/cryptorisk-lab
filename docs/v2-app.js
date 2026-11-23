@@ -174,7 +174,8 @@ function drawDistribution(){
  const pad={l:46,r:12,t:21,b:42},W=w-pad.l-pad.r,H=h-pad.t-pad.b,colors={gbm:"#64aafa",markov:"#f0bd6a",ewma:"#3cd7ad"};
  g.font="11px system-ui";g.textBaseline="middle";g.textAlign="right";
  let values=result?modelNames.flatMap(m=>result.models[m].returns):[];
- const lo=result?Math.max(-95,Math.floor(Math.min(...values)/10)*10):-65,hi=result?Math.min(400,Math.ceil(Math.max(...values)/10)*10):70;
+ let minReturn=Infinity,maxReturn=-Infinity;for(let v of values){if(v<minReturn)minReturn=v;if(v>maxReturn)maxReturn=v;}
+ const lo=result?Math.max(-95,Math.floor(minReturn/10)*10):-65,hi=result?Math.min(400,Math.ceil(maxReturn/10)*10):70;
  const span=Math.max(30,hi-lo),bins=44,B=span/bins,hists={},x=v=>pad.l+(v-lo)/span*W;
  let maxP=.1;
  if(result){
