@@ -59,3 +59,18 @@ Every archive URL, SHA-256 and daily count is recorded in `docs/btc-2025-sources
 
 Source specification: https://github.com/binance/binance-public-data
 
+
+## Chart interaction upgrade: cursor, zoom and navigation
+
+The chart continues to render the original observed Binance daily OHLCV candles, seed-reproducible Monte Carlo closing-price paths and model percentile bands using the same data and original model engine. The user-experience upgrade changes **only chart interaction and rendering**, never calibration or simulation data.
+
+- **Pointer-anchored wheel/trackpad zoom:** date beneath the cursor remains fixed while the visible bar count eases smoothly. Two-finger horizontal trackpad movement pans the chart.
+- **Drag-to-pan with momentum:** a short movement threshold preserves clicks for selecting an individual simulated path. Kinetic panning is disabled by the operating-system reduced-motion preference.
+- **Two-finger touch zoom and pan:** two active pointers scale around their centroid and can translate horizontally without a network dependency.
+- **Right price scale:** hovering anywhere in the plotted price area displays a horizontal crosshair and a precise, dynamically calculated USDT price label on the chart's right axis. The inverse pixel-to-price transformation uses the **same displayed min/max bounds** as the candles and risk lines.
+- **Vertical price-scale drag:** drag the chart's right axis to zoom its price scale; double-click the axis for automatic vertical scaling.
+- **Accessible keyboard shortcuts:** Left/Right to pan, Up/Down or +/- to zoom, Home to fit the research forecast, End to reveal and fit the observed full year, Escape to restore automatic price scaling.
+- **Visible-range autoscaling:** an extreme scenario loss threshold no longer forces the whole price chart to compress, and distant unobserved historical ranges do not determine the displayed vertical scale.
+- **Frame-coalesced hover rendering:** pointer move events are synchronized to animation frames to avoid unnecessary canvas redraws.
+
+Verification extends the GitHub Actions Chromium smoke test with a screenshot and numeric assertions covering accurate cursor-price inversion, wheel zoom date anchoring, drag-to-pan, price-axis scaling, and keyboard navigation. The unchanged notebook verification remains a separate mandatory job.
