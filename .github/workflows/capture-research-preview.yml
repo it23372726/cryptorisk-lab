@@ -1,0 +1,60 @@
+name: Capture research dashboard preview
+
+on:
+  push:
+    branches: [final-research-docs-2026-11-24]
+
+permissions:
+  contents: write
+
+jobs:
+  screenshot:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install headless Chromium
+        run: |
+          python -m pip install playwright
+          python -m playwright install --with-deps chromium
+      - name: Capture real five-model simulation dashboard
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from playwright.sync_api import sync_playwright
+          with sync_playwright() as p:
+              browser = p.chromium.launch(headless=True)
+              page = browser.new_page(viewport={"width": 1440, "height": 950}, device_scale_factor=1)
+              errors = []
+              page.on("pageerror", lambda error: errors.append(str(error)))
+              page.goto(Path("docs/index.html").resolve().as_uri(), wait_until="load")
+              page.locator("#startBtn").click()
+              page.wait_for_function(
+                  "() => /^\\d/.test(document.querySelector('#kpiGbm').textContent.trim())",
+                  timeout=90000
+              )
+              page.evaluate("""() => {
+                  const s=document.getElementById("dayScrub");
+                  s.value=s.max;
+                  s.dispatchEvent(new Event("input",{bubbles:true}));
+              }""")
+              page.wait_for_timeout(500)
+              Path("figures").mkdir(exist_ok=True)
+              page.screenshot(path="figures/demo-screenshot.png", full_page=False)
+              assert not errors, f"Browser errors: {errors}"
+              print("PASS: Screenshot of actual seeded five-model dashboard saved")
+              browser.close()
+          PY
+      - name: Commit authentic screenshot to review branch
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add figures/demo-screenshot.png
+          if ! git diff --cached --quiet; then
+            git commit -m "Add verified five-model dashboard screenshot"
+            git push origin HEAD:final-research-docs-2026-11-24
+          fi
