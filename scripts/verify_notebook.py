@@ -26,6 +26,11 @@ for marker in required_markers:
     assert any(marker in content for content in cells), marker
 # Add a read-only provenance probe to the in-memory executed copy.
 # The committed scientific notebook is unchanged; the probe exists in memory only.
+# Register the Jupyter inline backend in the in-memory run. Headless CI
+# otherwise computes plots without saving image/png outputs for reviewers.
+# The checked-in notebook source is not modified by this execution setup.
+first_code_index = next(i for i, cell in enumerate(nb.cells) if cell.cell_type == "code")
+nb.cells[first_code_index].source = "%matplotlib inline\\n".replace("\\n", "\n") + nb.cells[first_code_index].source
 last_code_index = max(i for i, cell in enumerate(nb.cells) if cell.cell_type == "code")
 nb.cells[last_code_index].source += """
 import json as _crl_export_json
@@ -168,6 +173,20 @@ for item in [
     "PASS: X5 paired sensitivity confidence intervals completed",
 ]:
     assert item in text_output, f"Missing expected verification: {item}"
+# The scientific evidence includes actual plotted curves, not just printed tables.
+x2_index = next(
+    i for i, cell in enumerate(nb.cells)
+    if cell.cell_type == "code"
+    and "# X2: Independently measured Monte Carlo error scaling" in cell.source
+)
+x2_png = sum("image/png" in item.get("data", {}) for item in executed.cells[x2_index].get("outputs", []))
+all_png = sum(
+    "image/png" in item.get("data", {})
+    for cell in executed.cells for item in cell.get("outputs", [])
+)
+assert x2_png >= 1, "The X2 log-log verification plot was not rendered as an image"
+assert all_png >= 8, f"Too few archived notebook figures: {all_png}"
+print(f"PASS: {all_png} real inline scientific figures saved, including X2 error scaling", flush=True)
 print("PASS: Full notebook executed without errors", flush=True)
 print(f"Execution time: {elapsed:.1f}s", flush=True)
 for line in text_output.splitlines():
@@ -177,6 +196,8 @@ report = {
     "notebook": str(source), "executed_cells": len(executed.cells),
     "execution_seconds": round(elapsed, 2),
     "result": "PASS",
+    "inline_figures": all_png,
+    "x2_scaling_figures": x2_png,
     "verified_new_sections": required_markers,
 }
 
