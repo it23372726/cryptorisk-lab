@@ -50,6 +50,7 @@
  <div class="timeline">
   <div class="timeline-row"><div class="timeline-left"><button class="button-secondary" id="playBtn" disabled type="button">▶ Play</button><button class="button-secondary" id="restartPlayback" disabled type="button">↺ Replay</button><output id="dayLabel">Day 0 / 30</output><span class="status" id="regimeStatus"></span></div><div class="timeline-left"><label for="speed" class="subtle">Speed</label><select id="speed"><option value=".5">0.5×</option><option selected value="1">1×</option><option value="2">2×</option><option value="4">4×</option></select><button class="button-secondary" id="revealBtn" type="button" aria-pressed="false">Reveal actual 2025</button></div></div>
   <input id="dayScrub" type="range" value="0" min="0" max="30" step=".1" disabled aria-label="Forecast playback day">
+  <p class="path-inspector" id="pathInspector" role="status">Choose one model and click a visible simulated trajectory to inspect it day by day.</p>
   <div class="timeline-row"><span class="subtle">Drag to inspect any simulated day · Scroll on chart to zoom · Drag chart to pan · Double-click to reset</span><span class="subtle" id="chartMode">Historical candles only · simulation not started</span></div>
  </div>
 </section>
