@@ -1,0 +1,16 @@
+/* Five-horizon historical evidence. A distinct research control, not a live trade setting. */
+.v5-horizon-container{padding:16px 18px 14px;margin:14px 0 18px;background:#132538;border:1px solid #34516c;border-radius:12px}
+.v5-horizon-head{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:13px}
+.v5-horizon-head strong{font-size:14px;color:#edf7ff;font-weight:750}
+.v5-horizon-head p{color:#a3bdcf;font-size:11px;line-height:1.6;margin:5px 0 0}
+.v5-horizon-buttons{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:7px}
+.v5-horizon-buttons button{border:1px solid #38526c;background:#0f1c2c;color:#aac4db;border-radius:9px;font-weight:800;font-size:15px;padding:13px 11px;cursor:pointer;min-height:49px;transition:background .15s ease,border-color .15s ease}
+.v5-horizon-buttons button small{display:block;font-size:9px;font-weight:650;letter-spacing:.03em;line-height:1.3;margin-top:3px;color:#9bbacc}
+.v5-horizon-buttons button[aria-pressed=true]{border-color:#78b9d9;color:#fff;background:#29465d;box-shadow:inset 0 0 0 1px #507b98}
+.v5-horizon-buttons button:hover{border-color:#7dacd0;background:#263c51}
+.v5-horizon-buttons button:focus-visible{outline:2px solid #a9e2ff;outline-offset:2px}
+.v5-horizon-sync{font-size:11px;color:#9cbfd2;margin:12px 0 0;line-height:1.6}
+.v5-horizon-sync[data-mismatch=true]{color:#f1cd94}
+.v5-sample-tag{font-size:10px!important;color:#b0cadb!important}
+@media(max-width:650px){.v5-horizon-container{padding:12px}.v5-horizon-buttons{gap:5px}.v5-horizon-buttons button{font-size:13px;padding:11px 4px}.v5-horizon-head p{font-size:10px}}
+@media(prefers-reduced-motion:reduce){.v5-horizon-buttons button{transition:none}}

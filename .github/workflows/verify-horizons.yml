@@ -1,0 +1,51 @@
+name: Generate audited five-horizon Bitcoin forecasts
+
+on:
+  push:
+    branches: [research-web-v5-multi-horizon-7-14-30-60-90]
+    paths:
+      - 'research/phase5_horizons/generate.py'
+      - 'research/phase5_horizons/verify_horizons.py'
+      - 'research/phase5_horizons/EXPLORATORY_PROTOCOL.md'
+      - '.github/workflows/verify-horizons.yml'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'research/phase5_horizons/**'
+      - 'docs/v5-evidence-horizons.js'
+      - '.github/workflows/verify-horizons.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  horizons:
+    name: Reproduce 5 horizons against archived Binance daily closes
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+      - name: Install reproducible scientific libraries
+        run: python -m pip install -r research/phase3_2026/requirements-lock.txt
+      - name: Freeze and compute all five horizon forecast series
+        run: python research/phase5_horizons/generate.py
+      - name: Independently verify original 30-day findings and all horizon scores
+        run: python research/phase5_horizons/verify_horizons.py
+      - name: Confirm reproducible committed horizon datasets (no numerical drift)
+        run: git diff --exit-code -- docs/v5-evidence-horizons.js research/phase5_horizons/results/
+      - name: Upload dated horizon evidence and results
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: five-horizon-2025-2026-scientific-evidence
+          path: |
+            docs/v5-evidence-horizons.js
+            research/phase5_horizons/results/
+          if-no-files-found: error

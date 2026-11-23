@@ -1,4 +1,4 @@
-"""End-to-end scientific browser audit for unified CryptoRisk Lab v4.
+"""End-to-end scientific browser audit for five-horizon CryptoRisk Lab v5.
 
 Verifies all five archived models, 2025 original notebook parity, the
 post-hoc 2025 candidate extensions, untouched independent 2026 validation,
@@ -70,6 +70,9 @@ try:
         page.screenshot(path="browser-verification-unified-2025.png",full_page=False)
         page.locator('button[data-holdout-threshold="20"]').click()
         assert "8 actual" in page.locator("#holdoutSample").inner_text()
+        assert "≥20%" in page.locator("#holdoutEventLabel").inner_text()
+        assert "≥20%" in page.locator("#holdoutBestLabel").inner_text()
+        assert "8 / 335" in page.locator("#holdoutEventHeadline").inner_text()
         page.locator('button[data-holdout-threshold="35"]').click()
         assert page.locator("#holdoutFindLoss").is_disabled()
         page.locator('button[data-holdout-threshold="10"]').click()
@@ -147,6 +150,79 @@ try:
         assert page.locator("#holdoutFinalPrice").inner_text()=="Hidden"
         print("PASS: Bidirectional 2025/2026 year switching maintains correct model and research provenance",flush=True)
 
+
+        # Each historical forecast horizon must be backed by its own genuine
+        # completed-outcome observations, never derived from the 30-day scores.
+        counts={2025:{7:358,14:351,30:335,60:305,90:275},
+                2026:{7:297,14:290,30:274,60:244,90:214}}
+        for year in (2025,2026):
+            page.locator(f'[data-validation-year="{year}"]').click()
+            for h in (7,14,30,60,90):
+                page.locator(f'[data-validation-horizon="{h}"]').click()
+                evidence=page.evaluate("""() => {
+                    const a=window.CRLValidationUnified;
+                    const d=a.evidence,rs=a.rows,t=a.state.threshold;
+                    return {year:a.state.year,horizon:a.state.horizon,n:rs.length,
+                      actualLast:rs.at(-1).target,first:rs[0].origin,
+                      valid:rs.every(r=>(Date.parse(r.target)-Date.parse(r.origin))===a.state.horizon*86400000),
+                      eventCount:rs.reduce((s,r)=>s+r.events[t],0),
+                      sourceEventCount:d.scores[String(t)].events,
+                      score:d.scores["10"].models.gbm.brier,
+                      firstPrice:rs[0].close,sourceForecast:rs[0].prob.garch[10],
+                      replayMax:document.getElementById("holdoutReplaySlider").max,
+                      simHorizon:Number(document.getElementById("horizon").value),
+                      exploratory:document.getElementById("holdoutInferenceTable").textContent.includes("Exploratory")};
+                }""")
+                assert evidence["n"]==counts[year][h],evidence
+                assert str(counts[2025][h]) in page.locator('[data-validation-year="2025"] span').inner_text()
+                assert str(counts[2026][h]) in page.locator('[data-validation-year="2026"] span').inner_text()
+                assert evidence["year"]==year and evidence["horizon"]==h
+                assert evidence["first"]==f"{year}-01-01"
+                assert evidence["actualLast"]==("2025-12-31" if year==2025 else "2026-10-31")
+                assert evidence["valid"] and evidence["eventCount"]==evidence["sourceEventCount"]
+                assert evidence["replayMax"]==str(h)
+                assert evidence["simHorizon"]==h
+                assert 0<=evidence["sourceForecast"]<=1
+                if h!=30:assert evidence["exploratory"], "Exploratory horizons must not claim Holm inference"
+                if year==2025 and h==30:assert "0.150874" in page.locator("#holdoutScoreTable").inner_text()
+                if year==2026 and h==30:assert "0.175239" in page.locator("#holdoutScoreTable").inner_text()
+                if (year,h) in ((2025,7),(2026,90)):
+                    page.evaluate("() => document.querySelector('#validation').scrollIntoView({block:'start',behavior:'instant'})")
+                    page.wait_for_timeout(120)
+                    page.screenshot(path=f"browser-verification-{year}-h{h}.png",full_page=False)
+                    page.locator("#holdoutDateSlider").evaluate(
+                        "(e)=>{e.value=e.max;e.dispatchEvent(new Event('input',{bubbles:true}));}"
+                    )
+                    assert page.locator("#holdoutFinalPrice").inner_text()=="Hidden"
+                    page.locator("#holdoutReveal").click()
+                    assert f"Day {h} / {h}" in page.locator("#holdoutDay").inner_text()
+                    assert page.locator("#holdoutFinalPrice").inner_text()!="Hidden"
+                    assert page.evaluate("""() => {
+                      const a=window.CRLValidationUnified,r=a.rows[a.state.index];
+                      return Math.abs(a.getHistoricalClose(r.target)-r.future)<.01;
+                    }""")
+                    page.locator("#holdoutHide").click()
+            print(f"PASS: {year} five 7–90d horizons, score parity, horizon selection and exact historical H-day outcomes",flush=True)
+
+        # Unsupported custom simulator durations must not silently be presented
+        # as historical forecasts of another duration.
+        page.locator('[data-validation-year="2025"]').click()
+        page.locator('[data-validation-horizon="30"]').click()
+        page.locator("#horizon").evaluate(
+            "(e)=>{e.value=18;e.dispatchEvent(new Event('input',{bubbles:true}));}"
+        )
+        assert page.evaluate("() => window.CRLValidationUnified.state.horizon")==30
+        assert "No audited historical backtest exists" in page.locator("#validationHorizonSync").inner_text()
+        assert page.locator("#validationHorizonSync").get_attribute("data-mismatch")=="true"
+        page.locator("#horizonNumber").evaluate(
+            "(e)=>{e.value=14;e.dispatchEvent(new Event('input',{bubbles:true}));}"
+        )
+        assert page.evaluate("() => window.CRLValidationUnified.state.horizon")==14
+        assert page.locator('[data-validation-horizon="14"]').get_attribute("aria-pressed")=="true"
+        page.locator('[data-validation-horizon="30"]').click()
+        assert page.evaluate("() => Number(document.getElementById('horizon').value)===30")
+        assert page.locator("#validationHorizonSync").get_attribute("data-mismatch")=="false"
+        print("PASS: Exact simulation horizon synchronization and explicit custom-horizon incompatibility warning",flush=True)
         # Original trading-style simulation must remain independent and reproducible.
         page.locator("#mainChart").scroll_into_view_if_needed()
         page.locator('input[name="paths"][value="1000"]').check(force=True)
