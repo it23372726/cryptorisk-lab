@@ -80,5 +80,6 @@ jobs:
             browser-verification-full-year.png
             browser-verification-crosshair.png
             browser-verification-predictions-reality.png
+            browser-verification-validation-replay.png
             browser-verification-mobile.png
           if-no-files-found: ignore
