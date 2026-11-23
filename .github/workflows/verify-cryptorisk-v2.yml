@@ -2,7 +2,7 @@ name: Verify CryptoRisk Lab v2
 
 on:
   push:
-    branches: [research-web-v2-2026-11-23]
+    branches: [research-web-v2-2026-11-23, phase1-research-ewma-2026-11-23]
   workflow_dispatch:
 
 permissions:
