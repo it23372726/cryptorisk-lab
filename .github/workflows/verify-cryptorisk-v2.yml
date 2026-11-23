@@ -2,7 +2,7 @@ name: Verify CryptoRisk Lab scientific website
 
 on:
   push:
-    branches: [research-web-v2-2026-11-23, phase1-research-ewma-2026-11-23, website-v2-animated-lab-2026-11-23, historical-validation-lab-2026-11-23, website-v3-five-model-2026-validation-2026-11-24]
+    branches: [research-web-v2-2026-11-23, phase1-research-ewma-2026-11-23, website-v2-animated-lab-2026-11-23, historical-validation-lab-2026-11-23, website-v3-five-model-2026-validation-2026-11-24, research-web-2025-five-model-exploratory-2026-11-24]
   pull_request:
     branches: [main]
   workflow_dispatch:
@@ -59,8 +59,16 @@ jobs:
           cache: pip
       - name: Install browser test dependencies
         run: |
-          python -m pip install playwright
+          python -m pip install playwright "numpy==1.26.4"
           python -m playwright install --with-deps chromium
+      - name: Check original 2025 notebook and independently recomputed new model scores
+        run: |
+          python scripts/verify_v4_evidence.py
+          python research/phase4_2025/build_exploratory.py --verify
+      - name: Reproduce all 335 new 2025 forecasts from fixed seed and compare archived bytes
+        run: |
+          python research/phase4_2025/build_exploratory.py --generate
+          git diff --exit-code -- docs/v4-exploratory-2025-data.json docs/v4-exploratory-2025-data.js research/phase4_2025/FINDINGS.md
       - name: Check 2026 standalone evidence reproduces frozen research ledger
         run: python scripts/verify_v3_evidence.py
       - name: Stress-test 30,000 paths per model at 90-day horizon
@@ -71,7 +79,7 @@ jobs:
         if: success()
         uses: actions/upload-artifact@v4
         with:
-          name: website-v3-five-model-standalone-preview
+          name: website-v4-complete-five-model-validation-preview
           path: docs/
           if-no-files-found: error
       - name: Upload browser screenshot
@@ -84,6 +92,7 @@ jobs:
             browser-verification-full-year.png
             browser-verification-crosshair.png
             browser-verification-predictions-reality.png
+            browser-verification-2025-garch-range.png
             browser-verification-validation-replay.png
             browser-verification-2026.png
             browser-verification-2026-overview.png
