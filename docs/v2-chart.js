@@ -225,7 +225,7 @@ class ForecastChart {
    if(key==="ArrowUp"||key==="+"||key==="=")this.zoomAt(.8,13+this.plotWidth/2);
    if(key==="ArrowDown"||key==="-")this.zoomAt(1.25,13+this.plotWidth/2);
    if(key==="Home")this.resetZoom();
-   if(key==="End")this.fitFullYear();
+   if(key==="End"){const fit=global.document?.getElementById("fitYear");if(fit)fit.click();else this.fitFullYear();}
    if(key==="Escape")this.resetPriceScale();
  }
  resetPriceScale(){this.manualPriceRange=null;this.queueDraw();}
