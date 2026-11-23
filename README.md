@@ -29,7 +29,9 @@ flowchart LR
     H --> I["Brier scores, uncertainty, interpretation"]
 ~~~
 
-**Visual evidence:** The live dashboard provides the actual historical chart, simulated forecast fans, risk comparison and historical replay. Browser screenshots are also generated in the [website verification workflow](https://github.com/it23372726/cryptorisk-lab/actions/workflows/verify-cryptorisk-v2.yml). A stable in-repository screenshot is a pending final publication asset.
+![Actual CryptoRisk Lab five-model research dashboard](figures/demo-screenshot.png)
+
+*Authentic Chromium screenshot captured from the working static research dashboard after a seeded five-model simulation. This is a verified interface, not a fabricated market forecast. Updated browser screenshots are archived by the [verification workflow](https://github.com/it23372726/cryptorisk-lab/actions/workflows/verify-cryptorisk-v2.yml).*
 
 ## Quick start
 

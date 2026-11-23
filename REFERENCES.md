@@ -36,7 +36,7 @@ Research sources for the BTC/USDT risk simulations, mathematical methods and his
 [10] K. Sheppard, “Forecasting,” *arch* Python documentation, [Online]. Available: [arch.readthedocs.io/en/latest/univariate/forecasting.html](https://arch.readthedocs.io/en/latest/univariate/forecasting.html). Accessed: Nov. 24, 2026.  
 **Use:** software documentation for conditional variance forecasting and how GARCH recursion is implemented.
 
-[11] RiskMetrics Group, *RiskMetrics: Technical Document*, 4th ed., J. P. Morgan/Reuters, 1996. [Online]. Available: [MSCI RiskMetrics archive](https://www.msci.com/documents/10199/dbb975aa-5dc2-4441-aa2d-ae34ab5f0945).  
+[11] J. Mina and J. Yi Xiao, *Return to RiskMetrics: The Evolution of a Standard*. New York, NY, USA: RiskMetrics Group, Apr. 2001. [Online]. Available: [MSCI-hosted original report](https://www.msci.com/documents/10199/dbb975aa-5dc2-4441-aa2d-ae34ab5f0945). Accessed: Nov. 24, 2026.  
 **Use:** background for EWMA volatility filtering and commonly used decay reference values; the final Bitcoin decay is selected by the project's 2024 experiment rather than fixed from an external convention.
 
 ## Evidence mapping

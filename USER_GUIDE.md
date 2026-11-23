@@ -5,6 +5,10 @@
 
 CryptoRisk Lab is a **historical probabilistic research simulator**, not a live-price service and not investment advice. The interactive simulation starts at the actual BTCUSDT close on **31 December 2024 (93,576 USDT)** and uses historical model calibration from **2022–2024**. Its scenario charts do **not** predict today's price.
 
+![Five-model research dashboard with settings, historical and forecast chart, and risk results](figures/demo-screenshot.png)
+
+**Screenshot guide:** The *Scenario settings* panel controls the hypothetical experiment. The *BTC/USDT chart* differentiates genuine historical daily candles from simulated future price paths. The *risk output summaries* display model-specific loss probabilities, while the lower comparison and historical-validation panels explain accuracy and uncertainty. This image is an actual tested browser rendering, not a representation of a current-market forecast.
+
 ## Quick start
 
 1. Open the live site or the local HTML page. The main area presents actual Binance historical daily BTC/USDT candlesticks. Forecast data are initially absent.
