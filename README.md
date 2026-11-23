@@ -1,72 +1,124 @@
 # CryptoRisk Lab
 
-**A reproducible Bitcoin downside-risk research laboratory.** Explore how different volatility assumptions affect simulated BTC/USDT returns, then test probabilistic downside forecasts against actual historical daily closes.
+**Explore how volatility assumptions change simulated Bitcoin losses, then compare risk forecasts with what actually happened.**
 
-[**Open the website**](https://it23372726.github.io/cryptorisk-lab/) · [**Run original research notebook in Google Colab**](https://colab.research.google.com/github/it23372726/cryptorisk-lab/blob/main/notebook/cryptorisk-lab.ipynb)
+**[Live simulation dashboard](https://it23372726.github.io/cryptorisk-lab/)** · **[Open research notebook in Colab](https://colab.research.google.com/github/it23372726/cryptorisk-lab/blob/main/notebook/cryptorisk-lab.ipynb)**
 
-The original research question asks whether a two-state Markov model estimates 30-day Bitcoin downside risk more accurately than a constant-volatility Geometric Brownian Motion (GBM) model. The project retains that original experiment and extends it with two additional volatility models and a separate 2026 evaluation.
+[![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/it23372726/cryptorisk-lab/blob/main/notebook/cryptorisk-lab.ipynb)
 
-## What the website does
+CryptoRisk Lab is a reproducible, self-contained scientific simulation environment. It compares five historical BTC/USDT downside-risk models, visualizes real daily-price candlesticks and modelled future paths, and makes the original 30-day GBM-versus-Markov research question empirically testable. It is **not** a live-market forecast, trade recommendation or account-connected financial service.
 
-- **Simulation Lab:** Compare five independent, seeded Monte Carlo scenarios from the fixed December 31, 2024 BTC/USDT forecast origin. Choose investment, horizon, loss threshold, path count, volatility stress multiplier, initial Markov regime and random seed. Explore the chart, simulated paths, forecast percentiles, VaR95, Expected Shortfall and drawdowns.
-- **Predictions vs Reality:** Select **2025 or 2026** within a **single historical validation dashboard**. Compare all five models at **7, 14, 30, 60 or 90 days** on identical completed forecast dates for the chosen year. The historical horizon automatically follows a matching Simulation Lab horizon. Scrub daily forecasts, compare five model risk probabilities against actual losses, and replay exactly H days of observed daily BTC closes. Longer horizons have fewer completed observations.
-- **Methodology and research evidence:** Inspect scientific assumptions, model equations, calibration, statistical limitations, and links to original verified research outputs.
+## Research question and visual overview
 
-All website data and simulations work as static files, including through GitHub Pages. No live prices, account connection, or API key is needed.
+**Primary question:** Does a two-state observed-regime Markov chain improve **30-day terminal Bitcoin loss probability forecasts** over a constant-volatility geometric Brownian motion baseline?
 
-## Five models
+The original research preserves that question. EWMA is an added dynamic-volatility benchmark; Adaptive GBM, Gaussian GARCH and extra horizons are separately identified extensions.
 
-| Model | What changes |
-|---|---|
-| Constant GBM | Drift and volatility stay fixed at 2022–2024 calibration |
-| Two-state Markov | Returns and transition probabilities depend on calm/volatile regimes |
-| EWMA | Daily variance responds to past and simulated return shocks |
-| Adaptive GBM | A rolling 30-day historical volatility estimate replaces static sigma |
-| Gaussian GARCH(1,1) | Conditional variance responds to squared past innovations and its own previous level |
+~~~mermaid
+flowchart LR
+    A["Binance BTC/USDT UTC daily data"] --> B["2022–2024 calibration"]
+    B --> C["Constant GBM"]
+    B --> D["Two-state Markov"]
+    B --> E["EWMA"]
+    B --> F["Adaptive GBM / GARCH"]
+    C --> G["Monte Carlo risk measures"]
+    D --> G
+    E --> G
+    F --> G
+    G --> H["Historical 2025 / 2026 validation"]
+    H --> I["Brier scores, uncertainty, interpretation"]
+~~~
 
-**Calibration:** Static fitted parameters come from BTCUSDT UTC daily returns for 2022–2024. No future daily returns are used to initialize a forecast. The interactive scenario simulator is anchored to **2024-12-31**; it is not today's trading forecast.
+**Visual evidence:** The live dashboard provides the actual historical chart, simulated forecast fans, risk comparison and historical replay. Browser screenshots are also generated in the [website verification workflow](https://github.com/it23372726/cryptorisk-lab/actions/workflows/verify-cryptorisk-v2.yml). A stable in-repository screenshot is a pending final publication asset.
 
-## Scientific validation
+## Quick start
 
-**Original primary event:** Bitcoin price is at least 10% lower **exactly 30 calendar days after forecast origin**. This fixed 30-day evaluation is preserved. **Additional exploratory horizons: 7, 14, 60 and 90 days.** Each new forecast is scored against the actual closing price exactly H days ahead. Lower Brier score is better.
+**Use the browser:** Open the [live dashboard](https://it23372726.github.io/cryptorisk-lab/). Configure the investment, horizon, loss threshold and path count, then click **Run simulation**. Pause, replay, inspect individual paths and compare model risk estimates.
 
-| Forecast source | 2025 Brier (335 dates) | 2026 Brier (274 dates) |
+**Run offline:** Download/clone the repository and double-click **docs/index.html** with its neighboring JS and CSS assets intact. The website does not require a backend, data API request or developer server.
+
+**Run the original research:** Open the badge above in Google Colab and select **Runtime → Run all**. The main notebook downloads its historical 2022–2025 spot prices and contains the original GBM, Markov, EWMA and retrospective verification. Dependencies are listed in [requirements.txt](requirements.txt).
+
+**Advanced research reproduction:**
+
+~~~bash
+python -m pip install -r requirements.txt
+python -m pip install nbclient nbformat
+python scripts/verify_notebook.py
+# Separate 2026 GARCH/Adaptive GBM research uses its pinned scientific environment:
+python -m pip install -r research/phase3_2026/requirements-lock.txt
+python research/phase3_2026/check_results.py
+python research/phase4_2025/verify_extension.py
+python research/phase5_horizons/verify_horizons.py
+~~~
+
+The automated scientific and browser workflows also exercise a full notebook run, offline site loading, 2025/2026 archived probability parity and a maximum-load five-model browser scenario. See [reproducibility evidence](research/WEB_V5_HORIZON_VALIDATION.md).
+
+## User guide
+
+Start with **1,000 USDT**, **30 days**, **10,000 paths**, **10% loss threshold**, **1.00× volatility**, **Calm** initial regime and seed **42**. The app simulates five separate Monte Carlo ensembles and displays numerical downside probabilities, VaR95, ES95, probability bands and selected paths.
+
+In **Predictions vs Reality**, select 2025 or 2026, a verified horizon and an origin date, then reveal actual subsequent daily closing prices. Historical scores are fixed evidence and **do not change** with hypothetical scenario controls. The original **30-day** experiment is distinguished from exploratory 7/14/60/90-day evaluations.
+
+See [USER_GUIDE.md](USER_GUIDE.md) for every control, precise metric meanings, an example experiment and limitations.
+
+## Models and mathematics
+
+| Model | Return or variance assumption | Status |
+|---|---|---|
+| **GBM** | Fixed 2022–2024 daily log-return mean/volatility | Original baseline |
+| **Two-state Markov** | Conditional calm/volatile return distributions with fitted DTMC transitions | Original primary model |
+| **EWMA** | Recursively updated conditional variance; decay selected using 2024 | Stretch benchmark |
+| **Adaptive GBM** | Fixed drift, most recent 30 observed daily returns determine forecast volatility | Additional retrospective model |
+| **Gaussian GARCH(1,1)** | Conditional variance from prior shocks and lagged variance | Additional retrospective model |
+
+For example, GBM simulates daily log returns \(\mu+\sigma Z\); the Markov model uses \(\mu_{S_d}+\sigma_{S_d}Z_d\) and advances its regime with the fitted row-stochastic transition matrix. A Monte Carlo event probability is the fraction of simulated paths with terminal loss meeting the threshold. Analytic GBM loss probabilities, VaR and ES are independent numerical verification targets.
+
+Read [THEORY.md](THEORY.md) for equations, variable definitions, regimes, algorithm order, units, verification and a generic **Concepts applied** table.
+
+## Verification
+
+The original **97-cell** Colab notebook has passed a clean-kernel GitHub Actions run. It checks data integrity, independent analytical GBM probabilities and VaR/ES, Markov \(P^d\) state occupancy, limiting cases, random-seed reproducibility, sensitivity and dependent historical backtesting.
+
+The browser tests check local-file startup, controls, immutable historical evidence, exact archived Brier parity, mobile layout and a five-model stress scenario of **30,000 paths each for 90 days**.
+
+**Scientific caveat:** Verification demonstrates that code matches its stated mathematical model. It does **not** prove those model assumptions represent real-world Bitcoin crashes accurately.
+
+## Results, limitations and future work
+
+**Original primary event:** a terminal Bitcoin loss of **at least 10% exactly 30 days after forecast origin**, evaluated by Brier score against real subsequent closes.
+
+| Model or benchmark | 2025 (335 origins) | 2026 (274 origins) |
 |---|---:|---:|
-| Calibration-only historical frequency | **0.150874** | 0.176230 |
-| Constant GBM | 0.151631 | **0.175239** |
-| Two-state Markov | 0.151176 | 0.178221 |
+| Historical-frequency baseline | **0.150874** | 0.176230 |
+| GBM | 0.151631 | **0.175239** |
+| Markov | 0.151176 | 0.178221 |
 | EWMA | 0.159060 | 0.215885 |
-| Adaptive GBM | 0.154912 (exploratory) | 0.218919 |
-| Gaussian GARCH(1,1) | 0.151766 (exploratory) | 0.176664 |
+| Adaptive GBM (2025 post-hoc) | 0.154912 | 0.218919 |
+| Gaussian GARCH (2025 post-hoc) | 0.151766 | 0.176664 |
 
-**Interpretation:** In the original 2025 experiment, Markov had a small descriptive advantage over GBM, but the historical-frequency benchmark scored better than both. In the separate fixed-protocol **2026 retrospective** holdout, constant GBM scored better than Markov, GARCH, Adaptive GBM and EWMA. **Neither new adaptive model established a statistically supported improvement over GBM** on the pre-specified 2026 primary metric.
+**Interpretation:** Markov was descriptively slightly better than GBM in the 2025 30-day test, but the simple calibration-only historical benchmark led for the 10% event. GBM led the corresponding 2026 test. Given overlapping forecast windows, limited rare events and dependence-aware confidence intervals, **neither period establishes broad superiority for the more complex models**. The separate 2026 study is a *fixed-protocol retrospective* evaluation, **not** a prospective blind forecast competition.
 
-**Crucial research distinction:** The original 2025 GBM, Markov, EWMA and historical-frequency values are preserved from the executed notebook, unchanged. Adaptive GBM and GARCH were subsequently added to the 2025 comparison **after 2025 outcomes were inspected**, so those added 2025 results are explicitly **post-hoc exploratory**, not a new independent confirmation. The 2026 fixed-protocol evaluation was conducted separately, but is also retrospective rather than genuinely prospective.
+Model risk, training-period drift, normal shock assumptions, estimated state labels, market-regime changes and sparse extreme events cannot be resolved by increasing Monte Carlo path count. Historical observations and hypothetical scenarios are always presented as distinct.
 
-Daily H-day forecast windows overlap by up to **H−1 days** (89 days for 90-day comparisons) and are not independent trials. Samples become smaller at longer horizons, and event frequencies differ among horizons and years. New horizons were specified after inspecting prior 2025/2026 data and are **exploratory**, not new confirmatory evidence. Gaussian shocks may underrepresent heavy tails. These are historical educational comparisons, not investment advice.
+Source-of-truth evidence: [Phase 1 findings](research/PHASE1_FINDINGS.md), [2026 research](research/phase3_2026/results/FINDINGS.md), [2025 additions](research/phase4_2025/results/FINDINGS.md), [multi-horizon findings](research/phase5_horizons/results/FINDINGS.md).
 
-## Reproduce the science and website
+## Concepts applied
 
-- **Original assignment research:** `notebook/cryptorisk-lab.ipynb` (preserved). Run all in a fresh Colab session.
-- **Fixed 2026 extension:** `research/phase3_2026/run_research.py`, with protocol, archived Binance source hashes, dated forecast ledger, fitted GARCH parameters, Brier scores and moving-block-bootstrap uncertainty in `research/phase3_2026/`.
-- **Exploratory 2025 additional models:** `research/phase4_2025/run_exploratory.py`, with research-integrity explanation and per-origin forecasts in `research/phase4_2025/`.
-- **Five-horizon extension:** `research/phase5_horizons/generate.py`, `research/phase5_horizons/EXPLORATORY_PROTOCOL.md`, and the dated CSV/JSON files under `research/phase5_horizons/results/`. Reproduces observed terminal events for every horizon and year using unchanged training-calibrated models.
-- **Standalone website:** Open `docs/index.html`, or serve the `docs/` directory from any basic static web server.
-- **Audits:** `scripts/verify_browser.py`, `scripts/verify_v3_evidence.py`, `research/phase4_2025/verify_extension.py`, `research/phase5_horizons/verify_horizons.py`, and `scripts/verify_v3_models.cjs`.
+This project applies **input modelling and random variate generation** (historical log returns and normal shocks), **discrete-time Markov chains** (fitted two-state transitions, state occupancy \(P^d\)), and **Monte Carlo integration and the law of large numbers** (risk probabilities, path sampling and convergence). It checks the stochastic simulator against analytical and limiting-case results and quantifies uncertainty from repeated random seeds and overlapping historical events.
 
-GitHub Actions rerun the original scientific notebook, verify source data and stored historical score parity, stress-test five Monte Carlo ensembles, test the year selector and inspect the site in Chromium.
+These concepts are used in the original 30-day scientific model, not merely mentioned in the UI.
 
-## Research sources
+## References and data credits
 
-1. [Binance official BTCUSDT spot daily data archives](https://github.com/binance/binance-public-data).
-2. Hamilton, J. D. (1989), *A New Approach to the Economic Analysis of Nonstationary Time Series and the Business Cycle*. [DOI](https://doi.org/10.2307/1912559).
-3. Engle, R. F. (1982), *Autoregressive Conditional Heteroscedasticity*. [DOI](https://doi.org/10.2307/1912773).
-4. Bollerslev, T. (1986), *Generalized Autoregressive Conditional Heteroskedasticity*. [DOI](https://doi.org/10.1016/0304-4076(86)90063-1).
-5. Gneiting, T. and Raftery, A. E. (2007), *Strictly Proper Scoring Rules, Prediction, and Estimation*. [DOI](https://doi.org/10.1198/016214506000001437).
-6. [arch Python documentation](https://arch.readthedocs.io/en/latest/univariate/forecasting.html).
+Key background: [Hamilton (1989)](https://doi.org/10.2307/1912559), [Ardia, Bluteau and Rüede (2019)](https://doi.org/10.1016/j.frl.2018.08.009), [Maciel (2021)](https://doi.org/10.1002/ijfe.2043), [Poon and Granger (2003)](https://doi.org/10.1257/jel.41.2.478), [Glasserman (2003)](https://doi.org/10.1007/978-0-387-21617-1), [Bollerslev (1986)](https://doi.org/10.1016/0304-4076(86)90063-1), and [Gneiting and Raftery (2007)](https://doi.org/10.1198/016214506000001437). Full IEEE entries and their modelling relevance are in [REFERENCES.md](REFERENCES.md).
 
-For methods, model caveats and traceable results, see `research/PHASE1_FINDINGS.md`, `research/phase3_2026/PRE_REGISTERED_PROTOCOL.md`, and `research/phase4_2025/EXPLORATORY_PROTOCOL.md`.
+Historical BTCUSDT daily candles: [Binance Public Data](https://github.com/binance/binance-public-data). Archive hashes, derived-data provenance and third-party rights are detailed in [data/README.md](data/README.md).
 
 ## AI assistance
 
-ChatGPT was used to assist research interpretation, develop simulation and website code, create reproducibility audits, and draft documentation. Quantitative claims are grounded in recorded source data and independently executed research and test scripts; AI-generated text is not itself evidence of model accuracy.
+ChatGPT assisted with explanations, simulation implementation, numerical verification, statistical interpretation, browser development, and documentation. Generated suggestions were evaluated against independent equations, executed source code and archived historical observations. Descriptive results were not selected to make any particular model appear superior. Detailed private interaction records are maintained separately from this public software repository.
+
+## Licence
+
+Source code is released under the [MIT License](LICENSE). Third-party historical market data and referenced research remain subject to their original provider/publisher terms.
