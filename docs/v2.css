@@ -15,3 +15,5 @@
  .mobile-config-hint{display:block;font-size:12px;color:#a9cfe8;padding:0 15px 13px}
  .mobile-config-hint a{color:#90cbef;font-weight:700}
 }
+
+.path-inspector{font-size:12px;color:#c7e2ee;margin:2px 0 0;padding:10px 13px;border-radius:8px;background:#0b1d2f;border:1px solid #28445b;line-height:1.65}
