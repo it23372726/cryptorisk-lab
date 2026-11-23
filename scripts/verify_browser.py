@@ -63,8 +63,10 @@ try:
         assert page.locator("#holdoutModelBars .v3-bar-row").count()==6
         print("PASS: 335 original 2025 dates, all preserved notebook probabilities and two authentic exploratory added models",flush=True)
 
-        page.locator("#validation").scroll_into_view_if_needed()
-        page.wait_for_timeout(100)
+        page.evaluate("() => document.querySelector('#validation').scrollIntoView({block:'start',behavior:'instant'})")
+        page.wait_for_timeout(150)
+        page.screenshot(path="browser-verification-selector-2025.png",full_page=False)
+        page.locator("#holdoutProbabilityChart").scroll_into_view_if_needed()
         page.screenshot(path="browser-verification-unified-2025.png",full_page=False)
         page.locator('button[data-holdout-threshold="20"]').click()
         assert "8 actual" in page.locator("#holdoutSample").inner_text()
@@ -98,6 +100,9 @@ try:
         assert page.locator("#holdoutDateSlider").get_attribute("max")=="273"
         assert "274 forecasts" in page.locator("#validationPeriodDates").inner_text()
         assert "0.175239" in page.locator("#holdoutScoreTable").inner_text()
+        page.evaluate("() => document.querySelector('#validation').scrollIntoView({block:'start',behavior:'instant'})")
+        page.wait_for_timeout(150)
+        page.screenshot(path="browser-verification-selector-2026.png",full_page=False)
         assert "0.4339" in page.locator("#holdoutInferenceTable").inner_text()
         assert "Holm" in page.locator("#holdoutInferenceContext").inner_text()
         assert page.evaluate("""() => {
