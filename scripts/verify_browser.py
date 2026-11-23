@@ -32,6 +32,76 @@ try:
         assert page.evaluate("() => window.CRL_HISTORY.candles.at(-1).date") == "2025-12-31"
         assert "2025-12-31" in page.locator("#actual2025Summary").inner_text()
         print("PASS: 396 authentic daily Binance candles, complete 2025, origin preserved", flush=True)
+        # Verify the price-level crosshair numerically, not merely the OHLC tooltip.
+        box = page.locator("#mainChart").bounding_box()
+        assert box is not None
+        hover_x, hover_y = box["width"] * .59, box["height"] * .44
+        page.locator("#mainChart").hover(position={"x": hover_x, "y": hover_y})
+        page.wait_for_function("() => Number.isFinite(window.CRLApp.chart.crosshairPrice)")
+        crosshair = page.evaluate("""() => {
+            const c = window.CRLApp.chart, a = c.axis;
+            return {value:c.crosshairPrice, inverse:a.priceAtY(c.cursor.y),
+                    tooltip:c.tooltip.textContent, y:c.cursor.y};
+        }""")
+        assert abs(crosshair["value"] - crosshair["inverse"]) < .001
+        assert crosshair["value"] > 0
+        assert "OBSERVED" in crosshair["tooltip"] or "Future region" in crosshair["tooltip"]
+        page.screenshot(path="browser-verification-crosshair.png", full_page=False)
+        print("PASS: Crosshair reflects actual hovered price on right axis", flush=True)
+
+        # Pointer-centred scroll zoom must leave the date beneath the pointer stable.
+        viewport_x = hover_x
+        before_zoom = page.evaluate("""x => {
+            const c=window.CRLApp.chart;
+            return {count:c.view.count,
+                    world:c.view.start+(x-13)/c.plotWidth*c.view.count};
+        }""", viewport_x)
+        page.mouse.wheel(0,-330)
+        page.wait_for_function("n => window.CRLApp.chart.view.count < n", before_zoom["count"])
+        after_zoom = page.evaluate("""x => {
+            const c=window.CRLApp.chart;
+            return {count:c.view.count,
+                    world:c.view.start+(x-13)/c.plotWidth*c.view.count};
+        }""", viewport_x)
+        assert abs(before_zoom["world"]-after_zoom["world"]) < .06, (
+            "Scroll zoom drifted away from cursor date"
+        )
+        assert after_zoom["count"] < before_zoom["count"]
+        print("PASS: Pointer-centred wheel zoom preserves target date", flush=True)
+
+        # Mouse drag should pan instead of selecting an accidental Monte Carlo path.
+        before_pan = page.evaluate("() => window.CRLApp.chart.view.start")
+        page.mouse.move(box["x"]+hover_x, box["y"]+hover_y)
+        page.mouse.down()
+        page.mouse.move(box["x"]+hover_x-125, box["y"]+hover_y, steps=5)
+        page.mouse.up()
+        after_pan = page.evaluate("() => window.CRLApp.chart.view.start")
+        assert abs(after_pan-before_pan)>1, "Drag failed to pan chart"
+        print("PASS: Chart drags horizontally without losing zoom", flush=True)
+
+        # Right-side USDT scale: draggable vertical zoom and double-click autoscale.
+        axis_x = box["width"]-24
+        axis_y = box["height"]*.43
+        page.mouse.move(box["x"]+axis_x,box["y"]+axis_y)
+        page.wait_for_function("() => Number.isFinite(window.CRLApp.chart.crosshairPrice)")
+        before_price_zoom = page.evaluate("() => window.CRLApp.chart.axis.max-window.CRLApp.chart.axis.min")
+        page.mouse.down()
+        page.mouse.move(box["x"]+axis_x,box["y"]+axis_y+62,steps=5)
+        page.mouse.up()
+        page.wait_for_function("() => window.CRLApp.chart.manualPriceRange!==null")
+        after_price_zoom = page.evaluate("() => window.CRLApp.chart.axis.max-window.CRLApp.chart.axis.min")
+        assert abs(after_price_zoom-before_price_zoom)>1, "Price-scale drag did not rescale"
+        page.locator("#mainChart").dblclick(position={"x":axis_x,"y":axis_y})
+        assert page.evaluate("() => window.CRLApp.chart.manualPriceRange===null")
+        print("PASS: Draggable vertical USDT scale and double-click autoscale", flush=True)
+
+        # Keyboard navigation remains functional and accessible.
+        page.locator("#mainChart").focus()
+        page.keyboard.press("End")
+        assert page.evaluate("() => window.CRLApp.chart.view.count") == 396
+        page.keyboard.press("Home")
+        assert page.evaluate("() => window.CRLApp.chart.view.count") < 396
+        print("PASS: Keyboard date navigation and fit views", flush=True)
         assert page.evaluate("() => window.CRLCore.ewmaWarmStart(.9)") > 0
         page.locator('input[name="paths"][value="1000"]').check(force=True)
         page.locator("#startBtn").click()
