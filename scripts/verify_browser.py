@@ -65,7 +65,9 @@ try:
         print("PASS: Five-model engine + 274 genuine 2026 outcomes, all loss events, exact Brier parity", flush=True)
 
         # Exercise a distinct historical year without modifying the original 2025 validation.
-        page.locator("#validation2026").scroll_into_view_if_needed()
+        page.evaluate("() => document.getElementById('validation2026').scrollIntoView({block:'start',behavior:'instant'})")
+        page.wait_for_timeout(130)
+        page.screenshot(path="browser-verification-2026-overview.png",full_page=False)
         assert page.locator("#holdoutProbabilityChart").is_visible()
         assert page.locator("#holdoutPriceChart").is_visible()
         assert "0.175239" in page.locator("#holdoutScoreTable").inner_text()
@@ -104,6 +106,13 @@ try:
         page.screenshot(path="browser-verification-2026-replay.png",full_page=False)
         page.locator("#holdoutHide").click()
         assert page.locator("#holdoutFinalPrice").inner_text()=="Hidden"
+        page.locator("#holdoutPlay").click()
+        page.wait_for_function("() => window.CRLHoldout2026.state.day >= 2", timeout=7000)
+        page.locator("#holdoutPlay").click()
+        assert page.evaluate("() => !window.CRLHoldout2026.state.playing")
+        page.locator("#holdoutHide").click()
+        assert page.evaluate("() => window.CRLHoldout2026.state.day === 0")
+        print("PASS: Observed 2026 daily-close replay advances, pauses and resets", flush=True)
         page.locator("#holdoutProbabilityChart").scroll_into_view_if_needed()
         page.screenshot(path="browser-verification-2026.png",full_page=False)
         assert not page.evaluate("() => !!window.CRL_EVIDENCE_2026.candles"), "Must not fabricate 2026 OHLC candles"
@@ -290,6 +299,12 @@ try:
         assert "%" in page.locator("#kpiGarch").inner_text()
         assert page.locator("#riskTable [data-model='adaptive_gbm'][data-metric='p10']").inner_text().endswith("%")
         assert page.locator("#riskTable [data-model='garch'][data-metric='p10']").inner_text().endswith("%")
+        table_fits=page.evaluate("""() => {
+          const tbl=document.querySelector("#riskTable"),outer=tbl.closest(".table-scroll");
+          return tbl.getBoundingClientRect().width <= outer.getBoundingClientRect().width + 2;
+        }""")
+        assert table_fits, "Five-model research risk table overflows desktop comparison card"
+
         first_new = {model: page.evaluate(f"() => window.CRLApp.result.models['{model}'].prob['0.100'].p")
                      for model in ("gbm","markov","ewma","adaptive_gbm","garch")}
 
@@ -346,6 +361,7 @@ try:
         assert page.locator("#kpiGbm").inner_text() == "—"
         print("PASS: Reset invalidates old output", flush=True)
         page.set_viewport_size({"width": 390, "height": 844})
+        page.evaluate("() => window.scrollTo({top:0,behavior:'instant'})")
         page.wait_for_timeout(350)
         assert not page.evaluate("() => document.documentElement.scrollWidth > window.innerWidth+2"), "Mobile width overflow"
         assert page.locator("#mainChart").is_visible()
