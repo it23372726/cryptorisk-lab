@@ -249,6 +249,16 @@ for source_cell, executed_cell in zip(source_nb.cells, executed.cells):
     if source_cell.cell_type == "code":
         source_cell.outputs = executed_cell.outputs
         source_cell.execution_count = executed_cell.execution_count
+# CI appends two JSON provenance prints to the last code cell in memory.
+# They are NOT part of the public notebook source, so remove only those
+# CI-only stream lines from the saved execution artifact. All authentic
+# source-cell results, numerical tests and figures remain unchanged.
+for output in source_nb.cells[last_code_index].outputs:
+    if output.output_type == "stream":
+        output.text = "".join(
+            line for line in output.text.splitlines(keepends=True)
+            if not line.startswith(("WEB_CALIBRATION_JSON=", "WEB_BACKTEST_JSON="))
+        )
 executed_path = pathlib.Path("verification-artifacts/cryptorisk-lab-executed.ipynb")
 executed_path.parent.mkdir(exist_ok=True, parents=True)
 nbformat.validate(source_nb)
