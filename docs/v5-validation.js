@@ -115,7 +115,7 @@ function metadata(){
  setText("holdoutDateLeft","1 January "+year);
  setText("holdoutDateRight",rows.at(-1).origin);
  setText("holdoutOriginCount",rows.length+" complete origins");
- for(let letter of ["A","B","C","D","E","F"])setText("validationHorizonDays"+letter,String(h));
+ for(let letter of ["A","B","C","D","E","F","G"])setText("validationHorizonDays"+letter,String(h));
  setText("validationYearStatus",
   original?
    (is2025?"2025 original 30-day GBM, Markov and EWMA probabilities remain unchanged; the added Adaptive GBM/GARCH 2025 models are post-hoc exploratory."
