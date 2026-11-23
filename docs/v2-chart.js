@@ -144,9 +144,9 @@ class ForecastChart {
        this.manualPriceRange={min:anchor-span*frac,max:anchor+span*(1-frac)};
      }
      drag.lastX=pos.x;drag.lastTime=now;
-     this.cursor=pos;this.queueDraw();return;
+     this.cursor=pos;this.canvas.style.cursor=drag.mode==="price"?"ns-resize":"grabbing";this.queueDraw();return;
    }
-   if(e.pointerType!=="touch")this.cursor=pos;
+   if(e.pointerType!=="touch"){this.cursor=pos;this.canvas.style.cursor=this.inPriceAxis(pos)?"ns-resize":"crosshair";}
    this.queueDraw();
  }
  onPointerUp(e,cancel=false){
@@ -160,12 +160,13 @@ class ForecastChart {
    }else if(drag&&drag.id===e.pointerId){
      if(drag.active){
        this.suppressNextClick=true;
-       if(!cancel&&drag.mode==="pan"&&!this.reduceMotion){
+       if(!cancel&&drag.mode==="pan"&&!this.reduceMotion&&global.performance.now()-drag.lastTime<85){
          this.startInertia(drag.velocity);
        }
      }
      this.drag=null;
    }
+   this.canvas.style.cursor="crosshair";
    if(cancel||e.pointerType==="touch"){this.cursor=null;this.tooltip.style.display="none";}
    this.queueDraw();
  }
