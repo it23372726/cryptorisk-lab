@@ -80,3 +80,14 @@
 @media(max-width:850px){.v3-summary-strip{grid-template-columns:1fr 1fr}.v3-summary-strip>div:last-child{grid-column:1/-1}.info-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.kpi-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:600px){.kpi-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.kpi strong{font-size:22px}.v3-summary-strip{grid-template-columns:1fr}.v3-summary-strip>div:last-child{grid-column:auto}.v3-summary-strip>div{padding:13px 15px}.v3-replay-stats{grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}.v3-replay-stats>div{padding:10px}.v3-price-chart{height:285px}.v3-probability-chart{height:205px}.v3-across-years{grid-template-columns:1fr;gap:12px;padding:17px}.v3-evidence-panel>.content-pad{padding:13px 14px}.v3-score-row{grid-template-columns:93px 1fr 72px;gap:6px}.v3-replay-top .v3-button-pair{width:100%}.v3-button-pair button{font-size:11px}.info-grid{grid-template-columns:1fr}}
 @media(prefers-reduced-motion:reduce){.v3-bar-fill{transition:none!important}}
+
+/* Give the complete six-column model comparison room to breathe on desktop.
+   Preserve the histogram alongside it where space permits; stack otherwise. */
+@media(min-width:1281px){
+ #comparison .grid2{grid-template-columns:minmax(0,2.15fr) minmax(330px,1fr)}
+ #comparison #riskTable{min-width:780px}
+}
+@media(max-width:1280px){
+ #comparison .grid2{grid-template-columns:minmax(0,1fr)}
+ #comparison #riskTable{min-width:780px}
+}
