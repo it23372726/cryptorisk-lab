@@ -65,10 +65,11 @@ jobs:
         run: |
           python scripts/verify_v4_evidence.py
           python research/phase4_2025/build_exploratory.py --verify
-      - name: Reproduce all 335 new 2025 forecasts from fixed seed and compare archived bytes
+      - name: Reproduce all 335 new 2025 forecasts and audit scientific reproducibility
         run: |
           python research/phase4_2025/build_exploratory.py --generate
-          git diff --exit-code -- docs/v4-exploratory-2025-data.json docs/v4-exploratory-2025-data.js research/phase4_2025/FINDINGS.md
+          python scripts/verify_v4_reproducibility.py
+          git restore -- docs/v4-exploratory-2025-data.json docs/v4-exploratory-2025-data.js research/phase4_2025/FINDINGS.md
       - name: Check 2026 standalone evidence reproduces frozen research ledger
         run: python scripts/verify_v3_evidence.py
       - name: Stress-test 30,000 paths per model at 90-day horizon
