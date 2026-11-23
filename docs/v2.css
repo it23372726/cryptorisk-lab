@@ -17,3 +17,10 @@
 }
 
 .path-inspector{font-size:12px;color:#c7e2ee;margin:2px 0 0;padding:10px 13px;border-radius:8px;background:#0b1d2f;border:1px solid #28445b;line-height:1.65}
+
+/* Crosshair and precise gesture affordances on the self-contained trading chart. */
+.chart-canvas-wrap canvas{touch-action:none;user-select:none;-webkit-user-select:none;cursor:crosshair}
+.chart-canvas-wrap canvas:active{cursor:grabbing}
+.chart-canvas-wrap canvas:focus-visible{outline:2px solid #86cbf4;outline-offset:-2px}
+.chart-tooltip{font-variant-numeric:tabular-nums;line-height:1.6}
+@media (hover:none){.chart-canvas-wrap canvas{cursor:default}}
