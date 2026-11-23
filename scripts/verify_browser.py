@@ -176,7 +176,7 @@ try:
           };
         }""")
         assert extra2025["n"]==335 and extra2025["actualEvents"]==62
-        assert extra2025["originalModels"]==["gbm","historical","markov","ewma"]
+        assert extra2025["originalModels"]==["ewma","gbm","historical","markov"]
         assert extra2025["visibleModels"]==["adaptive_gbm","ewma","garch","gbm","historical","markov"]
         assert "EXPLORATORY POST-HOC" in extra2025["status"]
         assert abs(extra2025["originalMarkov"]-0.15117624634268656)<1e-12
