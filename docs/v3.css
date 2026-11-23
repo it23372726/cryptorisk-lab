@@ -91,3 +91,20 @@
  #comparison .grid2{grid-template-columns:minmax(0,1fr)}
  #comparison #riskTable{min-width:780px}
 }
+
+/* Five-model 2025 historical evidence: preserve readable names and sources. */
+#validation .rv-score-row{grid-template-columns:minmax(118px,1.5fr) minmax(55px,2fr) 78px}
+#validation .rv-score-row>span{line-height:1.35;overflow-wrap:anywhere}
+#validation .rv-model-tabs{gap:7px}
+#validation .rv-model-tabs button{font-size:11px}
+#validation .rv-timeline-card .rv-legend,#validation .rv-replay-card .rv-legend{gap:11px}
+#validation #rvFrequencyTable{min-width:1050px}
+#validation #rvFrequencyTable th,#validation #rvFrequencyTable td{padding:11px 9px;white-space:nowrap}
+#validation #rvExtensionText{color:#c3d0eb}
+#validation .rv-intro strong{color:#e1f4ff}
+@media(max-width:640px){
+ #validation .rv-score-row{grid-template-columns:110px minmax(40px,1fr) 70px;gap:7px}
+ #validation .rv-model-tabs button{padding:7px 10px}
+ #validation .rv-score-row>span{font-size:10px}
+ #validation .rv-timeline-canvas{height:220px}
+}
