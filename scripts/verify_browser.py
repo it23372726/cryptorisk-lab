@@ -99,8 +99,13 @@ try:
         page.locator("#mainChart").focus()
         page.keyboard.press("End")
         assert page.evaluate("() => window.CRLApp.chart.view.count") == 396
+        assert page.locator("#revealBtn").get_attribute("aria-pressed") == "true"
         page.keyboard.press("Home")
         assert page.evaluate("() => window.CRLApp.chart.view.count") < 396
+        # Return the observed-candle toggle to its original hidden state before
+        # testing the separate Reveal actual 2025 button below.
+        page.locator("#revealBtn").click()
+        assert page.locator("#revealBtn").get_attribute("aria-pressed") == "false"
         print("PASS: Keyboard date navigation and fit views", flush=True)
         assert page.evaluate("() => window.CRLCore.ewmaWarmStart(.9)") > 0
         page.locator('input[name="paths"][value="1000"]').check(force=True)
