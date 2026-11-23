@@ -53,6 +53,13 @@ jobs:
           python -m playwright install --with-deps chromium
       - name: Run end-to-end Chromium checks
         run: python scripts/verify_browser.py
+      - name: Upload standalone local preview
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: website-v2-standalone-preview
+          path: docs/
+          if-no-files-found: error
       - name: Upload browser screenshot
         if: always()
         uses: actions/upload-artifact@v4
