@@ -142,7 +142,7 @@ function run(){
    setStatus("Computing: "+int(r.done)+" / "+int(r.total)+" paths per model");
    if(!r.complete){requestAnimationFrame(activeBatch);return;}
    result=runner.finish();runner=null;activeBatch=null;phase="ready";day=0;animating=true;lastFrame=null;
-   renderResults();setStatus("Simulation complete. Animating "+int(s.paths)+"-path results.");renderDay();frame=requestAnimationFrame(animate);
+   renderResults();if(window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches){day=s.horizon;animating=false;setStatus("Simulation complete. Automatic motion disabled by accessibility preference; use the day scrubber.");renderDay();}else{setStatus("Simulation complete. Animating "+int(s.paths)+"-path results.");renderDay();frame=requestAnimationFrame(animate);}
   }catch(e){clearResults();setStatus("Simulation error: "+e.message);console.error(e);}
  };
  requestAnimationFrame(activeBatch);
