@@ -92,7 +92,7 @@ try:
         print("PASS: Date selector and observed 30-day price reveal/hide without lookahead", flush=True)
 
         # Selecting one date does not recalculate the frozen Brier figures.
-        page.locator("#rvNext").click()
+        page.locator("#rvPrev").click()
         assert "0.024159" in page.locator("#rvScoreTable").inner_text()
         page.locator('button[data-rv-threshold="35"]').click()
         assert page.locator("#rvFindEvent").is_disabled()
