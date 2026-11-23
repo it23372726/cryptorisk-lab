@@ -124,6 +124,8 @@ for _row in _web_rows:
         assert all(0<=x<=1 for x in _row["p"][_model])
         assert (_row["p"][_model][0]>=_row["p"][_model][1]>=_row["p"][_model][2])
 for _rec in m8_results.to_dict(orient="records"):
+    if _rec["Model"] not in _web_models.values():
+        continue  # Exploratory selected-Markov candidate is NOT a primary model.
     _key = next(k for k,v in _web_models.items() if v==_rec["Model"])
     _pct = int(_rec["Threshold"].strip(">=%"))
     assert abs(_web_scores[str(_pct)]["models"][_key]["brier"]-_rec["Brier"])<1e-12
