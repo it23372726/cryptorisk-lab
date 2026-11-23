@@ -32,13 +32,13 @@ function clearResults(){
  $("computeBar").style.width="0%";setStatus("Ready. Press Run simulation to generate paths.");
  for(let m of modelNames){
   $(m==="gbm"?"kpiGbm":m==="markov"?"kpiMarkov":"kpiEwma").textContent="—";
-  $(m==="gbm"?"kpiGbmCi":m==="markov"?"kpiMarkovCi":"kpiEwmaCi").textContent=m==="ewma"?"Dynamic variance · warm-start approximation":"Run to estimate the probability";
+  $(m==="gbm"?"kpiGbmCi":m==="markov"?"kpiMarkovCi":"kpiEwmaCi").textContent=m==="ewma"?"Dynamic variance · full-history calibration":"Run to estimate the probability";
   document.querySelectorAll('[data-model="'+m+'"]').forEach(e=>e.textContent="—");
  }
  $("verifyStatus").textContent="Run a simulation to execute browser-side structural and risk-ordering checks.";
  $("insight").innerHTML="<strong>Explore how risk evolves.</strong> Run a reproducible experiment to animate projected paths and price-percentile fans.";
  chart.update({result:null,day:0,horizon:readSettings().horizon,threshold:readSettings().threshold,view,reveal:actual});
- drawDistribution();updatePlay();setRunBtns();
+ drawDistribution();updatePlay();renderPathInspector();setRunBtns();
 }
 function changeSettings(){
  // User inputs are part of the reproducible experiment; editing them invalidates old outputs.
@@ -87,19 +87,19 @@ function verify(){
  const sem=Math.sqrt(Math.max(1e-8,p*(1-p)/s.paths));
  if(Math.abs(o-p)>4*sem+.005)v.errors.push("GBM analytical 10% loss-probability check");
  const passes=v.errors.length===0;
- $("verifyStatus").textContent=(passes?"PASS":"CHECK")+" · "+int(s.paths)+" paths/model · numerical structure, percentile order, VaR/ES order and analytical GBM loss probability "+(passes?"verified.":": "+v.errors.join("; "))+" EWMA full-history warm start not yet parity-verified.";
+ $("verifyStatus").textContent=(passes?"PASS":"CHECK")+" · "+int(s.paths)+" paths/model · numerical structure, percentile order, VaR/ES order and analytical GBM loss probability "+(passes?"verified.":": "+v.errors.join("; "))+" EWMA initial variance exported from executed research notebook.";
 }
 function renderResults(){
  let s=result.settings;
  for(let m of modelNames){
   const o=result.models[m],id=m==="gbm"?"Gbm":m==="markov"?"Markov":"Ewma",hit=o.prob[s.threshold.toFixed(3)];
   $("kpi"+id).textContent=pct(hit.p);
-  $("kpi"+id+"Ci").textContent="MC 95% interval "+pct(hit.low)+" – "+pct(hit.high)+(m==="ewma"?" · provisional start":"");
+  $("kpi"+id+"Ci").textContent="MC 95% interval "+pct(hit.low)+" – "+pct(hit.high)+(m==="ewma"?" · notebook state":"");
   const vals={p10:pct(o.prob["0.100"].p),p20:pct(o.prob["0.200"].p),p35:pct(o.prob["0.350"].p),custom:pct(hit.p),var:money(o.var95),es:money(o.es95),touch:pct(o.touch),dd:pct(o.drawdown)};
   for(let [k,v] of Object.entries(vals)){const cell=document.querySelector('[data-model="'+m+'"][data-metric="'+k+'"]');if(cell)cell.textContent=v;}
  }
  let gbm=result.models.gbm.prob[s.threshold.toFixed(3)].p,markov=result.models.markov.prob[s.threshold.toFixed(3)].p,ewma=result.models.ewma.prob[s.threshold.toFixed(3)].p;
- $("insight").innerHTML="<strong>Scenario findings.</strong> Terminal loss ≥ "+Math.round(s.threshold*100)+"%: GBM "+pct(gbm)+", Markov "+pct(markov)+", EWMA "+pct(ewma)+". All are model-dependent simulated probabilities, not validated real-world accuracy. EWMA's on-page starting variance is provisional.";
+ $("insight").innerHTML="<strong>Scenario findings.</strong> Terminal loss ≥ "+Math.round(s.threshold*100)+"%: GBM "+pct(gbm)+", Markov "+pct(markov)+", EWMA "+pct(ewma)+". All are model-dependent simulated probabilities, not validated real-world accuracy. EWMA's starting variance is copied from the executed notebook.";
  verify();drawDistribution();
 }
 function updatePlay(){
