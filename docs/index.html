@@ -131,7 +131,69 @@
  <p class="validation-note" style="margin-top:15px"><strong>Scientific conclusion:</strong> Markov's small historical scoring advantage over GBM was not statistically conclusive. The 2025 results of newly selected candidates and additional risk measures are exploratory because 2025 had already been inspected. No ≥35% loss events occurred. EWMA did not consistently improve terminal-loss forecasts. The historical replay above reveals an actual outcome; it is never used to generate forecast paths.</p></div>
  </div>
 </section>
-<section class="section" id="methodology"><div class="section-heading"><div><div class="overline">03 · Scientific foundations</div><h2>Models, assumptions and verification</h2><p>Make the mathematics and limits visible, without turning the main dashboard into an instruction manual.</p></div></div>
+<section class="section v3-research-section" id="validation2026" aria-labelledby="holdoutTitle">
+ <div class="section-heading"><div><div class="overline">03 · Independent retrospective replication</div><h2 id="holdoutTitle">2026 Holdout: Five Models vs Reality</h2><p>Test the original models alongside Adaptive GBM and GARCH using <strong>274 identical 30-day Bitcoin forecast windows</strong>. This is a fixed 2026 retrospective comparison, not a live prediction.</p></div><span class="pill">VERIFIED 2026 EVIDENCE</span></div>
+ <div class="v3-period-switch" role="navigation" aria-label="Historical evaluation periods"><a href="#validation">2025 · Original three-model evaluation</a><a href="#validation2026" aria-current="page">2026 · Five-model holdout</a></div>
+ <div class="v3-summary-strip" aria-label="2026 research summary">
+   <div><small>ACTUAL ≥10% LOSS EVENTS</small><strong id="holdoutEventHeadline">62 / 274</strong><p>22.63% of overlapping windows</p></div>
+   <div><small>LOWEST 10% BRIER SCORE</small><strong id="holdoutBestHeadline">GBM · 0.175239</strong><p>Constant-volatility baseline</p></div>
+   <div><small>NEW MODEL IMPROVEMENT</small><strong>Not established</strong><p>Neither Adaptive GBM nor GARCH beat GBM convincingly</p></div>
+ </div>
+ <div class="v3-evidence-grid">
+   <article class="card v3-evidence-panel">
+    <div class="card-head"><div><h2>Select a historical forecast</h2><p>Forecast made at the selected day's BTC close · outcome exactly 30 days later</p></div><span class="pill">274 ORIGINS</span></div>
+    <div class="content-pad">
+     <div class="v3-between"><div><span class="v3-kicker">FORECAST ORIGIN (UTC)</span><strong class="v3-date" id="holdoutDate">2026-01-01</strong><span class="v3-muted" id="holdoutTarget">Outcome: 2026-01-31</span></div>
+     <div class="v3-button-pair"><button type="button" id="holdoutPrev" class="button-secondary">‹ Prev</button><button type="button" id="holdoutNext" class="button-secondary">Next ›</button></div></div>
+     <label class="v3-range-label" for="holdoutDateSlider">Explore forecast origins</label>
+     <input class="v3-range" type="range" min="0" max="273" step="1" value="0" id="holdoutDateSlider">
+     <div class="v3-between v3-muted"><span>1 January 2026</span><span>1 October 2026</span></div>
+     <div class="v3-between v3-threshold-row"><div><span class="v3-kicker">30-DAY TERMINAL LOSS</span><div class="v3-button-pair v3-thresholds" role="group" aria-label="2026 terminal loss threshold"><button type="button" data-holdout-threshold="10" aria-pressed="true">≥10%</button><button type="button" data-holdout-threshold="20" aria-pressed="false">≥20%</button><button type="button" data-holdout-threshold="35" aria-pressed="false">≥35%</button></div></div><button id="holdoutFindLoss" type="button" class="button-secondary">Find loss event</button></div>
+     <div class="v3-actual v3-actual--neutral" id="holdoutActual" role="status">Select a date to compare model probabilities with the real outcome.</div>
+    </div>
+   </article>
+   <article class="card v3-evidence-panel">
+    <div class="card-head"><div><h2>Recorded predictions vs actual outcome</h2><p>Probabilities from the frozen, audited 2026 research ledger</p></div><span class="pill">NOT SIMULATION SLIDERS</span></div>
+    <div class="content-pad"><div class="v3-between v3-outcome"><span class="v3-kicker">ACTUAL RESULT</span><strong id="holdoutOutcome">—</strong></div><div id="holdoutModelBars" class="v3-model-bars"></div><p class="v3-muted">A probability is a forecast. Its accuracy is judged across all 274 dates using Brier scores, not by matching one YES/NO outcome.</p></div>
+   </article>
+ </div>
+ <article class="card v3-evidence-panel v3-chart-panel">
+  <div class="card-head"><div><h2>How risk probabilities changed throughout 2026</h2><p>Five archived model probability curves and actual terminal-loss event markers, displayed on the same dates</p></div><span class="pill">SELECT A DATE</span></div>
+  <div class="content-pad"><canvas class="v3-canvas v3-probability-chart" id="holdoutProbabilityChart" aria-label="Five 2026 forecast probability curves with actual loss events; click to select a date" role="img" tabindex="0"></canvas><div class="v3-legend" id="holdoutLegend"></div><p class="v3-muted" id="holdoutChartHover" aria-live="polite">Move your pointer across the chart or select a date to inspect the model forecasts.</p></div>
+ </article>
+ <article class="card v3-evidence-panel v3-chart-panel">
+  <div class="card-head"><div><h2>Replay what Bitcoin actually did over 30 days</h2><p>Observed subsequent UTC closing prices. The chosen loss boundary is drawn as a reference; future closes stay hidden until revealed.</p></div><span class="pill">ACTUAL CLOSES · NOT CANDLES</span></div>
+  <div class="content-pad"><canvas class="v3-canvas v3-price-chart" id="holdoutPriceChart" aria-label="Actual subsequent 30 daily BTC closes compared with origin price and selected loss threshold" role="img"></canvas>
+   <div class="v3-legend"><span><i style="background:#edf7ff"></i>Observed BTC daily closes</span><span><i style="background:#f69aa8"></i>Loss threshold</span><span><i style="background:#7bcab6"></i>Original investment price</span></div>
+   <div class="v3-between v3-replay-top"><div class="v3-button-pair"><button type="button" class="button-primary" id="holdoutPlay">▶ Play actual outcome</button><button type="button" class="button-secondary" id="holdoutReveal">Reveal day 30</button><button type="button" class="button-secondary" id="holdoutHide">↺ Hide future</button></div><strong id="holdoutDay">Day 0 / 30</strong></div>
+   <input class="v3-range" type="range" min="0" max="30" value="0" step="1" id="holdoutReplaySlider" aria-label="Reveal actual subsequent historical daily closes">
+   <div class="v3-replay-stats"><div><small>BTC close at forecast origin</small><strong id="holdoutStartPrice">—</strong></div><div><small>Observed close on day 30</small><strong id="holdoutFinalPrice">Hidden</strong></div><div><small>Realized 30-day return</small><strong id="holdoutReturn">Hidden</strong></div><div><small>Starting Markov regime</small><strong id="holdoutRegime">—</strong></div></div>
+   <p class="v3-muted" id="holdoutReplayNote">Only the starting price is visible. Future Bitcoin prices are not used to create model probability predictions.</p>
+  </div>
+ </article>
+ <div class="v3-evidence-grid">
+  <article class="card v3-evidence-panel">
+   <div class="card-head"><div><h2>2026 forecast accuracy</h2><p>Same forecast dates, same 30-day loss event, same Brier scoring method · lower is better</p></div></div>
+   <div class="content-pad"><p class="v3-muted" id="holdoutSample">274 overlapping forecast origins, 2026 Jan–Oct.</p><div class="v3-score-bars" id="holdoutScoreBars"></div>
+    <div class="table-scroll"><table id="holdoutScoreTable"><thead><tr><th>Forecast model</th><th>Mean risk</th><th>Brier score</th></tr></thead><tbody></tbody></table></div>
+    <p class="v3-muted">The historical-frequency benchmark is trained only on the original calibration period, not on future 2026 data.</p>
+   </div>
+  </article>
+  <article class="card v3-evidence-panel">
+   <div class="card-head"><div><h2>Does the improvement hold statistically?</h2><p>Paired 30-day moving-block bootstrap · 3,000 resamples · Holm correction</p></div></div>
+   <div class="content-pad">
+    <p id="holdoutInferenceHeadline" class="v3-inference">Neither new model demonstrated a conclusive improvement.</p>
+    <div class="table-scroll"><table id="holdoutInferenceTable"><thead><tr><th>Candidate minus GBM</th><th>Difference</th><th>95% interval</th><th>Holm p</th></tr></thead><tbody></tbody></table></div>
+    <p class="v3-muted">Negative Brier difference favors the candidate. If the interval spans zero or adjusted p is not below 0.05, improvement is not established.</p>
+    <p class="v3-muted"><strong>Scientific limitations:</strong> Forecast windows overlap, 2026 was analyzed retrospectively rather than prospectively, models assume Gaussian conditional shocks, and no ≥35% losses were observed in these windows. Neither faster-moving probabilities nor 20,000 Monte Carlo paths guarantees predictive skill.</p>
+    <a href="https://github.com/it23372726/cryptorisk-lab/blob/main/research/phase3_2026/results/FINDINGS.md" target="_blank" rel="noopener noreferrer">Read executed findings and GARCH parameters</a>
+   </div>
+  </article>
+ </div>
+ <div class="v3-across-years"><div><div class="overline">What changed between evaluation periods?</div><h3>2025 and 2026: the best-scoring model can change.</h3><p>Markov scored slightly better than GBM in the original 2025 evaluation, but constant GBM scored better in 2026. A lower score in one sample is not proof of consistent superiority.</p></div><div><strong>2025</strong><span id="holdout2025Lead">Markov · 0.151176</span><strong>2026</strong><span id="holdout2026Lead">GBM · 0.175239</span></div></div>
+ <p class="v3-muted v3-provenance" id="holdoutProvenance">All forecasts and 2026 outcome prices originate from the committed, independently audited research ledger. No browser re-estimation is performed. The 2026 price replay uses recorded daily closing prices, not invented OHLC candles.</p>
+</section>
+<section class="section" id="methodology"><div class="section-heading"><div><div class="overline">04 · Scientific foundations</div><h2>Models, assumptions and verification</h2><p>Make the mathematics and limits visible, without turning the main dashboard into an instruction manual.</p></div></div>
  <div class="info-grid">
  <article class="info-box"><h3 class="color-gbm">Geometric Brownian Motion</h3><p>Constant daily log-return parameters μ = 0.000615 and σ = 0.028460 estimated from 2022–2024. Each day uses a seeded independent normal shock; prices evolve multiplicatively.</p><p><code>ln(Pₜ₊₁/Pₜ) = μ + σZₜ</code></p></article>
  <article class="info-box"><h3 class="color-markov">Two-state Markov model</h3><p>Calm/volatile log-return means and standard deviations differ by state. State transitions use 499/540 for Calm→Calm and 500/541 for Volatile→Volatile. Overlapping 14-day volatility windows mechanically inflate apparent persistence.</p><p><code>rₜ ∼ Normal(μ_state, σ_state²)</code></p></article>
