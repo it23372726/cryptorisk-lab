@@ -57,7 +57,7 @@ try:
                     world:c.view.start+(x-13)/c.plotWidth*c.view.count};
         }""", viewport_x)
         page.mouse.wheel(0,-330)
-        page.wait_for_function("n => window.CRLApp.chart.view.count < n", before_zoom["count"])
+        page.wait_for_function("n => window.CRLApp.chart.view.count < n", arg=before_zoom["count"])
         after_zoom = page.evaluate("""x => {
             const c=window.CRLApp.chart;
             return {count:c.view.count,
