@@ -91,3 +91,15 @@
  #comparison .grid2{grid-template-columns:minmax(0,1fr)}
  #comparison #riskTable{min-width:780px}
 }
+
+/* Unified historical period selector. Same charts, distinct audited datasets. */
+.v4-year-selector{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:12px 0 13px;max-width:810px}
+.v4-year-selector button{display:flex;flex-direction:column;gap:4px;text-align:left;min-width:0;border:1px solid #354c61;border-radius:12px;padding:13px 18px;background:#142133;color:#aec4d6;transition:background .18s ease,border-color .18s ease}
+.v4-year-selector button strong{font-size:20px;letter-spacing:-.035em;color:#eaf5ff}
+.v4-year-selector button span{font-size:11px;line-height:1.5}
+.v4-year-selector button[aria-pressed=true]{border-color:#75b7dc;background:#1d354b;box-shadow:inset 0 0 0 1px #4c879e}
+.v4-year-selector button[aria-pressed=true] strong{color:#ffffff}
+.v4-year-selector button:hover{border-color:#7caac7}
+.v4-year-selector button:focus-visible{outline:2px solid #9ad8fa;outline-offset:3px}
+.v4-year-note{color:#adc7da;font-size:12px;max-width:960px;line-height:1.7;margin:0 0 20px;padding:12px 16px;background:#102336;border-left:3px solid #64b3d5;border-radius:0 9px 9px 0}
+@media(max-width:600px){.v4-year-selector{grid-template-columns:1fr}.v4-year-selector button{padding:11px 14px}.v4-year-selector button strong{font-size:18px}}
