@@ -17,6 +17,8 @@ required_markers = [
     "# M2: Model-selection experiment",
     "# M3: Verify the entire",
     "# M4: Retrospective risk diagnostics",
+    "# X2: Independently measured Monte Carlo error scaling",
+    "# X5: Explicit 95% paired-seed intervals",
 ]
 cells = ["".join(c.get("source", "")) for c in nb.cells]
 for marker in required_markers:
@@ -161,6 +163,8 @@ for item in [
     "PASS: EWMA candidate selection completed using 2024 validation only",
     "PASS: Three-model 2025 validation, historical benchmark and dependence-aware uncertainty completed",
     "PASS: Terminal risk, daily-close touches, max drawdown and exploratory observed-path checks completed",
+    "PASS: Independent N^(-1/2) Monte Carlo error-scaling experiment completed",
+    "PASS: X5 paired sensitivity confidence intervals completed",
 ]:
     assert item in text_output, f"Missing expected verification: {item}"
 print("PASS: Full notebook executed without errors", flush=True)
