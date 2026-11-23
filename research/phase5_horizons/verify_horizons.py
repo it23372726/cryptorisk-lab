@@ -61,9 +61,9 @@ for year in ("2025","2026"):
         for i,(row,record) in enumerate(zip(rows,bundle["rows"])):
             assert len(record)==30
             for k,v in zip(columns,record):
-                original=row[k]
-                if k in ("origin","target"):assert v==original
-                else:assert math.isclose(float(v),float(original),rel_tol=1e-12,abs_tol=1e-12)
+                saved_value=row[k]
+                if k in ("origin","target"):assert v==saved_value
+                else:assert math.isclose(float(v),float(saved_value),rel_tol=1e-12,abs_tol=1e-12)
             assert (dt.date.fromisoformat(row["target"])-dt.date.fromisoformat(row["origin"])).days==h
             assert int(row["regime"]) in (0,1)
             assert float(row["ewma_nextvar"])>0 and float(row["garch_nextvar_pct2"])>0
