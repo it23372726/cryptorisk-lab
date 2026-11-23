@@ -1,4 +1,4 @@
-"""Browser end-to-end checks for the CryptoRisk Lab v2 historical research terminal."""
+"""Browser end-to-end checks for the CryptoRisk Lab five-model scientific research terminal."""
 import contextlib
 import json
 import pathlib
@@ -32,6 +32,83 @@ try:
         assert page.evaluate("() => window.CRL_HISTORY.candles.at(-1).date") == "2025-12-31"
         assert "2025-12-31" in page.locator("#actual2025Summary").inner_text()
         print("PASS: 396 authentic daily Binance candles, complete 2025, origin preserved", flush=True)
+
+        # 2026 ledger is directly sourced from the frozen audited scientific model run.
+        page.wait_for_function("() => !!window.CRLHoldout2026 && !!window.CRL_EVIDENCE_2026", timeout=30000)
+        five = page.evaluate("""() => {
+          const core=window.CRLCore,d=window.CRLHoldout2026,models=core.models;
+          const rows=d.rows,metric=d.evidence.scores;
+          const brier=(m,t)=>rows.reduce((sum,r)=>sum+(r.prob[m][t]-r.events[t])**2,0)/rows.length;
+          return {
+            models,first:rows[0].origin,last:rows.at(-1).origin,n:rows.length,
+            events:[10,20,35].map(t=>rows.reduce((s,r)=>s+r.events[t],0)),
+            fixedFit:core.CAL.garch,nextVar:core.CAL.garch.nextVar,
+            rollingSigma:core.adaptiveWarmStart(),
+            auditedGBM:brier("gbm",10),publishedGBM:metric["10"].models.gbm.brier,
+            auditedGarch:brier("garch",20),publishedGarch:metric["20"].models.garch.brier,
+            publishedAdaptive:metric["10"].models.adaptive_gbm.brier,
+            actualOct:d.getHistoricalClose("2026-10-31"),
+            startingPrice:core.origin
+          };
+        }""")
+        assert five["models"] == ["gbm","markov","ewma","adaptive_gbm","garch"]
+        assert (five["first"],five["last"],five["n"]) == ("2026-01-01","2026-10-01",274)
+        assert five["events"] == [62,38,0]
+        assert abs(five["auditedGBM"]-five["publishedGBM"])<1e-10
+        assert abs(five["auditedGarch"]-five["publishedGarch"])<1e-10
+        assert five["publishedAdaptive"]>five["publishedGBM"]
+        assert 0<five["rollingSigma"]<1 and five["startingPrice"]==93576
+        assert abs(five["nextVar"]-5.547208876802669)<1e-10
+        assert five["actualOct"]>0
+        assert "0.175239" in page.locator("#holdoutScoreTable").inner_text()
+        assert page.locator("#holdoutModelBars .v3-bar-row").count() == 6
+        print("PASS: Five-model engine + 274 genuine 2026 outcomes, all loss events, exact Brier parity", flush=True)
+
+        # Exercise a distinct historical year without modifying the original 2025 validation.
+        page.locator("#validation2026").scroll_into_view_if_needed()
+        assert page.locator("#holdoutProbabilityChart").is_visible()
+        assert page.locator("#holdoutPriceChart").is_visible()
+        assert "0.175239" in page.locator("#holdoutScoreTable").inner_text()
+        page.locator('button[data-holdout-threshold="20"]').click()
+        assert "38 actual" in page.locator("#holdoutSample").inner_text()
+        page.locator('button[data-holdout-threshold="35"]').click()
+        assert page.locator("#holdoutFindLoss").is_disabled()
+        page.locator('button[data-holdout-threshold="10"]').click()
+        assert page.locator("#holdoutFindLoss").is_enabled()
+        page.locator("#holdoutFindLoss").click()
+        assert page.evaluate("""() => {
+          const h=window.CRLHoldout2026;return h.rows[h.state.index].events[10]===1;
+        }""")
+        print("PASS: 2026 threshold-dependent probabilities, loss event filtering and six-model scores", flush=True)
+        page.locator("#holdoutDateSlider").evaluate(
+          "(e)=>{e.value=273;e.dispatchEvent(new Event('input',{bubbles:true}));}"
+        )
+        assert page.locator("#holdoutDate").inner_text()=="2026-10-01"
+        assert "2026-10-31" in page.locator("#holdoutTarget").inner_text()
+        assert page.locator("#holdoutFinalPrice").inner_text()=="Hidden"
+        page.locator("#holdoutReplaySlider").evaluate(
+          "(e)=>{e.value=15;e.dispatchEvent(new Event('input',{bubbles:true}));}"
+        )
+        assert "Day 15 / 30" in page.locator("#holdoutDay").inner_text()
+        assert page.locator("#holdoutFinalPrice").inner_text()=="Hidden"
+        page.locator("#holdoutReveal").click()
+        assert "Hidden" not in page.locator("#holdoutFinalPrice").inner_text()
+        assert "Day 30 / 30" in page.locator("#holdoutDay").inner_text()
+        actual_2026 = page.evaluate("""() => {
+          const h=window.CRLHoldout2026,row=h.rows[h.state.index];
+          return {day:h.state.day,close:row.future,source:h.getHistoricalClose(row.target)};
+        }""")
+        assert actual_2026["day"]==30
+        assert abs(actual_2026["close"]-actual_2026["source"])<.011
+        page.locator("#holdoutPriceChart").scroll_into_view_if_needed()
+        page.screenshot(path="browser-verification-2026-replay.png",full_page=False)
+        page.locator("#holdoutHide").click()
+        assert page.locator("#holdoutFinalPrice").inner_text()=="Hidden"
+        page.locator("#holdoutProbabilityChart").scroll_into_view_if_needed()
+        page.screenshot(path="browser-verification-2026.png",full_page=False)
+        assert not page.evaluate("() => !!window.CRL_EVIDENCE_2026.candles"), "Must not fabricate 2026 OHLC candles"
+        assert "0.151176" in page.locator("#rvScoreTable").inner_text()
+        print("PASS: 2026 observed UTC daily close replay and untouched 2025 original evaluation", flush=True)
         # New Predictions vs Reality verification: these numbers are exported
         # by an executed scientific notebook, never hardcoded in the UI.
         page.wait_for_function("() => window.CRLValidation && window.CRL_VALIDATION.rows.length===335", timeout=30000)
@@ -207,6 +284,15 @@ try:
         page.locator('input[name="paths"][value="1000"]').check(force=True)
         page.locator("#startBtn").click()
         page.wait_for_function("() => window.CRLApp.result && window.CRLApp.result.models.ewma.n === 1000", timeout=30000)
+        assert page.evaluate("() => window.CRLApp.result.models.adaptive_gbm.n") == 1000
+        assert page.evaluate("() => window.CRLApp.result.models.garch.n") == 1000
+        assert "%" in page.locator("#kpiAdaptive").inner_text()
+        assert "%" in page.locator("#kpiGarch").inner_text()
+        assert page.locator("#riskTable [data-model='adaptive_gbm'][data-metric='p10']").inner_text().endswith("%")
+        assert page.locator("#riskTable [data-model='garch'][data-metric='p10']").inner_text().endswith("%")
+        first_new = {model: page.evaluate(f"() => window.CRLApp.result.models['{model}'].prob['0.100'].p")
+                     for model in ("gbm","markov","ewma","adaptive_gbm","garch")}
+
         first = page.locator("#kpiGbm").inner_text()
         assert "%" in first
         assert "PASS" in page.locator("#verifyStatus").inner_text()
@@ -245,6 +331,10 @@ try:
         page.locator("#startBtn").click()
         page.wait_for_function("() => window.CRLApp.result && window.CRLApp.result.models.gbm.n === 1000", timeout=30000)
         assert first == page.locator("#kpiGbm").inner_text(), "Same seed/settings did not reproduce GBM output"
+        for model,expected in first_new.items():
+            observed=page.evaluate(f"() => window.CRLApp.result.models['{model}'].prob['0.100'].p")
+            assert observed == expected, "Seeded five-model scenario changed for "+model
+
         print("PASS: Reproducible Monte Carlo probabilities", flush=True)
         # Capture the full 30-day forecast fan and sample trajectories, not a half-drawn frame.
         page.locator("#revealBtn").click()
