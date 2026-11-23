@@ -43,6 +43,14 @@ try:
         assert "Sample Markov path:" in page.locator("#regimeStatus").inner_text()
         page.locator('button[data-view="markov"]').click()
         assert page.locator('button[data-view="markov"]').get_attribute("aria-pressed") == "true"
+        pick = page.evaluate("""() => {
+          const c=window.CRLApp.chart,a=c.axis,d=15;
+          const sample=window.CRLApp.result.models.markov.paths[0].values[d];
+          return {x: a.pad.l+((c.originIdx+d-c.view.start+.5)/c.view.count)*a.graphW, y:a.y(sample)};
+        }""")
+        page.locator("#mainChart").click(position=pick)
+        assert "MARKOV path" in page.locator("#pathInspector").inner_text()
+        print("PASS: Clickable simulated path reveals price, P/L, drawdown and regime", flush=True)
         page.locator("#revealBtn").click()
         assert page.locator("#revealBtn").get_attribute("aria-pressed") == "true"
         print("PASS: Forecast scrubber, regime, overlays and actual-outcome reveal", flush=True)
