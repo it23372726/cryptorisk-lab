@@ -58,6 +58,8 @@ try:
         assert page.locator("#revealBtn").get_attribute("aria-pressed") == "true"
         assert page.evaluate("() => window.CRLApp.chart.view.count") == 396
         assert "2025-12-31" in page.locator("#actual2025Summary").inner_text()
+        page.evaluate("() => window.scrollTo(0, 0)")
+        page.screenshot(path="browser-verification-full-year.png", full_page=False)
         assert page.evaluate("() => window.CRLApp.result.settings.horizon") == 30
         page.locator("#resetView").click()
         assert page.evaluate("() => window.CRLApp.chart.view.count") < 396
