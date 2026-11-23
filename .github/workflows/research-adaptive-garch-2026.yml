@@ -8,6 +8,11 @@ on:
       - 'research/phase3_2026/run_research.py'
       - 'research/phase3_2026/check_results.py'
       - '.github/workflows/research-adaptive-garch-2026.yml'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'research/phase3_2026/**'
+      - '.github/workflows/research-adaptive-garch-2026.yml'
   workflow_dispatch:
 
 permissions:
