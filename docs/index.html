@@ -92,7 +92,7 @@
   <button type="button" data-validation-year="2026" aria-pressed="false"><strong>2026</strong><span>274 forecasts · fixed-protocol retrospective holdout</span></button>
  </div>
  <p class="v4-year-note" id="validationYearStatus">2025: original three models preserved, added Adaptive GBM and GARCH exploratory.</p>
- <div class="v3-summary-strip" aria-label="2026 research summary">
+ <div class="v3-summary-strip" aria-label="Selected-year historical research summary">
    <div><small>ACTUAL ≥10% LOSS EVENTS</small><strong id="holdoutEventHeadline">62 / 335</strong><p id="validationPeriodDates">335 forecasts · Jan–Dec 2025</p></div>
    <div><small>LOWEST 10% BRIER SCORE</small><strong id="holdoutBestHeadline">—</strong><p>Lower Brier score = better</p></div>
    <div><small>NEW MODEL IMPROVEMENT</small><strong id="holdoutNewModelStatus">Exploratory only · not a blind test</strong><p>Interpret statistical evidence by year</p></div>
@@ -101,23 +101,23 @@
    <article class="card v3-evidence-panel">
     <div class="card-head"><div><h2>Select a historical forecast</h2><p>Forecast made at the selected day's BTC close · outcome exactly 30 days later</p></div><span class="pill" id="holdoutOriginCount">ALL FIVE MODELS</span></div>
     <div class="content-pad">
-     <div class="v3-between"><div><span class="v3-kicker">FORECAST ORIGIN (UTC)</span><strong class="v3-date" id="holdoutDate">2026-01-01</strong><span class="v3-muted" id="holdoutTarget">Outcome: 2026-01-31</span></div>
+     <div class="v3-between"><div><span class="v3-kicker">FORECAST ORIGIN (UTC)</span><strong class="v3-date" id="holdoutDate">2025-01-01</strong><span class="v3-muted" id="holdoutTarget">Outcome: 2025-01-31</span></div>
      <div class="v3-button-pair"><button type="button" id="holdoutPrev" class="button-secondary">‹ Prev</button><button type="button" id="holdoutNext" class="button-secondary">Next ›</button></div></div>
      <label class="v3-range-label" for="holdoutDateSlider">Explore forecast origins</label>
      <input class="v3-range" type="range" min="0" max="334" step="1" value="0" id="holdoutDateSlider">
      <div class="v3-between v3-muted"><span id="holdoutDateLeft">1 January 2025</span><span id="holdoutDateRight">1 December 2025</span></div>
-     <div class="v3-between v3-threshold-row"><div><span class="v3-kicker">30-DAY TERMINAL LOSS</span><div class="v3-button-pair v3-thresholds" role="group" aria-label="2026 terminal loss threshold"><button type="button" data-holdout-threshold="10" aria-pressed="true">≥10%</button><button type="button" data-holdout-threshold="20" aria-pressed="false">≥20%</button><button type="button" data-holdout-threshold="35" aria-pressed="false">≥35%</button></div></div><button id="holdoutFindLoss" type="button" class="button-secondary">Find loss event</button></div>
+     <div class="v3-between v3-threshold-row"><div><span class="v3-kicker">30-DAY TERMINAL LOSS</span><div class="v3-button-pair v3-thresholds" role="group" aria-label="Terminal loss threshold"><button type="button" data-holdout-threshold="10" aria-pressed="true">≥10%</button><button type="button" data-holdout-threshold="20" aria-pressed="false">≥20%</button><button type="button" data-holdout-threshold="35" aria-pressed="false">≥35%</button></div></div><button id="holdoutFindLoss" type="button" class="button-secondary">Find loss event</button></div>
      <div class="v3-actual v3-actual--neutral" id="holdoutActual" role="status">Select a date to compare model probabilities with the real outcome.</div>
     </div>
    </article>
    <article class="card v3-evidence-panel">
-    <div class="card-head"><div><h2>Recorded predictions vs actual outcome</h2><p>Probabilities from the frozen, audited 2026 research ledger</p></div><span class="pill">NOT SIMULATION SLIDERS</span></div>
-    <div class="content-pad"><div class="v3-between v3-outcome"><span class="v3-kicker">ACTUAL RESULT</span><strong id="holdoutOutcome">—</strong></div><div id="holdoutModelBars" class="v3-model-bars"></div><p class="v3-muted">A probability is a forecast. Its accuracy is judged across all 274 dates using Brier scores, not by matching one YES/NO outcome.</p></div>
+    <div class="card-head"><div><h2>Recorded predictions vs actual outcome</h2><p>Original research and added exploratory forecasts for the selected year</p></div><span class="pill">NOT SIMULATION SLIDERS</span></div>
+    <div class="content-pad"><div class="v3-between v3-outcome"><span class="v3-kicker">ACTUAL RESULT</span><strong id="holdoutOutcome">—</strong></div><div id="holdoutModelBars" class="v3-model-bars"></div><p class="v3-muted">A probability is a forecast. Its accuracy is judged across all selected-year dates using Brier scores, not by matching one YES/NO outcome.</p></div>
    </article>
  </div>
  <article class="card v3-evidence-panel v3-chart-panel">
-  <div class="card-head"><div><h2>How risk probabilities changed throughout 2026</h2><p>Five archived model probability curves and actual loss-event markers, updated for the selected year</p></div><span class="pill">SELECT A DATE</span></div>
-  <div class="content-pad"><canvas class="v3-canvas v3-probability-chart" id="holdoutProbabilityChart" aria-label="Five 2026 forecast probability curves with actual loss events; click to select a date" role="img" tabindex="0"></canvas><div class="v3-legend" id="holdoutLegend"></div><p class="v3-muted" id="holdoutChartHover" aria-live="polite">Move your pointer across the chart or select a date to inspect the model forecasts.</p></div>
+  <div class="card-head"><div><h2>How risk forecasts changed during the selected year</h2><p>Five archived model probability curves and actual loss-event markers, updated for the selected year</p></div><span class="pill">SELECT A DATE</span></div>
+  <div class="content-pad"><canvas class="v3-canvas v3-probability-chart" id="holdoutProbabilityChart" aria-label="Five archived model forecast probability curves and actual loss events; click to select a date" role="img" tabindex="0"></canvas><div class="v3-legend" id="holdoutLegend"></div><p class="v3-muted" id="holdoutChartHover" aria-live="polite">Move your pointer across the chart or select a date to inspect the model forecasts.</p></div>
  </article>
  <article class="card v3-evidence-panel v3-chart-panel">
   <div class="card-head"><div><h2>Replay what Bitcoin actually did over 30 days</h2><p>Observed subsequent UTC closing prices. The chosen loss boundary is drawn as a reference; future closes stay hidden until revealed.</p></div><span class="pill">ACTUAL CLOSES · NOT CANDLES</span></div>
@@ -131,14 +131,14 @@
  </article>
  <div class="v3-evidence-grid">
   <article class="card v3-evidence-panel">
-   <div class="card-head"><div><h2>2026 forecast accuracy</h2><p>Same forecast dates, same 30-day loss event, same Brier scoring method · lower is better</p></div></div>
-   <div class="content-pad"><p class="v3-muted" id="holdoutSample">274 overlapping forecast origins, 2026 Jan–Oct.</p><div class="v3-score-bars" id="holdoutScoreBars"></div>
+   <div class="card-head"><div><h2>Historical forecast accuracy</h2><p>Same forecast dates, same 30-day loss event, same Brier scoring method · lower is better</p></div></div>
+   <div class="content-pad"><p class="v3-muted" id="holdoutSample">335 overlapping 2025 forecast origins.</p><div class="v3-score-bars" id="holdoutScoreBars"></div>
     <div class="table-scroll"><table id="holdoutScoreTable"><thead><tr><th>Forecast model</th><th>Mean risk</th><th>Brier score</th></tr></thead><tbody></tbody></table></div>
     <p class="v3-muted">The historical-frequency benchmark uses the original 2022–2024 calibration only, never outcomes in the selected year.</p>
    </div>
   </article>
   <article class="card v3-evidence-panel">
-   <div class="card-head"><div><h2>Does the improvement hold statistically?</h2><p>Paired 30-day moving-block bootstrap · 3,000 resamples · Holm correction</p></div></div>
+   <div class="card-head"><div><h2>Does the improvement hold statistically?</h2><p>Historical uncertainty · 30-day moving-block bootstrap · 3,000 samples</p></div></div>
    <div class="content-pad">
     <p id="holdoutInferenceHeadline" class="v3-inference">Historical accuracy varies by year.</p>
     <div class="table-scroll"><table id="holdoutInferenceTable"><thead><tr><th>Candidate minus GBM</th><th>Difference</th><th>95% interval</th><th>Holm p</th></tr></thead><tbody></tbody></table></div>
@@ -148,7 +148,7 @@
    </div>
   </article>
  </div>
- <div class="v3-across-years"><div><div class="overline">What changed between evaluation periods?</div><h3>Model rankings can change between evaluation periods.</h3><p>Markov scored slightly better than GBM in the original 2025 evaluation, while GBM beat Markov in the 2026 holdout. The simple historical-frequency baseline scored better than both in 2025. Changing event frequencies and market regimes mean absolute Brier scores should not be compared naively across years.</p></div><div><strong>2025</strong><span id="holdout2025Lead">Markov · 0.151176</span><strong>2026</strong><span id="holdout2026Lead">GBM · 0.175239</span></div></div>
+ <div class="v3-across-years"><div><div class="overline">What changed between evaluation periods?</div><h3>Historical forecast rankings are not stable.</h3><p>Markov scored slightly better than GBM in the original 2025 evaluation, while GBM beat Markov in the 2026 holdout. The simple historical-frequency baseline scored better than both in 2025. Changing event frequencies and market regimes mean absolute Brier scores should not be compared naively across years.</p></div><div><strong>2025</strong><span id="holdout2025Lead">Markov · 0.151176</span><strong>2026</strong><span id="holdout2026Lead">GBM · 0.175239</span></div></div>
  <p class="v3-muted v3-provenance" id="holdoutProvenance">All probabilities are archived research results. The 2025 original probabilities are preserved unchanged, the new 2025 forecasts are post-hoc exploratory, and the separate 2026 study remains frozen. The price replay uses real daily closes, not invented candles.</p>
 </section>
 <section class="section" id="methodology"><div class="section-heading"><div><div class="overline">03 · Scientific foundations</div><h2>Models, assumptions and verification</h2><p>Make the mathematics and limits visible, without turning the main dashboard into an instruction manual.</p></div></div>
