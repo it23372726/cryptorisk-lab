@@ -44,6 +44,11 @@ for item in [
     "PASS: Original 14-day calibration reproduced",
     "PASS: Day-by-day occupancy matches Markov",
     "PASS: Retrospective diagnostics computed",
+    "PASS: Regime classification audit and 250 shuffled controls completed",
+    "PASS: 12 alternative regime definitions evaluated without 2025 model selection",
+    "PASS: EWMA candidate selection completed using 2024 validation only",
+    "PASS: Three-model 2025 validation, historical benchmark and dependence-aware uncertainty completed",
+    "PASS: Terminal risk, daily-close touches, max drawdown and exploratory observed-path checks completed",
 ]:
     assert item in text_output, f"Missing expected verification: {item}"
 print("PASS: Full notebook executed without errors", flush=True)
@@ -57,4 +62,17 @@ report = {
     "result": "PASS",
     "verified_new_sections": required_markers,
 }
+
+# Preserve the actual model-selection and forecast scores in the artifact, not
+# merely assertion statuses. This evidence is produced by executed notebook cells.
+import re
+phase1_json_line = re.search(r"PHASE1_RESULT_JSON=(\{[^\n]+\})", text_output)
+assert phase1_json_line, "Missing machine-readable Phase 1 results"
+phase1_results = json.loads(phase1_json_line.group(1))
+assert len(phase1_results["candidate_markov_2024_ranking"]) == 12
+assert len(phase1_results["ewma_2024_ranking"]) == 4
+assert len(phase1_results["retrospective_2025_comparison"]) == 15
+report["phase1_results"] = phase1_results
+print("PHASE1_VERIFIED_RESULTS=" + json.dumps(phase1_results, separators=(",", ":")), flush=True)
+
 report_path.write_text(json.dumps(report, indent=2) + "\n")
