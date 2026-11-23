@@ -48,14 +48,14 @@ jobs:
             research/phase5_horizons/results/
           if-no-files-found: error
       - name: Commit first audited evidence onto isolated research branch
-        if: success() && github.event_name == 'push' && github.ref == 'refs/heads/research-web-v5-multi-horizon-7-14-30-60-90'
+        if: success() && ((github.event_name == 'push' && github.ref == 'refs/heads/research-web-v5-multi-horizon-7-14-30-60-90') || (github.event_name == 'pull_request' && github.head_ref == 'research-web-v5-multi-horizon-7-14-30-60-90' && github.event.pull_request.head.repo.full_name == github.repository))
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add docs/v5-evidence-horizons.js research/phase5_horizons/results/
           if ! git diff --cached --quiet; then
             git commit -m 'Archive five-horizon verified BTC forecasts and descriptive validation'
-            git fetch origin "${{ github.ref_name }}"
-            git rebase "origin/${{ github.ref_name }}"
-            git push origin HEAD:${{ github.ref_name }}
+            git fetch origin "${{ github.head_ref || github.ref_name }}"
+            git rebase "origin/${{ github.head_ref || github.ref_name }}"
+            git push origin HEAD:${{ github.head_ref || github.ref_name }}
           fi
