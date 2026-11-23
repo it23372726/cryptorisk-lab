@@ -1,8 +1,8 @@
-name: Verify CryptoRisk Lab v2
+name: Verify CryptoRisk Lab scientific website
 
 on:
   push:
-    branches: [research-web-v2-2026-11-23, phase1-research-ewma-2026-11-23, website-v2-animated-lab-2026-11-23, historical-validation-lab-2026-11-23]
+    branches: [research-web-v2-2026-11-23, phase1-research-ewma-2026-11-23, website-v2-animated-lab-2026-11-23, historical-validation-lab-2026-11-23, website-v3-five-model-2026-validation-2026-11-24]
   pull_request:
     branches: [main]
   workflow_dispatch:
@@ -61,13 +61,15 @@ jobs:
         run: |
           python -m pip install playwright
           python -m playwright install --with-deps chromium
+      - name: Check 2026 standalone evidence reproduces frozen research ledger
+        run: python scripts/verify_v3_evidence.py
       - name: Run end-to-end Chromium checks
         run: python scripts/verify_browser.py
       - name: Upload standalone local preview
         if: success()
         uses: actions/upload-artifact@v4
         with:
-          name: website-v2-standalone-preview
+          name: website-v3-five-model-standalone-preview
           path: docs/
           if-no-files-found: error
       - name: Upload browser screenshot
@@ -81,5 +83,7 @@ jobs:
             browser-verification-crosshair.png
             browser-verification-predictions-reality.png
             browser-verification-validation-replay.png
+            browser-verification-2026.png
+            browser-verification-2026-replay.png
             browser-verification-mobile.png
           if-no-files-found: ignore
