@@ -6,7 +6,7 @@ class ForecastChart {
   this.canvas=canvas;this.tooltip=tooltip;this.candles=global.CRL_HISTORY.candles;
   this.originIdx=this.candles.findIndex(c=>c.date==="2024-12-31");
   if(this.originIdx<0||this.candles[this.originIdx].close!==93576)throw Error("Historical candle origin mismatch");
-  this.view={start:0,count:61};this.cursor=null;this.drag=null;
+  this.view={start:0,count:61};this.cursor=null;this.drag=null;this.selectedPath=null;this.onSelectPath=null;
   this.state={result:null,day:0,view:"all",reveal:false,threshold:.10,horizon:30};
   this.canvas.addEventListener("wheel",e=>{e.preventDefault();const b=this.canvas.getBoundingClientRect();let anchor=(e.clientX-b.left-55)/Math.max(10,b.width-135);anchor=Math.max(0,Math.min(1,anchor));const old=this.view.count;let next=Math.max(16,Math.min(115,old*(e.deltaY>0?1.13:.87)));this.view.start+=anchor*(old-next);this.view.count=next;this.clampView();this.draw();},{passive:false});
   this.canvas.addEventListener("pointerdown",e=>{this.drag={x:e.clientX,start:this.view.start};this.canvas.setPointerCapture(e.pointerId);});
@@ -15,7 +15,20 @@ class ForecastChart {
   this.canvas.addEventListener("pointercancel",()=>{this.drag=null;});
   this.canvas.addEventListener("pointerleave",()=>{this.cursor=null;this.drag=null;this.tooltip.style.display="none";this.draw();});
   this.canvas.addEventListener("dblclick",()=>this.resetZoom());
+  this.canvas.addEventListener("click",e=>this.selectAt(e));
   if("ResizeObserver" in global){this.ro=new ResizeObserver(()=>this.draw());this.ro.observe(canvas);}else global.addEventListener("resize",()=>this.draw());
+ }
+ selectAt(e){
+  const {result,view,day}=this.state;
+  if(!result||view==="all"||!this.axis)return;
+  const a=this.axis,idx=Math.round((e.offsetX-a.pad.l)/a.graphW*this.view.count+this.view.start-.5);
+  const d=idx-this.originIdx;
+  if(d<0||d>Math.floor(day)||d>result.settings.horizon)return;
+  const paths=result.models[view].paths.slice(0,16);let closest=-1,dist=Infinity;
+  for(let k=0;k<paths.length;k++){const gap=Math.abs(a.y(paths[k].values[d])-e.offsetY);if(gap<dist){dist=gap;closest=k;}}
+  this.selectedPath=dist<=19?{model:view,index:closest}:null;
+  if(typeof this.onSelectPath==="function")this.onSelectPath(this.selectedPath);
+  this.draw();
  }
  resetZoom(){this.view={start:0,count:Math.max(61,this.originIdx+this.state.horizon+1)};this.clampView();this.draw();}
  clampView(){const n=Math.max(this.candles.length,this.originIdx+this.state.horizon+1);this.view.start=Math.max(-.3,Math.min(n-this.view.count+.3,this.view.start));}
@@ -40,6 +53,7 @@ class ForecastChart {
   values.push(93576,93576*(1-threshold));
   let min=Math.min(...values),max=Math.max(...values);const span=Math.max(250,max-min);min-=span*.095;max+=span*.095;
   const y=v=>P.bottom-(v-min)/(max-min)*(P.bottom-P.top);
+  this.axis={y,pad,graphW};
   const regionStart=Math.max(pad.l,x(this.originIdx)+barW/2);
   g.fillStyle="#192b43";g.globalAlpha=.33;g.fillRect(regionStart,P.top,Math.max(0,w-pad.r-regionStart),volumeBottom-P.top);g.globalAlpha=1;
   g.font="11px ui-sans-serif,system-ui,sans-serif";g.textBaseline="middle";g.textAlign="right";
@@ -77,6 +91,17 @@ class ForecastChart {
     g.save();g.strokeStyle=colors[m];g.lineWidth=view==="all"?2.3:3;g.lineJoin="round";g.lineCap="round";
     g.beginPath();iterate((d,ix)=>{const xx=x(this.originIdx+d),yy=y(interpolate(ix,2));d===0?g.moveTo(xx,yy):g.lineTo(xx,yy);});g.stroke();g.restore();
    }
+  }
+  // Emphasize the individually selected simulated trajectory; model states color Markov segments.
+  if(result&&this.selectedPath&&displayed.includes(this.selectedPath.model)&&dmax>.001){
+    const {model,index}=this.selectedPath,record=result.models[model].paths[index];
+    if(record){const end=Math.floor(dmax);g.save();g.lineWidth=2.9;g.lineCap="round";
+      for(let d=1;d<=end;d++){
+        g.strokeStyle=model==="markov"?(record.states[d-1]===0?"#36d9b2":"#ff8090"):"#f4fcff";
+        g.beginPath();g.moveTo(x(this.originIdx+d-1),y(record.values[d-1]));g.lineTo(x(this.originIdx+d),y(record.values[d]));g.stroke();
+      }
+      g.fillStyle="#fff";g.beginPath();g.arc(x(this.originIdx+end),y(record.values[end]),4,0,Math.PI*2);g.fill();g.restore();
+    }
   }
   // Investment threshold as a constant price level.
   const limit=93576*(1-threshold);
