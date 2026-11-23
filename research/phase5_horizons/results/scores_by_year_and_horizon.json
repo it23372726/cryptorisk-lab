@@ -1,0 +1,3821 @@
+{
+  "2025": {
+    "7": {
+      "10": {
+        "n": 358,
+        "events": 13,
+        "frequency": 0.036312849162011177,
+        "models": {
+          "historical": {
+            "brier": 0.03545812841339789,
+            "mean_probability": 0.05785123966942151,
+            "min_probability": 0.05785123966942149,
+            "max_probability": 0.05785123966942149,
+            "probability_std": 2.0816681711721685e-17
+          },
+          "gbm": {
+            "brier": 0.03631378684119784,
+            "mean_probability": 0.07263860715065665,
+            "min_probability": 0.07263860715065666,
+            "max_probability": 0.07263860715065666,
+            "probability_std": 1.3877787807814457e-17
+          },
+          "markov": {
+            "brier": 0.03584220506927375,
+            "mean_probability": 0.06088932960893855,
+            "min_probability": 0.052025,
+            "max_probability": 0.09271,
+            "probability_std": 0.016794907285357666
+          },
+          "ewma": {
+            "brier": 0.036277435363128496,
+            "mean_probability": 0.032067877094972067,
+            "min_probability": 0.0002,
+            "max_probability": 0.16105,
+            "probability_std": 0.033004697929800965
+          },
+          "adaptive_gbm": {
+            "brier": 0.03669599300445846,
+            "mean_probability": 0.0328872904937204,
+            "min_probability": 9.298157486305008e-05,
+            "max_probability": 0.13496764015374346,
+            "probability_std": 0.03314092563209578
+          },
+          "garch": {
+            "brier": 0.03558650486731843,
+            "mean_probability": 0.06152472067039106,
+            "min_probability": 0.0466,
+            "max_probability": 0.15405,
+            "probability_std": 0.013815875586370355
+          }
+        },
+        "differences": {
+          "markov_minus_gbm": {
+            "mean": -0.0004715817719240995,
+            "ci95": [
+              -0.0014885016655860378,
+              0.0007593041833880668
+            ],
+            "bootstrap_block": 7,
+            "exploratory": true
+          },
+          "markov_minus_historical": {
+            "mean": 0.000384076655875846,
+            "ci95": [
+              -0.0005922888042503701,
+              0.0012489745401941701
+            ],
+            "bootstrap_block": 7,
+            "exploratory": true
+          },
+          "ewma_minus_gbm": {
+            "mean": -3.6351478069350666e-05,
+            "ci95": [
+              -0.0028097394075265155,
+              0.0036946799161049087
+            ],
+            "bootstrap_block": 7,
+            "exploratory": true
+          },
+          "ewma_minus_historical": {
+            "mean": 0.0008193069497305948,
+            "ci95": [
+              -0.0013378991661089547,
+              0.003659443292259975
+            ],
+            "bootstrap_block": 7,
+            "exploratory": true
+          },
+          "adaptive_gbm_minus_gbm": {
+            "mean": 0.0003822061632606143,
+            "ci95": [
+              -0.002633481600730821,
+              0.004207377703995774
+            ],
+            "bootstrap_block": 7,
+            "exploratory": true
+          },
+          "adaptive_gbm_minus_historical": {
+            "mean": 0.00123786459106056,
+            "ci95": [
+              -0.0010702978776520732,
+              0.004204586868433118
+            ],
+            "bootstrap_block": 7,
+            "exploratory": true
+          },
+          "garch_minus_gbm": {
+            "mean": -0.000727281973879407,
+            "ci95": [
+              -0.0016678134745541082,
+              0.0003808722307845046
+            ],
+            "bootstrap_block": 7,
+            "exploratory": true
+          },
+          "garch_minus_historical": {
+            "mean": 0.00012837645392053848,
+            "ci95": [
+              -0.0007320782185380795,
+              0.0008217851068520557
+            ],
+            "bootstrap_block": 7,
+            "exploratory": true
+          }
+        }
+      },
+      "20": {
+        "n": 358,
+        "events": 0,
+        "frequency": 0.0,
+        "models": {
+          "historical": {
+            "brier": 0.0001425052764897493,
+            "mean_probability": 0.011937557392102846,
+            "min_probability": 0.011937557392102846,
+            "max_probability": 0.011937557392102846,
+            "probability_std": 0.0
+          },
+          "gbm": {
+            "brier": 1.5905813390406373e-06,
+            "mean_probability": 0.0012611825161492833,
+            "min_probability": 0.0012611825161492833,
+            "max_probability": 0.0012611825161492833,
+            "probability_std": 0.0
+          },
+          "markov": {
+            "brier": 2.3790636871508383e-06,
+            "mean_probability": 0.001087374301675978,
+            "min_probability": 0.00051,
+            "max_probability": 0.00316,
+            "probability_std": 0.001093929072291946
+          },
+          "ewma": {
+            "brier": 1.826699022346369e-05,
+            "mean_probability": 0.0015730446927374304,
+            "min_probability": 0.0,
+            "max_probability": 0.02755,
+            "probability_std": 0.0039739804501424374
+          },
+          "adaptive_gbm": {
+            "brier": 5.050459299249859e-06,
+            "mean_probability": 0.0007587409395634464,
+            "min_probability": 4.545181964405044e-15,
+            "max_probability": 0.01106620763634601,
+            "probability_std": 0.0021153655679055187
+          },
+          "garch": {
+            "brier": 1.3990265363128491e-05,
+            "mean_probability": 0.002858938547486033,
+            "min_probability": 0.001,
+            "max_probability": 0.02835,
+            "probability_std": 0.002411790982823126
+          }
+        },
+        "differences": {
+          "markov_minus_gbm": {
+            "mean": 7.884823481102009e-07,
+            "ci95": [
+              -1.080022887613075e-07,
+              1.7664655883336645e-06
+            ],
+            "bootstrap_block": 7,
+            "exploratory": true
+          },
+          "markov_minus_historical": {
+            "mean": -0.00014012621280259848,
+            "ci95": [
+              -0.00014102269743946995,
+              -0.000139148229562375
+            ],
+            "bootstrap_block": 7,
+            "exploratory": true
+          },
+          "ewma_minus_gbm": {
+            "mean": 1.667640888442305e-05,
+            "ci95": [
+              1.666507697272212e-06,
+              3.601865312324987e-05
+            ],
+            "bootstrap_block": 7,
+            "exploratory": true
+          },
+          "ewma_minus_historical": {
+            "mean": -0.0001242382862662856,
+            "ci95": [
+              -0.00013924818745343642,
+              -0.00010489604202745879
+            ],
+            "bootstrap_block": 7,
+            "exploratory": true
+          },
+          "adaptive_gbm_minus_gbm": {
+            "mean": 3.459877960209221e-06,
+            "ci95": [
+              -8.750156343576073e-07,
+              9.207138903345015e-06
+            ],
+            "bootstrap_block": 7,
+            "exploratory": true
+          },
+          "adaptive_gbm_minus_historical": {
+            "mean": -0.00013745481719049942,
+            "ci95": [
+              -0.00014178971078506624,
+              -0.00013170755624736363
+            ],
+            "bootstrap_block": 7,
+            "exploratory": true
+          },
+          "garch_minus_gbm": {
+            "mean": 1.2399684024087854e-05,
+            "ci95": [
+              5.992514156769419e-06,
+              2.1905768870456568e-05
+            ],
+            "bootstrap_block": 7,
+            "exploratory": true
+          },
+          "garch_minus_historical": {
+            "mean": -0.0001285150111266208,
+            "ci95": [
+              -0.00013492218099393923,
+              -0.00011900892628025208
+            ],
+            "bootstrap_block": 7,
+            "exploratory": true
+          }
+        }
+      },
+      "35": {
+        "n": 358,
+        "events": 0,
+        "frequency": 0.0,
+        "models": {
+          "historical": {
+            "brier": 0.0,
+            "mean_probability": 0.0,
+            "min_probability": 0.0,
+            "max_probability": 0.0,
+            "probability_std": 0.0
+          },
+          "gbm": {
+            "brier": 1.4249064970454527e-17,
+            "mean_probability": 3.774793367914928e-09,
+            "min_probability": 3.774793367914928e-09,
+            "max_probability": 3.774793367914928e-09,
+            "probability_std": 0.0
+          },
+          "markov": {
+            "brier": 0.0,
+            "mean_probability": 0.0,
+            "min_probability": 0.0,
+            "max_probability": 0.0,
+            "probability_std": 0.0
+          },
+          "ewma": {
+            "brier": 5.195530726256982e-09,
+            "mean_probability": 1.5083798882681565e-05,
+            "min_probability": 0.0,
+            "max_probability": 0.0007,
+            "probability_std": 7.048410982287991e-05
+          },
+          "adaptive_gbm": {
+            "brier": 7.250837051577067e-13,
+            "mean_probability": 1.823212918349957e-07,
+            "min_probability": 4.852285859524452e-50,
+            "max_probability": 6.018897542080929e-06,
+            "probability_std": 8.3177079276765e-07
+          },
+          "garch": {
+            "brier": 6.0614525139664806e-09,
+            "mean_probability": 2.2625698324022344e-05,
+            "min_probability": 0.0,
+            "max_probability": 0.0011,
+            "probability_std": 7.449516957036082e-05
+          }
+        },
+        "differences": {
+          "markov_minus_gbm": {
+            "mean": -1.4249064970454527e-17,
+            "ci95": [
+              -1.4249064970454527e-17,
+              -1.4249064970454527e-17
+            ],
+            "bootstrap_block": 7,
+            "exploratory": true
+          },
+          "markov_minus_historical": {
+            "mean": 0.0,
+            "ci95": [
+              0.0,
+              0.0
+            ],
+            "bootstrap_block": 7,
+            "exploratory": true
+          },
+          "ewma_minus_gbm": {
+            "mean": 5.195530712007918e-09,
+            "ci95": [
+              2.3044691312523663e-10,
+              1.2159043281840322e-08
+            ],
+            "bootstrap_block": 7,
+            "exploratory": true
+          },
+          "ewma_minus_historical": {
+            "mean": 5.195530726256982e-09,
+            "ci95": [
+              2.3044692737430166e-10,
+              1.2159043296089388e-08
+            ],
+            "bootstrap_block": 7,
+            "exploratory": true
+          },
+          "adaptive_gbm_minus_gbm": {
+            "mean": 7.250694560927362e-13,
+            "ci95": [
+              8.356658220237057e-15,
+              1.9029468884259943e-12
+            ],
+            "bootstrap_block": 7,
+            "exploratory": true
+          },
+          "adaptive_gbm_minus_historical": {
+            "mean": 7.250837051577067e-13,
+            "ci95": [
+              8.37090728520751e-15,
+              1.9029611374909645e-12
+            ],
+            "bootstrap_block": 7,
+            "exploratory": true
+          },
+          "garch_minus_gbm": {
+            "mean": 6.061452499717415e-09,
+            "ci95": [
+              1.1590432818403204e-09,
+              1.5084148030443673e-08
+            ],
+            "bootstrap_block": 7,
+            "exploratory": true
+          },
+          "garch_minus_historical": {
+            "mean": 6.0614525139664806e-09,
+            "ci95": [
+              1.1590432960893856e-09,
+              1.5084148044692736e-08
+            ],
+            "bootstrap_block": 7,
+            "exploratory": true
+          }
+        }
+      }
+    },
+    "14": {
+      "10": {
+        "n": 351,
+        "events": 28,
+        "frequency": 0.07977207977207977,
+        "models": {
+          "historical": {
+            "brier": 0.0745581318073212,
+            "mean_probability": 0.11367837338262476,
+            "min_probability": 0.11367837338262476,
+            "max_probability": 0.11367837338262476,
+            "probability_std": 0.0
+          },
+          "gbm": {
+            "brier": 0.07731194079619384,
+            "mean_probability": 0.14224964162653386,
+            "min_probability": 0.14224964162653386,
+            "max_probability": 0.14224964162653386,
+            "probability_std": 0.0
+          },
+          "markov": {
+            "brier": 0.07717448396246442,
+            "mean_probability": 0.12855166666666665,
+            "min_probability": 0.120075,
+            "max_probability": 0.15822,
+            "probability_std": 0.015858391224276885
+          },
+          "ewma": {
+            "brier": 0.07734386234330484,
+            "mean_probability": 0.07092891737891738,
+            "min_probability": 0.0028,
+            "max_probability": 0.229,
+            "probability_std": 0.04976141965426045
+          },
+          "adaptive_gbm": {
+            "brier": 0.0778309376179854,
+            "mean_probability": 0.07791664326236336,
+            "min_probability": 0.0030122476781109008,
+            "max_probability": 0.20876644388751936,
+            "probability_std": 0.05190228650491236
+          },
+          "garch": {
+            "brier": 0.0759894822079772,
+            "mean_probability": 0.1301737891737892,
+            "min_probability": 0.11725,
+            "max_probability": 0.1999,
+            "probability_std": 0.010693563026445701
+          }
+        },
+        "differences": {
+          "markov_minus_gbm": {
+            "mean": -0.0001374568337294637,
+            "ci95": [
+              -0.0028903031892911473,
+              0.003288092373053332
+            ],
+            "bootstrap_block": 14,
+            "exploratory": true
+          },
+          "markov_minus_historical": {
+            "mean": 0.0026163521551431862,
+            "ci95": [
+              0.001028669012721989,
+              0.004212540886526979
+            ],
+            "bootstrap_block": 14,
+            "exploratory": true
+          },
+          "ewma_minus_gbm": {
+            "mean": 3.192154711099212e-05,
+            "ci95": [
+              -0.009854513078858967,
+              0.01215393390005571
+            ],
+            "bootstrap_block": 14,
+            "exploratory": true
+          },
+          "ewma_minus_historical": {
+            "mean": 0.0027857305359836448,
+            "ci95": [
+              -0.004165915029340672,
+              0.011246896903449386
+            ],
+            "bootstrap_block": 14,
+            "exploratory": true
+          },
+          "adaptive_gbm_minus_gbm": {
+            "mean": 0.000518996821791541,
+            "ci95": [
+              -0.008899843279350738,
+              0.012386490238502253
+            ],
+            "bootstrap_block": 14,
+            "exploratory": true
+          },
+          "adaptive_gbm_minus_historical": {
+            "mean": 0.003272805810664193,
+            "ci95": [
+              -0.003427291870658515,
+              0.011563329959803787
+            ],
+            "bootstrap_block": 14,
+            "exploratory": true
+          },
+          "garch_minus_gbm": {
+            "mean": -0.0013224585882166435,
+            "ci95": [
+              -0.002955152444357743,
+              0.0007441122931077671
+            ],
+            "bootstrap_block": 14,
+            "exploratory": true
+          },
+          "garch_minus_historical": {
+            "mean": 0.0014313504006560076,
+            "ci95": [
+              -0.001007381254872365,
+              0.0032911201867583013
+            ],
+            "bootstrap_block": 14,
+            "exploratory": true
+          }
+        }
+      },
+      "20": {
+        "n": 351,
+        "events": 0,
+        "frequency": 0.0,
+        "models": {
+          "historical": {
+            "brier": 0.0006696710753345792,
+            "mean_probability": 0.02587800369685767,
+            "min_probability": 0.025878003696857672,
+            "max_probability": 0.025878003696857672,
+            "probability_std": 3.469446951953614e-18
+          },
+          "gbm": {
+            "brier": 0.0002179998343025366,
+            "mean_probability": 0.01476481744900818,
+            "min_probability": 0.014764817449008184,
+            "max_probability": 0.014764817449008184,
+            "probability_std": 3.469446951953614e-18
+          },
+          "markov": {
+            "brier": 0.00018982325,
+            "mean_probability": 0.013023333333333338,
+            "min_probability": 0.01062,
+            "max_probability": 0.021435,
+            "probability_std": 0.004496224959773353
+          },
+          "ewma": {
+            "brier": 0.00023409358974358973,
+            "mean_probability": 0.007952421652421653,
+            "min_probability": 0.0,
+            "max_probability": 0.07835,
+            "probability_std": 0.01307105885556656
+          },
+          "adaptive_gbm": {
+            "brier": 0.00015658918349245037,
+            "mean_probability": 0.006090029532725996,
+            "min_probability": 1.1699668567100167e-08,
+            "max_probability": 0.049620671776912824,
+            "probability_std": 0.01093163865955034
+          },
+          "garch": {
+            "brier": 0.00028546355413105415,
+            "mean_probability": 0.016297008547008548,
+            "min_probability": 0.01165,
+            "max_probability": 0.05385,
+            "probability_std": 0.004457697449332391
+          }
+        },
+        "differences": {
+          "markov_minus_gbm": {
+            "mean": -2.817658430253658e-05,
+            "ci95": [
+              -6.768368686663916e-05,
+              1.62689060820788e-05
+            ],
+            "bootstrap_block": 14,
+            "exploratory": true
+          },
+          "markov_minus_historical": {
+            "mean": -0.0004798478253345794,
+            "ci95": [
+              -0.0005193549278986819,
+              -0.00043540233494996397
+            ],
+            "bootstrap_block": 14,
+            "exploratory": true
+          },
+          "ewma_minus_gbm": {
+            "mean": 1.609375544105318e-05,
+            "ci95": [
+              -0.0001662196838395736,
+              0.00027913856989974264
+            ],
+            "bootstrap_block": 14,
+            "exploratory": true
+          },
+          "ewma_minus_historical": {
+            "mean": -0.0004355774855909896,
+            "ci95": [
+              -0.0006178909248716163,
+              -0.00017253267113230005
+            ],
+            "bootstrap_block": 14,
+            "exploratory": true
+          },
+          "adaptive_gbm_minus_gbm": {
+            "mean": -6.141065081008618e-05,
+            "ci95": [
+              -0.00019390434373717558,
+              0.00013298728957411013
+            ],
+            "bootstrap_block": 14,
+            "exploratory": true
+          },
+          "adaptive_gbm_minus_historical": {
+            "mean": -0.000513081891842129,
+            "ci95": [
+              -0.0006455755847692183,
+              -0.0003186839514579327
+            ],
+            "bootstrap_block": 14,
+            "exploratory": true
+          },
+          "garch_minus_gbm": {
+            "mean": 6.746371982851757e-05,
+            "ci95": [
+              2.4494233361281108e-05,
+              0.00012859803090401614
+            ],
+            "bootstrap_block": 14,
+            "exploratory": true
+          },
+          "garch_minus_historical": {
+            "mean": -0.00038420752120352523,
+            "ci95": [
+              -0.00042717700767076164,
+              -0.00032307321012802663
+            ],
+            "bootstrap_block": 14,
+            "exploratory": true
+          }
+        }
+      },
+      "35": {
+        "n": 351,
+        "events": 0,
+        "frequency": 0.0,
+        "models": {
+          "historical": {
+            "brier": 8.541722899675756e-07,
+            "mean_probability": 0.0009242144177449165,
+            "min_probability": 0.0009242144177449168,
+            "max_probability": 0.0009242144177449168,
+            "probability_std": 3.2526065174565133e-19
+          },
+          "gbm": {
+            "brier": 3.3992396947744065e-10,
+            "mean_probability": 1.843702713230744e-05,
+            "min_probability": 1.8437027132307438e-05,
+            "max_probability": 1.8437027132307438e-05,
+            "probability_std": 3.3881317890172014e-21
+          },
+          "markov": {
+            "brier": 3.374999999999999e-09,
+            "mean_probability": 3.833333333333334e-05,
+            "min_probability": 1.5e-05,
+            "max_probability": 0.00012,
+            "probability_std": 4.3652669512362645e-05
+          },
+          "ewma": {
+            "brier": 8.958547008547007e-07,
+            "mean_probability": 0.00029173789173789173,
+            "min_probability": 0.0,
+            "max_probability": 0.00735,
+            "probability_std": 0.0009004130737495046
+          },
+          "adaptive_gbm": {
+            "brier": 2.354601448313058e-08,
+            "mean_probability": 4.027413565419244e-05,
+            "min_probability": 1.6851360928955962e-26,
+            "max_probability": 0.0008873413325476397,
+            "probability_std": 0.00014806758078809241
+          },
+          "garch": {
+            "brier": 1.731054131054131e-07,
+            "mean_probability": 0.0003139601139601139,
+            "min_probability": 0.0,
+            "max_probability": 0.00325,
+            "probability_std": 0.00027300999972082587
+          }
+        },
+        "differences": {
+          "markov_minus_gbm": {
+            "mean": 3.0350760305225595e-09,
+            "ci95": [
+              1.4196914151379438e-09,
+              4.852383722830252e-09
+            ],
+            "bootstrap_block": 14,
+            "exploratory": true
+          },
+          "markov_minus_historical": {
+            "mean": -8.507972899675756e-07,
+            "ci95": [
+              -8.524126745829603e-07,
+              -8.48979982275268e-07
+            ],
+            "bootstrap_block": 14,
+            "exploratory": true
+          },
+          "ewma_minus_gbm": {
+            "mean": 8.955147768852233e-07,
+            "ci95": [
+              4.1603095973542505e-08,
+              2.3130719350048826e-06
+            ],
+            "bootstrap_block": 14,
+            "exploratory": true
+          },
+          "ewma_minus_historical": {
+            "mean": 4.1682410887125333e-08,
+            "ci95": [
+              -8.122292700245555e-07,
+              1.4592395690067843e-06
+            ],
+            "bootstrap_block": 14,
+            "exploratory": true
+          },
+          "adaptive_gbm_minus_gbm": {
+            "mean": 2.3206090513653132e-08,
+            "ci95": [
+              -2.759092911167574e-10,
+              6.483342757331585e-08
+            ],
+            "bootstrap_block": 14,
+            "exploratory": true
+          },
+          "adaptive_gbm_minus_historical": {
+            "mean": -8.30626275484445e-07,
+            "ci95": [
+              -8.541082752892149e-07,
+              -7.889989384247822e-07
+            ],
+            "bootstrap_block": 14,
+            "exploratory": true
+          },
+          "garch_minus_gbm": {
+            "mean": 1.7276548913593568e-07,
+            "ci95": [
+              9.271509739804392e-08,
+              3.0658386520431173e-07
+            ],
+            "bootstrap_block": 14,
+            "exploratory": true
+          },
+          "garch_minus_historical": {
+            "mean": -6.810668768621625e-07,
+            "ci95": [
+              -7.611172686000542e-07,
+              -5.472485007937863e-07
+            ],
+            "bootstrap_block": 14,
+            "exploratory": true
+          }
+        }
+      }
+    },
+    "30": {
+      "10": {
+        "n": 335,
+        "events": 62,
+        "frequency": 0.18507462686567164,
+        "models": {
+          "historical": {
+            "brier": 0.15087432659189265,
+            "mean_probability": 0.19230769230769235,
+            "min_probability": 0.19230769230769232,
+            "max_probability": 0.19230769230769232,
+            "probability_std": 2.7755575615628914e-17
+          },
+          "gbm": {
+            "brier": 0.15163141569977123,
+            "mean_probability": 0.21352469441510255,
+            "min_probability": 0.21352469441510258,
+            "max_probability": 0.21352469441510258,
+            "probability_std": 2.7755575615628914e-17
+          },
+          "markov": {
+            "brier": 0.15117624634268656,
+            "mean_probability": 0.20046591044776121,
+            "min_probability": 0.19584,
+            "max_probability": 0.21932,
+            "probability_std": 0.009339021888973526
+          },
+          "ewma": {
+            "brier": 0.15905966337313432,
+            "mean_probability": 0.11906597014925373,
+            "min_probability": 0.0153,
+            "max_probability": 0.2794,
+            "probability_std": 0.060228197196094506
+          },
+          "adaptive_gbm": {
+            "brier": 0.15491189554586143,
+            "mean_probability": 0.13658557524927664,
+            "min_probability": 0.0207673518038806,
+            "max_probability": 0.27370970546667706,
+            "probability_std": 0.06233120941684733
+          },
+          "garch": {
+            "brier": 0.15176570309701495,
+            "mean_probability": 0.2072341791044776,
+            "min_probability": 0.1967,
+            "max_probability": 0.2419,
+            "probability_std": 0.006009660419356595
+          }
+        },
+        "differences": {
+          "markov_minus_gbm": {
+            "mean": -0.00045516935708467645,
+            "ci95": [
+              -0.004889370670538284,
+              0.004678999736969687
+            ],
+            "two_sided_centered_bootstrap_p": 0.8373875374875042,
+            "bootstrap_block": 30,
+            "exploratory": true
+          },
+          "markov_minus_historical": {
+            "mean": 0.0003019197507939488,
+            "ci95": [
+              -0.003924660786675625,
+              0.0033636255581418247
+            ],
+            "two_sided_centered_bootstrap_p": 0.8830389870043319,
+            "bootstrap_block": 30,
+            "exploratory": true
+          },
+          "ewma_minus_gbm": {
+            "mean": 0.007428247673363087,
+            "ci95": [
+              -0.02287787444713242,
+              0.04356266071775288
+            ],
+            "two_sided_centered_bootstrap_p": 0.6537820726424525,
+            "bootstrap_block": 30,
+            "exploratory": true
+          },
+          "ewma_minus_historical": {
+            "mean": 0.008185336781241708,
+            "ci95": [
+              -0.01619683871519916,
+              0.03707916858445641
+            ],
+            "two_sided_centered_bootstrap_p": 0.5324891702765745,
+            "bootstrap_block": 30,
+            "exploratory": true
+          },
+          "adaptive_gbm_minus_gbm": {
+            "mean": 0.003280479846090193,
+            "ci95": [
+              -0.020244214112921287,
+              0.02950449341929186
+            ],
+            "two_sided_centered_bootstrap_p": 0.7964011996001333,
+            "bootstrap_block": 30,
+            "exploratory": true
+          },
+          "adaptive_gbm_minus_historical": {
+            "mean": 0.004037568953968816,
+            "ci95": [
+              -0.013948600770382668,
+              0.0232227108646177
+            ],
+            "two_sided_centered_bootstrap_p": 0.6647784071976008,
+            "bootstrap_block": 30,
+            "exploratory": true
+          },
+          "garch_minus_gbm": {
+            "mean": 0.00013428739724368366,
+            "ci95": [
+              -0.002324241913232657,
+              0.003034520762308062
+            ],
+            "two_sided_centered_bootstrap_p": 0.9236921026324558,
+            "bootstrap_block": 30,
+            "exploratory": true
+          },
+          "garch_minus_historical": {
+            "mean": 0.0008913765051223088,
+            "ci95": [
+              -0.004472491634932233,
+              0.005083512042694073
+            ],
+            "two_sided_centered_bootstrap_p": 0.7074308563812063,
+            "bootstrap_block": 30,
+            "exploratory": true
+          }
+        }
+      },
+      "20": {
+        "n": 335,
+        "events": 8,
+        "frequency": 0.023880597014925373,
+        "models": {
+          "historical": {
+            "brier": 0.024360370985275118,
+            "mean_probability": 0.05628517823639776,
+            "min_probability": 0.05628517823639775,
+            "max_probability": 0.05628517823639775,
+            "probability_std": 1.3877787807814457e-17
+          },
+          "gbm": {
+            "brier": 0.02465784978660965,
+            "mean_probability": 0.06058939276571966,
+            "min_probability": 0.06058939276571967,
+            "max_probability": 0.06058939276571967,
+            "probability_std": 6.938893903907228e-18
+          },
+          "markov": {
+            "brier": 0.024158891891791046,
+            "mean_probability": 0.054531044776119406,
+            "min_probability": 0.05163,
+            "max_probability": 0.066355,
+            "probability_std": 0.005856775865210185
+          },
+          "ewma": {
+            "brier": 0.024437148925373135,
+            "mean_probability": 0.026526268656716413,
+            "min_probability": 0.0002,
+            "max_probability": 0.1395,
+            "probability_std": 0.028584752685252977
+          },
+          "adaptive_gbm": {
+            "brier": 0.02407050898786119,
+            "mean_probability": 0.026054882595989308,
+            "min_probability": 3.487959986563524e-05,
+            "max_probability": 0.12020130051758054,
+            "probability_std": 0.02999189879338364
+          },
+          "garch": {
+            "brier": 0.024682884917910444,
+            "mean_probability": 0.05988731343283582,
+            "min_probability": 0.05295,
+            "max_probability": 0.09055,
+            "probability_std": 0.004535825413895684
+          }
+        },
+        "differences": {
+          "markov_minus_gbm": {
+            "mean": -0.0004989578948186,
+            "ci95": [
+              -0.0008550219601216274,
+              -2.534768180348208e-05
+            ],
+            "two_sided_centered_bootstrap_p": 0.022325891369543487,
+            "bootstrap_block": 30,
+            "exploratory": true
+          },
+          "markov_minus_historical": {
+            "mean": -0.00020147909348406287,
+            "ci95": [
+              -0.00042438791352046335,
+              6.70654686260525e-05
+            ],
+            "two_sided_centered_bootstrap_p": 0.09963345551482838,
+            "bootstrap_block": 30,
+            "exploratory": true
+          },
+          "ewma_minus_gbm": {
+            "mean": -0.0002207008612365111,
+            "ci95": [
+              -0.0029588094052708817,
+              0.0037685906258837338
+            ],
+            "two_sided_centered_bootstrap_p": 0.9046984338553815,
+            "bootstrap_block": 30,
+            "exploratory": true
+          },
+          "ewma_minus_historical": {
+            "mean": 7.677794009802605e-05,
+            "ci95": [
+              -0.002455756178655301,
+              0.003682752680890784
+            ],
+            "two_sided_centered_bootstrap_p": 0.9646784405198268,
+            "bootstrap_block": 30,
+            "exploratory": true
+          },
+          "adaptive_gbm_minus_gbm": {
+            "mean": -0.000587340798748457,
+            "ci95": [
+              -0.002971192955289778,
+              0.002656833071712858
+            ],
+            "two_sided_centered_bootstrap_p": 0.6944351882705765,
+            "bootstrap_block": 30,
+            "exploratory": true
+          },
+          "adaptive_gbm_minus_historical": {
+            "mean": -0.0002898619974139197,
+            "ci95": [
+              -0.0024742546212196573,
+              0.002637139633780884
+            ],
+            "two_sided_centered_bootstrap_p": 0.829723425524825,
+            "bootstrap_block": 30,
+            "exploratory": true
+          },
+          "garch_minus_gbm": {
+            "mean": 2.503513130080107e-05,
+            "ci95": [
+              -0.00018457828978580675,
+              0.0002829870663257573
+            ],
+            "two_sided_centered_bootstrap_p": 0.8363878707097634,
+            "bootstrap_block": 30,
+            "exploratory": true
+          },
+          "garch_minus_historical": {
+            "mean": 0.00032251393263533823,
+            "ci95": [
+              6.556336484460248e-05,
+              0.0005625573927999226
+            ],
+            "two_sided_centered_bootstrap_p": 0.011329556814395202,
+            "bootstrap_block": 30,
+            "exploratory": true
+          }
+        }
+      },
+      "35": {
+        "n": 335,
+        "events": 0,
+        "frequency": 0.0,
+        "models": {
+          "historical": {
+            "brier": 2.2000147840993502e-05,
+            "mean_probability": 0.004690431519699813,
+            "min_probability": 0.004690431519699813,
+            "max_probability": 0.004690431519699813,
+            "probability_std": 0.0
+          },
+          "gbm": {
+            "brier": 3.9067820001539545e-06,
+            "mean_probability": 0.0019765581195993094,
+            "min_probability": 0.0019765581195993085,
+            "max_probability": 0.0019765581195993085,
+            "probability_std": 8.673617379884035e-19
+          },
+          "markov": {
+            "brier": 3.7497597014925377e-06,
+            "mean_probability": 0.0018661194029850746,
+            "min_probability": 0.00161,
+            "max_probability": 0.00291,
+            "probability_std": 0.000517066799645042
+          },
+          "ewma": {
+            "brier": 3.465585074626865e-05,
+            "mean_probability": 0.0025829850746268653,
+            "min_probability": 0.0,
+            "max_probability": 0.0315,
+            "probability_std": 0.005289994220273166
+          },
+          "adaptive_gbm": {
+            "brier": 9.785262909181022e-06,
+            "mean_probability": 0.0011199012166274766,
+            "min_probability": 7.055501745588196e-14,
+            "max_probability": 0.01451884910205371,
+            "probability_std": 0.00292080197448874
+          },
+          "garch": {
+            "brier": 1.3167619402985074e-05,
+            "mean_probability": 0.0035389552238805975,
+            "min_probability": 0.00195,
+            "max_probability": 0.00865,
+            "probability_std": 0.0008021317387769345
+          }
+        },
+        "differences": {
+          "markov_minus_gbm": {
+            "mean": -1.5702229866141712e-07,
+            "ci95": [
+              -8.586342389599244e-07,
+              6.32729641637092e-07
+            ],
+            "two_sided_centered_bootstrap_p": 0.724758413862046,
+            "bootstrap_block": 30,
+            "exploratory": true
+          },
+          "markov_minus_historical": {
+            "mean": -1.8250388139500957e-05,
+            "ci95": [
+              -1.8952000079799466e-05,
+              -1.746063619920245e-05
+            ],
+            "two_sided_centered_bootstrap_p": 0.0003332222592469177,
+            "bootstrap_block": 30,
+            "exploratory": true
+          },
+          "ewma_minus_gbm": {
+            "mean": 3.0749068746114704e-05,
+            "ci95": [
+              -1.8300805076166408e-06,
+              8.50905978505923e-05
+            ],
+            "two_sided_centered_bootstrap_p": 0.1809396867710763,
+            "bootstrap_block": 30,
+            "exploratory": true
+          },
+          "ewma_minus_historical": {
+            "mean": 1.2655702905275162e-05,
+            "ci95": [
+              -1.992344634845618e-05,
+              6.699723200975278e-05
+            ],
+            "two_sided_centered_bootstrap_p": 0.5988003998667111,
+            "bootstrap_block": 30,
+            "exploratory": true
+          },
+          "adaptive_gbm_minus_gbm": {
+            "mean": 5.87848090902707e-06,
+            "ci95": [
+              -3.84688103587285e-06,
+              2.3854518523145996e-05
+            ],
+            "two_sided_centered_bootstrap_p": 0.5001666111296235,
+            "bootstrap_block": 30,
+            "exploratory": true
+          },
+          "adaptive_gbm_minus_historical": {
+            "mean": -1.2214884931812473e-05,
+            "ci95": [
+              -2.194024687671239e-05,
+              5.761152682306446e-06
+            ],
+            "two_sided_centered_bootstrap_p": 0.0753082305898034,
+            "bootstrap_block": 30,
+            "exploratory": true
+          },
+          "garch_minus_gbm": {
+            "mean": 9.26083740283112e-06,
+            "ci95": [
+              7.835726395368433e-06,
+              1.1016634790890823e-05
+            ],
+            "two_sided_centered_bootstrap_p": 0.0003332222592469177,
+            "bootstrap_block": 30,
+            "exploratory": true
+          },
+          "garch_minus_historical": {
+            "mean": -8.832528438008422e-06,
+            "ci95": [
+              -1.0257639445471107e-05,
+              -7.076731049948721e-06
+            ],
+            "two_sided_centered_bootstrap_p": 0.0003332222592469177,
+            "bootstrap_block": 30,
+            "exploratory": true
+          }
+        }
+      }
+    },
+    "60": {
+      "10": {
+        "n": 305,
+        "events": 99,
+        "frequency": 0.32459016393442625,
+        "models": {
+          "historical": {
+            "brier": 0.22423400349614028,
+            "mean_probability": 0.2538610038610038,
+            "min_probability": 0.25386100386100385,
+            "max_probability": 0.25386100386100385,
+            "probability_std": 5.551115123125783e-17
+          },
+          "gbm": {
+            "brier": 0.22348576925612923,
+            "mean_probability": 0.25936455665721736,
+            "min_probability": 0.25936455665721725,
+            "max_probability": 0.25936455665721725,
+            "probability_std": 1.1102230246251565e-16
+          },
+          "markov": {
+            "brier": 0.22541155423565573,
+            "mean_probability": 0.24567365573770492,
+            "min_probability": 0.24292,
+            "max_probability": 0.257155,
+            "probability_std": 0.005622781296158904
+          },
+          "ewma": {
+            "brier": 0.257682731852459,
+            "mean_probability": 0.15015573770491805,
+            "min_probability": 0.03475,
+            "max_probability": 0.31575,
+            "probability_std": 0.06380235407186423
+          },
+          "adaptive_gbm": {
+            "brier": 0.24663976576254185,
+            "mean_probability": 0.18084218844220784,
+            "min_probability": 0.048867056264293454,
+            "max_probability": 0.31248878153529425,
+            "probability_std": 0.06530939982967851
+          },
+          "garch": {
+            "brier": 0.22394092104098362,
+            "mean_probability": 0.25780934426229507,
+            "min_probability": 0.24715,
+            "max_probability": 0.27705,
+            "probability_std": 0.003989835802879925
+          }
+        },
+        "differences": {
+          "markov_minus_gbm": {
+            "mean": 0.0019257849795265049,
+            "ci95": [
+              -0.00633358293741967,
+              0.010587153608840522
+            ],
+            "bootstrap_block": 60,
+            "exploratory": true
+          },
+          "markov_minus_historical": {
+            "mean": 0.001177550739515395,
+            "ci95": [
+              -0.0037756498847615733,
+              0.006326153580950449
+            ],
+            "bootstrap_block": 60,
+            "exploratory": true
+          },
+          "ewma_minus_gbm": {
+            "mean": 0.0341969625963298,
+            "ci95": [
+              -0.033478126813063516,
+              0.10480800304752182
+            ],
+            "bootstrap_block": 60,
+            "exploratory": true
+          },
+          "ewma_minus_historical": {
+            "mean": 0.03344872835631869,
+            "ci95": [
+              -0.030944980476053624,
+              0.10033810400679262
+            ],
+            "bootstrap_block": 60,
+            "exploratory": true
+          },
+          "adaptive_gbm_minus_gbm": {
+            "mean": 0.023153996506412616,
+            "ci95": [
+              -0.027114342528683402,
+              0.07680318859966727
+            ],
+            "bootstrap_block": 60,
+            "exploratory": true
+          },
+          "adaptive_gbm_minus_historical": {
+            "mean": 0.022405762266401508,
+            "ci95": [
+              -0.024676805527394086,
+              0.07301427778090423
+            ],
+            "bootstrap_block": 60,
+            "exploratory": true
+          },
+          "garch_minus_gbm": {
+            "mean": 0.0004551517848543803,
+            "ci95": [
+              -0.0007047366975337038,
+              0.00162545016232186
+            ],
+            "bootstrap_block": 60,
+            "exploratory": true
+          },
+          "garch_minus_historical": {
+            "mean": -0.00029308245515673013,
+            "ci95": [
+              -0.002979504647873039,
+              0.0019226119967666482
+            ],
+            "bootstrap_block": 60,
+            "exploratory": true
+          }
+        }
+      },
+      "20": {
+        "n": 305,
+        "events": 36,
+        "frequency": 0.1180327868852459,
+        "models": {
+          "historical": {
+            "brier": 0.10441245364974716,
+            "mean_probability": 0.1003861003861004,
+            "min_probability": 0.10038610038610038,
+            "max_probability": 0.10038610038610038,
+            "probability_std": 1.3877787807814457e-17
+          },
+          "gbm": {
+            "brier": 0.10410214773498434,
+            "mean_probability": 0.11908141915459437,
+            "min_probability": 0.11908141915459436,
+            "max_probability": 0.11908141915459436,
+            "probability_std": 1.3877787807814457e-17
+          },
+          "markov": {
+            "brier": 0.10417646930581967,
+            "mean_probability": 0.11040686885245903,
+            "min_probability": 0.10822,
+            "max_probability": 0.119525,
+            "probability_std": 0.004465440291751061
+          },
+          "ewma": {
+            "brier": 0.11311766100000002,
+            "mean_probability": 0.051522295081967213,
+            "min_probability": 0.00355,
+            "max_probability": 0.19305,
+            "probability_std": 0.04198164327157501
+          },
+          "adaptive_gbm": {
+            "brier": 0.11450839421536202,
+            "mean_probability": 0.05934936717212126,
+            "min_probability": 0.0012350257695096056,
+            "max_probability": 0.18578929597349403,
+            "probability_std": 0.049414787536810056
+          },
+          "garch": {
+            "brier": 0.10438399097540983,
+            "mean_probability": 0.11909426229508198,
+            "min_probability": 0.11225,
+            "max_probability": 0.14055,
+            "probability_std": 0.003783933879355246
+          }
+        },
+        "differences": {
+          "markov_minus_gbm": {
+            "mean": 7.432157083533389e-05,
+            "ci95": [
+              -0.0020214500252980013,
+              0.002883388713210732
+            ],
+            "bootstrap_block": 60,
+            "exploratory": true
+          },
+          "markov_minus_historical": {
+            "mean": -0.00023598434392746703,
+            "ci95": [
+              -0.0036329049064298606,
+              0.002183063681883335
+            ],
+            "bootstrap_block": 60,
+            "exploratory": true
+          },
+          "ewma_minus_gbm": {
+            "mean": 0.00901551326501566,
+            "ci95": [
+              -0.009581005864692536,
+              0.03494410977393775
+            ],
+            "bootstrap_block": 60,
+            "exploratory": true
+          },
+          "ewma_minus_historical": {
+            "mean": 0.008705207350252857,
+            "ci95": [
+              -0.005798197504173851,
+              0.02853313946751662
+            ],
+            "bootstrap_block": 60,
+            "exploratory": true
+          },
+          "adaptive_gbm_minus_gbm": {
+            "mean": 0.01040624648037767,
+            "ci95": [
+              -0.008439881622670552,
+              0.03732552699930099
+            ],
+            "bootstrap_block": 60,
+            "exploratory": true
+          },
+          "adaptive_gbm_minus_historical": {
+            "mean": 0.010095940565614867,
+            "ci95": [
+              -0.004995339051071775,
+              0.031108244158032053
+            ],
+            "bootstrap_block": 60,
+            "exploratory": true
+          },
+          "garch_minus_gbm": {
+            "mean": 0.00028184324042549526,
+            "ci95": [
+              -8.363290752142234e-05,
+              0.0006728739005029494
+            ],
+            "bootstrap_block": 60,
+            "exploratory": true
+          },
+          "garch_minus_historical": {
+            "mean": -2.846267433730617e-05,
+            "ci95": [
+              -0.005832783131353563,
+              0.004060282607185254
+            ],
+            "bootstrap_block": 60,
+            "exploratory": true
+          }
+        }
+      },
+      "35": {
+        "n": 305,
+        "events": 0,
+        "frequency": 0.0,
+        "models": {
+          "historical": {
+            "brier": 0.0008953727583071212,
+            "mean_probability": 0.029922779922779922,
+            "min_probability": 0.029922779922779922,
+            "max_probability": 0.029922779922779922,
+            "probability_std": 0.0
+          },
+          "gbm": {
+            "brier": 0.00028698552378144515,
+            "mean_probability": 0.01694064708862814,
+            "min_probability": 0.016940647088628143,
+            "max_probability": 0.016940647088628143,
+            "probability_std": 3.469446951953614e-18
+          },
+          "markov": {
+            "brier": 0.00024657704549180324,
+            "mean_probability": 0.015629918032786887,
+            "min_probability": 0.01489,
+            "max_probability": 0.018715,
+            "probability_std": 0.0015108632566074999
+          },
+          "ewma": {
+            "brier": 0.0002918976721311475,
+            "mean_probability": 0.009814426229508197,
+            "min_probability": 5e-05,
+            "max_probability": 0.0717,
+            "probability_std": 0.013984802820086134
+          },
+          "adaptive_gbm": {
+            "brier": 0.00021648642962796214,
+            "mean_probability": 0.007202917887886753,
+            "min_probability": 2.6048463724646968e-08,
+            "max_probability": 0.05402868541287054,
+            "probability_std": 0.012829824766080133
+          },
+          "garch": {
+            "brier": 0.00037629718852459014,
+            "mean_probability": 0.01933360655737705,
+            "min_probability": 0.0165,
+            "max_probability": 0.02955,
+            "probability_std": 0.0015839337136185113
+          }
+        },
+        "differences": {
+          "markov_minus_gbm": {
+            "mean": -4.040847828964189e-05,
+            "ci95": [
+              -5.937326722406812e-05,
+              -1.933649058472386e-05
+            ],
+            "bootstrap_block": 60,
+            "exploratory": true
+          },
+          "markov_minus_historical": {
+            "mean": -0.0006487957128153179,
+            "ci95": [
+              -0.0006677605017497441,
+              -0.0006277237251103998
+            ],
+            "bootstrap_block": 60,
+            "exploratory": true
+          },
+          "ewma_minus_gbm": {
+            "mean": 4.912148349702394e-06,
+            "ci95": [
+              -0.0002601583821830846,
+              0.00041167430408740755
+            ],
+            "bootstrap_block": 60,
+            "exploratory": true
+          },
+          "ewma_minus_historical": {
+            "mean": -0.0006034750861759736,
+            "ci95": [
+              -0.0008685456167087604,
+              -0.00019671293043826854
+            ],
+            "bootstrap_block": 60,
+            "exploratory": true
+          },
+          "adaptive_gbm_minus_gbm": {
+            "mean": -7.049909415348303e-05,
+            "ci95": [
+              -0.0002819743726686547,
+              0.00028638987448150263
+            ],
+            "bootstrap_block": 60,
+            "exploratory": true
+          },
+          "adaptive_gbm_minus_historical": {
+            "mean": -0.000678886328679159,
+            "ci95": [
+              -0.0008903616071943307,
+              -0.0003219973600441734
+            ],
+            "bootstrap_block": 60,
+            "exploratory": true
+          },
+          "garch_minus_gbm": {
+            "mean": 8.9311664743145e-05,
+            "ci95": [
+              7.341995716117779e-05,
+              0.0001084405528578991
+            ],
+            "bootstrap_block": 60,
+            "exploratory": true
+          },
+          "garch_minus_historical": {
+            "mean": -0.000519075569782531,
+            "ci95": [
+              -0.0005349672773644981,
+              -0.000499946681667777
+            ],
+            "bootstrap_block": 60,
+            "exploratory": true
+          }
+        }
+      }
+    },
+    "90": {
+      "10": {
+        "n": 275,
+        "events": 79,
+        "frequency": 0.2872727272727273,
+        "models": {
+          "historical": {
+            "brier": 0.2049693237646235,
+            "mean_probability": 0.27236580516898606,
+            "min_probability": 0.27236580516898606,
+            "max_probability": 0.27236580516898606,
+            "probability_std": 0.0
+          },
+          "gbm": {
+            "brier": 0.20487761781084549,
+            "mean_probability": 0.27584861361656293,
+            "min_probability": 0.27584861361656293,
+            "max_probability": 0.27584861361656293,
+            "probability_std": 0.0
+          },
+          "markov": {
+            "brier": 0.20583832759181817,
+            "mean_probability": 0.26139436363636365,
+            "min_probability": 0.260055,
+            "max_probability": 0.26824,
+            "probability_std": 0.0030280020497389253
+          },
+          "ewma": {
+            "brier": 0.24176298637272722,
+            "mean_probability": 0.15719545454545453,
+            "min_probability": 0.0415,
+            "max_probability": 0.3206,
+            "probability_std": 0.0649659560306412
+          },
+          "adaptive_gbm": {
+            "brier": 0.23730121142546656,
+            "mean_probability": 0.19823200994538612,
+            "min_probability": 0.06332957476297325,
+            "max_probability": 0.32604229476200774,
+            "probability_std": 0.06612235934490648
+          },
+          "garch": {
+            "brier": 0.20504309690909092,
+            "mean_probability": 0.2759109090909091,
+            "min_probability": 0.2661,
+            "max_probability": 0.29075,
+            "probability_std": 0.0034501474396570198
+          }
+        },
+        "differences": {
+          "markov_minus_gbm": {
+            "mean": 0.0009607097809727479,
+            "ci95": [
+              -0.007369550144340397,
+              0.01162100449596626
+            ],
+            "bootstrap_block": 90,
+            "exploratory": true
+          },
+          "markov_minus_historical": {
+            "mean": 0.0008690038271946886,
+            "ci95": [
+              -0.005511729914497404,
+              0.009015101683392462
+            ],
+            "bootstrap_block": 90,
+            "exploratory": true
+          },
+          "ewma_minus_gbm": {
+            "mean": 0.03688536856188183,
+            "ci95": [
+              -0.04093600849303453,
+              0.13703286690320413
+            ],
+            "bootstrap_block": 90,
+            "exploratory": true
+          },
+          "ewma_minus_historical": {
+            "mean": 0.036793662608103773,
+            "ci95": [
+              -0.039030528801105545,
+              0.13453169074160246
+            ],
+            "bootstrap_block": 90,
+            "exploratory": true
+          },
+          "adaptive_gbm_minus_gbm": {
+            "mean": 0.03242359361462111,
+            "ci95": [
+              -0.02556409173756238,
+              0.10488314677313132
+            ],
+            "bootstrap_block": 90,
+            "exploratory": true
+          },
+          "adaptive_gbm_minus_historical": {
+            "mean": 0.03233188766084305,
+            "ci95": [
+              -0.023803471511985475,
+              0.10213310811700278
+            ],
+            "bootstrap_block": 90,
+            "exploratory": true
+          },
+          "garch_minus_gbm": {
+            "mean": 0.0001654790982454622,
+            "ci95": [
+              -0.00011067376428141412,
+              0.0004090959477283533
+            ],
+            "bootstrap_block": 90,
+            "exploratory": true
+          },
+          "garch_minus_historical": {
+            "mean": 7.377314446740421e-05,
+            "ci95": [
+              -0.002341107639348758,
+              0.001968934641726101
+            ],
+            "bootstrap_block": 90,
+            "exploratory": true
+          }
+        }
+      },
+      "20": {
+        "n": 275,
+        "events": 29,
+        "frequency": 0.10545454545454545,
+        "models": {
+          "historical": {
+            "brier": 0.09547027971336987,
+            "mean_probability": 0.13916500994035785,
+            "min_probability": 0.13916500994035785,
+            "max_probability": 0.13916500994035785,
+            "probability_std": 0.0
+          },
+          "gbm": {
+            "brier": 0.09642308476502631,
+            "mean_probability": 0.15116231796104238,
+            "min_probability": 0.15116231796104235,
+            "max_probability": 0.15116231796104235,
+            "probability_std": 2.7755575615628914e-17
+          },
+          "markov": {
+            "brier": 0.09588306290227272,
+            "mean_probability": 0.14071318181818185,
+            "min_probability": 0.13931,
+            "max_probability": 0.147885,
+            "probability_std": 0.003172280705743591
+          },
+          "ewma": {
+            "brier": 0.10527193943636363,
+            "mean_probability": 0.0650749090909091,
+            "min_probability": 0.0069,
+            "max_probability": 0.21775,
+            "probability_std": 0.04754055883225023
+          },
+          "adaptive_gbm": {
+            "brier": 0.10870500306413922,
+            "mean_probability": 0.08181857524837012,
+            "min_probability": 0.004062089456534782,
+            "max_probability": 0.2173088349346996,
+            "probability_std": 0.05870861401174438
+          },
+          "garch": {
+            "brier": 0.09659156314545454,
+            "mean_probability": 0.15246509090909088,
+            "min_probability": 0.1447,
+            "max_probability": 0.16745,
+            "probability_std": 0.003212917039206963
+          }
+        },
+        "differences": {
+          "markov_minus_gbm": {
+            "mean": -0.0005400218627536009,
+            "ci95": [
+              -0.0030935150427189055,
+              0.0030346635251443646
+            ],
+            "bootstrap_block": 90,
+            "exploratory": true
+          },
+          "markov_minus_historical": {
+            "mean": 0.0004127831889028344,
+            "ci95": [
+              1.8232171918380008e-05,
+              0.0009080080494428304
+            ],
+            "bootstrap_block": 90,
+            "exploratory": true
+          },
+          "ewma_minus_gbm": {
+            "mean": 0.008848854671337317,
+            "ci95": [
+              -0.016955942687491628,
+              0.04539974164611229
+            ],
+            "bootstrap_block": 90,
+            "exploratory": true
+          },
+          "ewma_minus_historical": {
+            "mean": 0.00980165972299375,
+            "ci95": [
+              -0.013522798180861748,
+              0.04250676341998047
+            ],
+            "bootstrap_block": 90,
+            "exploratory": true
+          },
+          "adaptive_gbm_minus_gbm": {
+            "mean": 0.012281918299112892,
+            "ci95": [
+              -0.013612968024860147,
+              0.04562071449206174
+            ],
+            "bootstrap_block": 90,
+            "exploratory": true
+          },
+          "adaptive_gbm_minus_historical": {
+            "mean": 0.013234723350769329,
+            "ci95": [
+              -0.010370884994167452,
+              0.04300279265625607
+            ],
+            "bootstrap_block": 90,
+            "exploratory": true
+          },
+          "garch_minus_gbm": {
+            "mean": 0.00016847838042822796,
+            "ci95": [
+              -0.00023156251055199463,
+              0.0005498186944103796
+            ],
+            "bootstrap_block": 90,
+            "exploratory": true
+          },
+          "garch_minus_historical": {
+            "mean": 0.0011212834320846639,
+            "ci95": [
+              -0.003139565401990888,
+              0.0040045845046528935
+            ],
+            "bootstrap_block": 90,
+            "exploratory": true
+          }
+        }
+      },
+      "35": {
+        "n": 275,
+        "events": 0,
+        "frequency": 0.0,
+        "models": {
+          "historical": {
+            "brier": 0.0034396009628115992,
+            "mean_probability": 0.05864811133200798,
+            "min_probability": 0.05864811133200795,
+            "max_probability": 0.05864811133200795,
+            "probability_std": 2.7755575615628914e-17
+          },
+          "gbm": {
+            "brier": 0.0012880894427114472,
+            "mean_probability": 0.035889962980079085,
+            "min_probability": 0.035889962980079085,
+            "max_probability": 0.035889962980079085,
+            "probability_std": 0.0
+          },
+          "markov": {
+            "brier": 0.001094993734090909,
+            "mean_probability": 0.03305590909090909,
+            "min_probability": 0.032385,
+            "max_probability": 0.036485,
+            "probability_std": 0.0015167756144080144
+          },
+          "ewma": {
+            "brier": 0.0006872702,
+            "mean_probability": 0.016799636363636364,
+            "min_probability": 0.00065,
+            "max_probability": 0.09735,
+            "probability_std": 0.020125665654819637
+          },
+          "adaptive_gbm": {
+            "brier": 0.0007534527526726984,
+            "mean_probability": 0.015456892189823454,
+            "min_probability": 1.9154735908098468e-06,
+            "max_probability": 0.0863063159693847,
+            "probability_std": 0.022683413246354107
+          },
+          "garch": {
+            "brier": 0.0014811198454545455,
+            "mean_probability": 0.03844018181818182,
+            "min_probability": 0.0342,
+            "max_probability": 0.04815,
+            "probability_std": 0.0018634020606593258
+          }
+        },
+        "differences": {
+          "markov_minus_gbm": {
+            "mean": -0.00019309570862053823,
+            "ci95": [
+              -0.0002382744286205382,
+              -0.0001397026758932655
+            ],
+            "bootstrap_block": 90,
+            "exploratory": true
+          },
+          "markov_minus_historical": {
+            "mean": -0.0023446072287206907,
+            "ci95": [
+              -0.0023897859487206907,
+              -0.002291214195993418
+            ],
+            "bootstrap_block": 90,
+            "exploratory": true
+          },
+          "ewma_minus_gbm": {
+            "mean": -0.0006008192427114472,
+            "ci95": [
+              -0.0012275456749841745,
+              0.0002585911200158256
+            ],
+            "bootstrap_block": 90,
+            "exploratory": true
+          },
+          "ewma_minus_historical": {
+            "mean": -0.0027523307628115994,
+            "ci95": [
+              -0.003379057195084327,
+              -0.0018929204000843268
+            ],
+            "bootstrap_block": 90,
+            "exploratory": true
+          },
+          "adaptive_gbm_minus_gbm": {
+            "mean": -0.000534636690038749,
+            "ci95": [
+              -0.0012597969071015704,
+              0.0005363060530484556
+            ],
+            "bootstrap_block": 90,
+            "exploratory": true
+          },
+          "adaptive_gbm_minus_historical": {
+            "mean": -0.0026861482101389013,
+            "ci95": [
+              -0.003411308427201723,
+              -0.001615205467051697
+            ],
+            "bootstrap_block": 90,
+            "exploratory": true
+          },
+          "garch_minus_gbm": {
+            "mean": 0.00019303040274309824,
+            "ci95": [
+              0.00015873630433400733,
+              0.0002367740872885528
+            ],
+            "bootstrap_block": 90,
+            "exploratory": true
+          },
+          "garch_minus_historical": {
+            "mean": -0.001958481117357054,
+            "ci95": [
+              -0.0019927752157661454,
+              -0.0019147374328115998
+            ],
+            "bootstrap_block": 90,
+            "exploratory": true
+          }
+        }
+      }
+    }
+  },
+  "2026": {
+    "7": {
+      "10": {
+        "n": 297,
+        "events": 16,
+        "frequency": 0.05387205387205387,
+        "models": {
+          "historical": {
+            "brier": 0.05098568960327036,
+            "mean_probability": 0.0578512396694215,
+            "min_probability": 0.05785123966942149,
+            "max_probability": 0.05785123966942149,
+            "probability_std": 1.3877787807814457e-17
+          },
+          "gbm": {
+            "brier": 0.05132203920561904,
+            "mean_probability": 0.07263860715065666,
+            "min_probability": 0.07263860715065666,
+            "max_probability": 0.07263860715065666,
+            "probability_std": 0.0
+          },
+          "markov": {
+            "brier": 0.05185284685462964,
+            "mean_probability": 0.06188803030303029,
+            "min_probability": 0.052025,
+            "max_probability": 0.09271,
+            "probability_std": 0.01743553902580284
+          },
+          "ewma": {
+            "brier": 0.055005201877104386,
+            "mean_probability": 0.03611498316498317,
+            "min_probability": 0.0002,
+            "max_probability": 0.2455,
+            "probability_std": 0.0448292770056753
+          },
+          "adaptive_gbm": {
+            "brier": 0.056324353018734896,
+            "mean_probability": 0.036415028780167336,
+            "min_probability": 0.0001526298469691331,
+            "max_probability": 0.17255421857901743,
+            "probability_std": 0.046350457637065544
+          },
+          "garch": {
+            "brier": 0.05134091620370369,
+            "mean_probability": 0.06234764309764309,
+            "min_probability": 0.0452,
+            "max_probability": 0.2117,
+            "probability_std": 0.01922270843813474
+          }
+        },
+        "differences": {
+          "markov_minus_gbm": {
+            "mean": 0.0005308076490105893,
+            "ci95": [
+              -0.0012070815024391285,
+              0.002798661097053157
+            ],
+            "bootstrap_block": 7,
+            "exploratory": true
+          },
+          "markov_minus_historical": {
+            "mean": 0.0008671572513592645,
+            "ci95": [
+              -0.0001148899997669782,
+              0.0017905843515692505
+            ],
+            "bootstrap_block": 7,
+            "exploratory": true
+          },
+          "ewma_minus_gbm": {
+            "mean": 0.0036831626714853376,
+            "ci95": [
+              -0.0018505109524442139,
+              0.010849903724712449
+            ],
+            "bootstrap_block": 7,
+            "exploratory": true
+          },
+          "ewma_minus_historical": {
+            "mean": 0.004019512273834013,
+            "ci95": [
+              -0.00034797819693775753,
+              0.009704792066507656
+            ],
+            "bootstrap_block": 7,
+            "exploratory": true
+          },
+          "adaptive_gbm_minus_gbm": {
+            "mean": 0.005002313813115855,
+            "ci95": [
+              -0.0013049461879550523,
+              0.01313121596482499
+            ],
+            "bootstrap_block": 7,
+            "exploratory": true
+          },
+          "adaptive_gbm_minus_historical": {
+            "mean": 0.00533866341546453,
+            "ci95": [
+              0.0003380598270857822,
+              0.011846041844387686
+            ],
+            "bootstrap_block": 7,
+            "exploratory": true
+          },
+          "garch_minus_gbm": {
+            "mean": 1.887699808466236e-05,
+            "ci95": [
+              -0.0014382553602127841,
+              0.001959203163721309
+            ],
+            "bootstrap_block": 7,
+            "exploratory": true
+          },
+          "garch_minus_historical": {
+            "mean": 0.00035522660043333786,
+            "ci95": [
+              -0.0009887093669088153,
+              0.0016122648429201883
+            ],
+            "bootstrap_block": 7,
+            "exploratory": true
+          }
+        }
+      },
+      "20": {
+        "n": 297,
+        "events": 1,
+        "frequency": 0.003367003367003367,
+        "models": {
+          "historical": {
+            "brier": 0.003429121051627103,
+            "mean_probability": 0.011937557392102848,
+            "min_probability": 0.011937557392102846,
+            "max_probability": 0.011937557392102846,
+            "probability_std": 1.734723475976807e-18
+          },
+          "gbm": {
+            "brier": 0.003360101136785848,
+            "mean_probability": 0.001261182516149283,
+            "min_probability": 0.0012611825161492833,
+            "max_probability": 0.0012611825161492833,
+            "probability_std": 2.168404344971009e-19
+          },
+          "markov": {
+            "brier": 0.0033661868205387196,
+            "mean_probability": 0.0011524242424242423,
+            "min_probability": 0.00051,
+            "max_probability": 0.00316,
+            "probability_std": 0.0011356563455420308
+          },
+          "ewma": {
+            "brier": 0.0034813009343434343,
+            "mean_probability": 0.0031183501683501686,
+            "min_probability": 0.0,
+            "max_probability": 0.08535,
+            "probability_std": 0.010566180323954578
+          },
+          "adaptive_gbm": {
+            "brier": 0.0034128080349610603,
+            "mean_probability": 0.002231566073238436,
+            "min_probability": 3.4732732312298093e-14,
+            "max_probability": 0.025107533591839974,
+            "probability_std": 0.0063925313861325364
+          },
+          "garch": {
+            "brier": 0.003366561102693603,
+            "mean_probability": 0.003221043771043771,
+            "min_probability": 0.0009,
+            "max_probability": 0.0634,
+            "probability_std": 0.005500913905224922
+          }
+        },
+        "differences": {
+          "markov_minus_gbm": {
+            "mean": 6.085683752873308e-06,
+            "ci95": [
+              2.0857084951155147e-07,
+              1.6726552657239924e-05
+            ],
+            "bootstrap_block": 7,
+            "exploratory": true
+          },
+          "markov_minus_historical": {
+            "mean": -6.293423108838313e-05,
+            "ci95": [
+              -0.0001407061243011971,
+              9.149619843488801e-05
+            ],
+            "bootstrap_block": 7,
+            "exploratory": true
+          },
+          "ewma_minus_gbm": {
+            "mean": 0.00012119979755758716,
+            "ci95": [
+              4.296386048551694e-06,
+              0.00034187471959122687
+            ],
+            "bootstrap_block": 7,
+            "exploratory": true
+          },
+          "ewma_minus_historical": {
+            "mean": 5.2179882716330704e-05,
+            "ci95": [
+              -0.000133273917693453,
+              0.00030590964350488717
+            ],
+            "bootstrap_block": 7,
+            "exploratory": true
+          },
+          "adaptive_gbm_minus_gbm": {
+            "mean": 5.270689817521244e-05,
+            "ci95": [
+              1.6144104589457724e-05,
+              9.934627317573799e-05
+            ],
+            "bootstrap_block": 7,
+            "exploratory": true
+          },
+          "adaptive_gbm_minus_historical": {
+            "mean": -1.631301666604395e-05,
+            "ci95": [
+              -0.0001227242933755531,
+              0.00016228770738234354
+            ],
+            "bootstrap_block": 7,
+            "exploratory": true
+          },
+          "garch_minus_gbm": {
+            "mean": 6.459965907755663e-06,
+            "ci95": [
+              -8.639510395050359e-05,
+              9.355283153974726e-05
+            ],
+            "bootstrap_block": 7,
+            "exploratory": true
+          },
+          "garch_minus_historical": {
+            "mean": -6.255994893350073e-05,
+            "ci95": [
+              -0.00013471814012611292,
+              4.732268113690886e-05
+            ],
+            "bootstrap_block": 7,
+            "exploratory": true
+          }
+        }
+      },
+      "35": {
+        "n": 297,
+        "events": 0,
+        "frequency": 0.0,
+        "models": {
+          "historical": {
+            "brier": 0.0,
+            "mean_probability": 0.0,
+            "min_probability": 0.0,
+            "max_probability": 0.0,
+            "probability_std": 0.0
+          },
+          "gbm": {
+            "brier": 1.4249064970454527e-17,
+            "mean_probability": 3.774793367914929e-09,
+            "min_probability": 3.774793367914928e-09,
+            "max_probability": 3.774793367914928e-09,
+            "probability_std": 8.271806125530277e-25
+          },
+          "markov": {
+            "brier": 0.0,
+            "mean_probability": 0.0,
+            "min_probability": 0.0,
+            "max_probability": 0.0,
+            "probability_std": 0.0
+          },
+          "ewma": {
+            "brier": 5.296717171717172e-07,
+            "mean_probability": 0.00012272727272727275,
+            "min_probability": 0.0,
+            "max_probability": 0.0076,
+            "probability_std": 0.0007173630417721858
+          },
+          "adaptive_gbm": {
+            "brier": 3.269301934115722e-10,
+            "mean_probability": 5.445762324312365e-06,
+            "min_probability": 7.57774944188556e-47,
+            "max_probability": 8.993915016500057e-05,
+            "probability_std": 1.7241631770765554e-05
+          },
+          "garch": {
+            "brier": 1.7342592592592597e-07,
+            "mean_probability": 5.8080808080808085e-05,
+            "min_probability": 0.0,
+            "max_probability": 0.00515,
+            "probability_std": 0.0004123742786093797
+          }
+        },
+        "differences": {
+          "markov_minus_gbm": {
+            "mean": -1.4249064970454527e-17,
+            "ci95": [
+              -1.4249064970454527e-17,
+              -1.4249064970454527e-17
+            ],
+            "bootstrap_block": 7,
+            "exploratory": true
+          },
+          "markov_minus_historical": {
+            "mean": 0.0,
+            "ci95": [
+              0.0,
+              0.0
+            ],
+            "bootstrap_block": 7,
+            "exploratory": true
+          },
+          "ewma_minus_gbm": {
+            "mean": 5.296717171574681e-07,
+            "ci95": [
+              3.1986530561625496e-10,
+              1.6570286195143715e-06
+            ],
+            "bootstrap_block": 7,
+            "exploratory": true
+          },
+          "ewma_minus_historical": {
+            "mean": 5.296717171717172e-07,
+            "ci95": [
+              3.198653198653199e-10,
+              1.6570286195286205e-06
+            ],
+            "bootstrap_block": 7,
+            "exploratory": true
+          },
+          "adaptive_gbm_minus_gbm": {
+            "mean": 3.2693017916250724e-10,
+            "ci95": [
+              6.307508912298788e-11,
+              6.754650811252851e-10
+            ],
+            "bootstrap_block": 7,
+            "exploratory": true
+          },
+          "adaptive_gbm_minus_historical": {
+            "mean": 3.269301934115722e-10,
+            "ci95": [
+              6.307510337205286e-11,
+              6.7546509537435e-10
+            ],
+            "bootstrap_block": 7,
+            "exploratory": true
+          },
+          "garch_minus_gbm": {
+            "mean": 1.7342592591167686e-07,
+            "ci95": [
+              9.175084032593526e-10,
+              5.579720117702629e-07
+            ],
+            "bootstrap_block": 7,
+            "exploratory": true
+          },
+          "garch_minus_historical": {
+            "mean": 1.7342592592592597e-07,
+            "ci95": [
+              9.175084175084176e-10,
+              5.579720117845121e-07
+            ],
+            "bootstrap_block": 7,
+            "exploratory": true
+          }
+        }
+      }
+    },
+    "14": {
+      "10": {
+        "n": 290,
+        "events": 35,
+        "frequency": 0.1206896551724138,
+        "models": {
+          "historical": {
+            "brier": 0.10617282037911348,
+            "mean_probability": 0.11367837338262475,
+            "min_probability": 0.11367837338262476,
+            "max_probability": 0.11367837338262476,
+            "probability_std": 1.3877787807814457e-17
+          },
+          "gbm": {
+            "brier": 0.10658849532267949,
+            "mean_probability": 0.14224964162653386,
+            "min_probability": 0.14224964162653386,
+            "max_probability": 0.14224964162653386,
+            "probability_std": 0.0
+          },
+          "markov": {
+            "brier": 0.10744428327948277,
+            "mean_probability": 0.12954548275862068,
+            "min_probability": 0.120075,
+            "max_probability": 0.15822,
+            "probability_std": 0.016479123797892122
+          },
+          "ewma": {
+            "brier": 0.11801317844827586,
+            "mean_probability": 0.07509344827586206,
+            "min_probability": 0.0022,
+            "max_probability": 0.3004,
+            "probability_std": 0.06074265153659001
+          },
+          "adaptive_gbm": {
+            "brier": 0.12276998217202377,
+            "mean_probability": 0.08137774710686257,
+            "min_probability": 0.003983820431051489,
+            "max_probability": 0.2439043735127862,
+            "probability_std": 0.0631544988840477
+          },
+          "garch": {
+            "brier": 0.10682053868103449,
+            "mean_probability": 0.13112775862068968,
+            "min_probability": 0.1161,
+            "max_probability": 0.24345,
+            "probability_std": 0.01454533744977898
+          }
+        },
+        "differences": {
+          "markov_minus_gbm": {
+            "mean": 0.0008557879568032694,
+            "ci95": [
+              -0.0028043665762447064,
+              0.0054463174419002135
+            ],
+            "bootstrap_block": 14,
+            "exploratory": true
+          },
+          "markov_minus_historical": {
+            "mean": 0.0012714629003692805,
+            "ci95": [
+              -0.001928310194980121,
+              0.003940098544522782
+            ],
+            "bootstrap_block": 14,
+            "exploratory": true
+          },
+          "ewma_minus_gbm": {
+            "mean": 0.011424683125596375,
+            "ci95": [
+              -0.007512564243311645,
+              0.03520927645030888
+            ],
+            "bootstrap_block": 14,
+            "exploratory": true
+          },
+          "ewma_minus_historical": {
+            "mean": 0.011840358069162386,
+            "ci95": [
+              -0.0020307468329015567,
+              0.0295255429446492
+            ],
+            "bootstrap_block": 14,
+            "exploratory": true
+          },
+          "adaptive_gbm_minus_gbm": {
+            "mean": 0.016181486849344267,
+            "ci95": [
+              -0.0050917816365503915,
+              0.043092751407217786
+            ],
+            "bootstrap_block": 14,
+            "exploratory": true
+          },
+          "adaptive_gbm_minus_historical": {
+            "mean": 0.01659716179291028,
+            "ci95": [
+              0.000227221806606486,
+              0.03664965798370791
+            ],
+            "bootstrap_block": 14,
+            "exploratory": true
+          },
+          "garch_minus_gbm": {
+            "mean": 0.0002320433583549968,
+            "ci95": [
+              -0.0025987339029661604,
+              0.0038397784154577163
+            ],
+            "bootstrap_block": 14,
+            "exploratory": true
+          },
+          "garch_minus_historical": {
+            "mean": 0.0006477183019210081,
+            "ci95": [
+              -0.0032336096327844413,
+              0.0036092702130848813
+            ],
+            "bootstrap_block": 14,
+            "exploratory": true
+          }
+        }
+      },
+      "20": {
+        "n": 290,
+        "events": 8,
+        "frequency": 0.027586206896551724,
+        "models": {
+          "historical": {
+            "brier": 0.02682812604378381,
+            "mean_probability": 0.025878003696857672,
+            "min_probability": 0.025878003696857672,
+            "max_probability": 0.025878003696857672,
+            "probability_std": 0.0
+          },
+          "gbm": {
+            "brier": 0.02698959611297794,
+            "mean_probability": 0.014764817449008183,
+            "min_probability": 0.014764817449008184,
+            "max_probability": 0.014764817449008184,
+            "probability_std": 1.734723475976807e-18
+          },
+          "markov": {
+            "brier": 0.02719913125310345,
+            "mean_probability": 0.013305103448275863,
+            "min_probability": 0.01062,
+            "max_probability": 0.021435,
+            "probability_std": 0.004672217168022108
+          },
+          "ewma": {
+            "brier": 0.028100529215517242,
+            "mean_probability": 0.010997758620689656,
+            "min_probability": 0.0,
+            "max_probability": 0.1546,
+            "probability_std": 0.022779132241283334
+          },
+          "adaptive_gbm": {
+            "brier": 0.028124529461623138,
+            "mean_probability": 0.009590676258873821,
+            "min_probability": 3.413684492053253e-08,
+            "max_probability": 0.07915033950670253,
+            "probability_std": 0.02135805208569386
+          },
+          "garch": {
+            "brier": 0.027044274370689656,
+            "mean_probability": 0.016811551724137935,
+            "min_probability": 0.0117,
+            "max_probability": 0.09065,
+            "probability_std": 0.007740927682471633
+          }
+        },
+        "differences": {
+          "markov_minus_gbm": {
+            "mean": 0.00020953514012550146,
+            "ci95": [
+              -2.6317025854260717e-05,
+              0.0005979352606960633
+            ],
+            "bootstrap_block": 14,
+            "exploratory": true
+          },
+          "markov_minus_historical": {
+            "mean": 0.0003710052093196381,
+            "ci95": [
+              -0.00047084557006087243,
+              0.0017907569282205635
+            ],
+            "bootstrap_block": 14,
+            "exploratory": true
+          },
+          "ewma_minus_gbm": {
+            "mean": 0.0011109331025392945,
+            "ci95": [
+              -1.3456243093762193e-06,
+              0.002581379788993324
+            ],
+            "bootstrap_block": 14,
+            "exploratory": true
+          },
+          "ewma_minus_historical": {
+            "mean": 0.001272403171733431,
+            "ci95": [
+              -0.0003911193500545259,
+              0.0036598455429748275
+            ],
+            "bootstrap_block": 14,
+            "exploratory": true
+          },
+          "adaptive_gbm_minus_gbm": {
+            "mean": 0.0011349333486451848,
+            "ci95": [
+              5.393713731097192e-05,
+              0.002534012154481897
+            ],
+            "bootstrap_block": 14,
+            "exploratory": true
+          },
+          "adaptive_gbm_minus_historical": {
+            "mean": 0.0012964034178393215,
+            "ci95": [
+              -0.00030965880291919596,
+              0.0036687074968028304
+            ],
+            "bootstrap_block": 14,
+            "exploratory": true
+          },
+          "garch_minus_gbm": {
+            "mean": 5.4678257711706996e-05,
+            "ci95": [
+              -0.00010115188445692451,
+              0.00022952014368929566
+            ],
+            "bootstrap_block": 14,
+            "exploratory": true
+          },
+          "garch_minus_historical": {
+            "mean": 0.00021614832690584364,
+            "ci95": [
+              -0.0003834268443000966,
+              0.0011636752680465325
+            ],
+            "bootstrap_block": 14,
+            "exploratory": true
+          }
+        }
+      },
+      "35": {
+        "n": 290,
+        "events": 0,
+        "frequency": 0.0,
+        "models": {
+          "historical": {
+            "brier": 8.541722899675754e-07,
+            "mean_probability": 0.0009242144177449167,
+            "min_probability": 0.0009242144177449168,
+            "max_probability": 0.0009242144177449168,
+            "probability_std": 1.0842021724855044e-19
+          },
+          "gbm": {
+            "brier": 3.399239694774406e-10,
+            "mean_probability": 1.8437027132307438e-05,
+            "min_probability": 1.8437027132307438e-05,
+            "max_probability": 1.8437027132307438e-05,
+            "probability_std": 0.0
+          },
+          "markov": {
+            "brier": 3.744310344827586e-09,
+            "mean_probability": 4.106896551724138e-05,
+            "min_probability": 1.5e-05,
+            "max_probability": 0.00012,
+            "probability_std": 4.536133172836998e-05
+          },
+          "ewma": {
+            "brier": 1.3957215517241376e-05,
+            "mean_probability": 0.0008401724137931034,
+            "min_probability": 0.0,
+            "max_probability": 0.035,
+            "probability_std": 0.0036402370571629607
+          },
+          "adaptive_gbm": {
+            "brier": 8.409766273680087e-07,
+            "mean_probability": 0.00028973659227750554,
+            "min_probability": 7.283210071382342e-25,
+            "max_probability": 0.0037383844644733235,
+            "probability_std": 0.0008700743269763954
+          },
+          "garch": {
+            "brier": 1.062939655172414e-06,
+            "mean_probability": 0.00040258620689655173,
+            "min_probability": 0.0,
+            "max_probability": 0.0114,
+            "probability_std": 0.0009491385574240784
+          }
+        },
+        "differences": {
+          "markov_minus_gbm": {
+            "mean": 3.4043863753501457e-09,
+            "ci95": [
+              1.5958518925915246e-09,
+              5.457317409832905e-09
+            ],
+            "bootstrap_block": 14,
+            "exploratory": true
+          },
+          "markov_minus_historical": {
+            "mean": -8.504279796227479e-07,
+            "ci95": [
+              -8.522365141055066e-07,
+              -8.48375048588265e-07
+            ],
+            "bootstrap_block": 14,
+            "exploratory": true
+          },
+          "ewma_minus_gbm": {
+            "mean": 1.3956875593271902e-05,
+            "ci95": [
+              5.098723120293635e-08,
+              4.129996373982364e-05
+            ],
+            "bootstrap_block": 14,
+            "exploratory": true
+          },
+          "ewma_minus_historical": {
+            "mean": 1.31030432272738e-05,
+            "ci95": [
+              -8.028451347951618e-07,
+              4.044613137382553e-05
+            ],
+            "bootstrap_block": 14,
+            "exploratory": true
+          },
+          "adaptive_gbm_minus_gbm": {
+            "mean": 8.406367033985312e-07,
+            "ci95": [
+              -3.3551900194778575e-10,
+              1.9157298914654567e-06
+            ],
+            "bootstrap_block": 14,
+            "exploratory": true
+          },
+          "adaptive_gbm_minus_historical": {
+            "mean": -1.3195662599566876e-08,
+            "ci95": [
+              -8.541678850000458e-07,
+              1.0618975254673589e-06
+            ],
+            "bootstrap_block": 14,
+            "exploratory": true
+          },
+          "garch_minus_gbm": {
+            "mean": 1.0625997312029366e-06,
+            "ci95": [
+              9.786654154776394e-08,
+              2.964213955340868e-06
+            ],
+            "bootstrap_block": 14,
+            "exploratory": true
+          },
+          "garch_minus_historical": {
+            "mean": 2.087673652048383e-07,
+            "ci95": [
+              -7.559658244503341e-07,
+              2.1103815893427694e-06
+            ],
+            "bootstrap_block": 14,
+            "exploratory": true
+          }
+        }
+      }
+    },
+    "30": {
+      "10": {
+        "n": 274,
+        "events": 62,
+        "frequency": 0.22627737226277372,
+        "models": {
+          "historical": {
+            "brier": 0.17622986222087852,
+            "mean_probability": 0.19230769230769232,
+            "min_probability": 0.19230769230769232,
+            "max_probability": 0.19230769230769232,
+            "probability_std": 0.0
+          },
+          "gbm": {
+            "brier": 0.17523855385691434,
+            "mean_probability": 0.2135246944151026,
+            "min_probability": 0.21352469441510258,
+            "max_probability": 0.21352469441510258,
+            "probability_std": 2.7755575615628914e-17
+          },
+          "markov": {
+            "brier": 0.17822108986861313,
+            "mean_probability": 0.20200992700729925,
+            "min_probability": 0.19584,
+            "max_probability": 0.21932,
+            "probability_std": 0.010334499835792052
+          },
+          "ewma": {
+            "brier": 0.21588507987226277,
+            "mean_probability": 0.12692226277372262,
+            "min_probability": 0.0099,
+            "max_probability": 0.3444,
+            "probability_std": 0.07038409816458473
+          },
+          "adaptive_gbm": {
+            "brier": 0.21891869439590766,
+            "mean_probability": 0.14167442246558307,
+            "min_probability": 0.024469016191091465,
+            "max_probability": 0.30332139202041564,
+            "probability_std": 0.07243196853952798
+          },
+          "garch": {
+            "brier": 0.17666360216240878,
+            "mean_probability": 0.20790492700729926,
+            "min_probability": 0.1958,
+            "max_probability": 0.27075,
+            "probability_std": 0.008376478156632457
+          }
+        },
+        "differences": {
+          "markov_minus_gbm": {
+            "mean": 0.0029825360116988047,
+            "ci95": [
+              -0.003093838582145276,
+              0.01020737604880158
+            ],
+            "two_sided_centered_bootstrap_p": 0.4055314895034988,
+            "bootstrap_block": 30
+          },
+          "markov_minus_historical": {
+            "mean": 0.001991227647734622,
+            "ci95": [
+              -0.0005443506629784665,
+              0.004442419840435355
+            ],
+            "two_sided_centered_bootstrap_p": 0.11396201266244585,
+            "bootstrap_block": 30
+          },
+          "ewma_minus_gbm": {
+            "mean": 0.04064652601534845,
+            "ci95": [
+              -0.01087372766984335,
+              0.10257665072033531
+            ],
+            "two_sided_centered_bootstrap_p": 0.16427857380873043,
+            "bootstrap_block": 30
+          },
+          "ewma_minus_markov": {
+            "mean": 0.03766399000364963,
+            "ci95": [
+              -0.007407957006979918,
+              0.0926150079527555
+            ],
+            "two_sided_centered_bootstrap_p": 0.1432855714761746,
+            "bootstrap_block": 30
+          },
+          "ewma_minus_historical": {
+            "mean": 0.03965521765138425,
+            "ci95": [
+              -0.004233907139551304,
+              0.09210307558853334
+            ],
+            "two_sided_centered_bootstrap_p": 0.10996334555148284,
+            "bootstrap_block": 30
+          },
+          "adaptive_gbm_minus_gbm": {
+            "mean": 0.043680140538993315,
+            "ci95": [
+              -0.005052397900498483,
+              0.102579194117902
+            ],
+            "two_sided_centered_bootstrap_p": 0.11796067977340886,
+            "bootstrap_block": 30
+          },
+          "adaptive_gbm_minus_markov": {
+            "mean": 0.04069760452729451,
+            "ci95": [
+              -0.0020746444760662034,
+              0.09262736560134985
+            ],
+            "two_sided_centered_bootstrap_p": 0.09563478840386538,
+            "bootstrap_block": 30
+          },
+          "adaptive_gbm_minus_historical": {
+            "mean": 0.04268883217502913,
+            "ci95": [
+              0.0013239036046643424,
+              0.09232923918166201
+            ],
+            "two_sided_centered_bootstrap_p": 0.06797734088637121,
+            "bootstrap_block": 30
+          },
+          "garch_minus_gbm": {
+            "mean": 0.0014250483054944255,
+            "ci95": [
+              -0.0016887874388393574,
+              0.005196162284307696
+            ],
+            "two_sided_centered_bootstrap_p": 0.43385538153948683,
+            "bootstrap_block": 30
+          },
+          "garch_minus_markov": {
+            "mean": -0.0015574877062043795,
+            "ci95": [
+              -0.005354841012728108,
+              0.0014515509181204436
+            ],
+            "two_sided_centered_bootstrap_p": 0.38487170943018995,
+            "bootstrap_block": 30
+          },
+          "garch_minus_historical": {
+            "mean": 0.00043373994153024216,
+            "ci95": [
+              -0.005401117338333608,
+              0.005200424097920627
+            ],
+            "two_sided_centered_bootstrap_p": 0.882705764745085,
+            "bootstrap_block": 30
+          }
+        }
+      },
+      "20": {
+        "n": 274,
+        "events": 38,
+        "frequency": 0.1386861313868613,
+        "models": {
+          "historical": {
+            "brier": 0.12624220542791242,
+            "mean_probability": 0.05628517823639775,
+            "min_probability": 0.05628517823639775,
+            "max_probability": 0.05628517823639775,
+            "probability_std": 0.0
+          },
+          "gbm": {
+            "brier": 0.12555138893106652,
+            "mean_probability": 0.06058939276571966,
+            "min_probability": 0.06058939276571967,
+            "max_probability": 0.06058939276571967,
+            "probability_std": 6.938893903907228e-18
+          },
+          "markov": {
+            "brier": 0.12748758280145986,
+            "mean_probability": 0.05549934306569343,
+            "min_probability": 0.05163,
+            "max_probability": 0.066355,
+            "probability_std": 0.006481069424277594
+          },
+          "ewma": {
+            "brier": 0.13912748578467152,
+            "mean_probability": 0.032312043795620436,
+            "min_probability": 0.0003,
+            "max_probability": 0.2214,
+            "probability_std": 0.039691162912431126
+          },
+          "adaptive_gbm": {
+            "brier": 0.14070125265099023,
+            "mean_probability": 0.031891511998792,
+            "min_probability": 6.091292018660517e-05,
+            "max_probability": 0.15752457761123168,
+            "probability_std": 0.04370664509243954
+          },
+          "garch": {
+            "brier": 0.12613185270072994,
+            "mean_probability": 0.06040036496350366,
+            "min_probability": 0.05275,
+            "max_probability": 0.12445,
+            "probability_std": 0.00727953835754153
+          }
+        },
+        "differences": {
+          "markov_minus_gbm": {
+            "mean": 0.0019361938703933719,
+            "ci95": [
+              -0.00022431671521485111,
+              0.004973851085233228
+            ],
+            "two_sided_centered_bootstrap_p": 0.13495501499500168,
+            "bootstrap_block": 30
+          },
+          "markov_minus_historical": {
+            "mean": 0.0012453773735474224,
+            "ci95": [
+              0.00011540764298053894,
+              0.002779320181677508
+            ],
+            "two_sided_centered_bootstrap_p": 0.05731422859046984,
+            "bootstrap_block": 30
+          },
+          "ewma_minus_gbm": {
+            "mean": 0.013576096853605042,
+            "ci95": [
+              0.0003347111228746552,
+              0.03150090519351046
+            ],
+            "two_sided_centered_bootstrap_p": 0.07397534155281572,
+            "bootstrap_block": 30
+          },
+          "ewma_minus_markov": {
+            "mean": 0.01163990298321167,
+            "ci95": [
+              0.0005978484602075709,
+              0.02654475651017334
+            ],
+            "two_sided_centered_bootstrap_p": 0.06731089636787738,
+            "bootstrap_block": 30
+          },
+          "ewma_minus_historical": {
+            "mean": 0.012885280356759092,
+            "ci95": [
+              0.0006992159164760698,
+              0.029337241144887692
+            ],
+            "two_sided_centered_bootstrap_p": 0.06564478507164279,
+            "bootstrap_block": 30
+          },
+          "adaptive_gbm_minus_gbm": {
+            "mean": 0.015149863719923726,
+            "ci95": [
+              0.001081605207025244,
+              0.03461615875195251
+            ],
+            "two_sided_centered_bootstrap_p": 0.06464511829390203,
+            "bootstrap_block": 30
+          },
+          "adaptive_gbm_minus_markov": {
+            "mean": 0.013213669849530355,
+            "ci95": [
+              0.001237025405545532,
+              0.029671849332639274
+            ],
+            "two_sided_centered_bootstrap_p": 0.0583138953682106,
+            "bootstrap_block": 30
+          },
+          "adaptive_gbm_minus_historical": {
+            "mean": 0.014459047223077778,
+            "ci95": [
+              0.001365940979133146,
+              0.03244862360792621
+            ],
+            "two_sided_centered_bootstrap_p": 0.0583138953682106,
+            "bootstrap_block": 30
+          },
+          "garch_minus_gbm": {
+            "mean": 0.0005804637696634354,
+            "ci95": [
+              2.301419917552584e-05,
+              0.0012471745964387187
+            ],
+            "two_sided_centered_bootstrap_p": 0.06464511829390203,
+            "bootstrap_block": 30
+          },
+          "garch_minus_markov": {
+            "mean": -0.0013557301007299368,
+            "ci95": [
+              -0.003753475690168815,
+              0.0002935239361884097
+            ],
+            "two_sided_centered_bootstrap_p": 0.18293902032655782,
+            "bootstrap_block": 30
+          },
+          "garch_minus_historical": {
+            "mean": -0.00011035272718251458,
+            "ci95": [
+              -0.0009658452623282221,
+              0.0004911324253908878
+            ],
+            "two_sided_centered_bootstrap_p": 0.7807397534155281,
+            "bootstrap_block": 30
+          }
+        }
+      },
+      "35": {
+        "n": 274,
+        "events": 0,
+        "frequency": 0.0,
+        "models": {
+          "historical": {
+            "brier": 2.20001478409935e-05,
+            "mean_probability": 0.004690431519699813,
+            "min_probability": 0.004690431519699813,
+            "max_probability": 0.004690431519699813,
+            "probability_std": 0.0
+          },
+          "gbm": {
+            "brier": 3.9067820001539545e-06,
+            "mean_probability": 0.001976558119599309,
+            "min_probability": 0.0019765581195993085,
+            "max_probability": 0.0019765581195993085,
+            "probability_std": 4.336808689942018e-19
+          },
+          "markov": {
+            "brier": 4.136158394160584e-06,
+            "mean_probability": 0.0019516058394160583,
+            "min_probability": 0.00161,
+            "max_probability": 0.00291,
+            "probability_std": 0.0005721826995966637
+          },
+          "ewma": {
+            "brier": 0.0001596912773722628,
+            "mean_probability": 0.004480656934306569,
+            "min_probability": 0.0,
+            "max_probability": 0.08885,
+            "probability_std": 0.011815878757388858
+          },
+          "adaptive_gbm": {
+            "brier": 7.699889841287531e-05,
+            "mean_probability": 0.0030614054842461524,
+            "min_probability": 4.504955595151757e-13,
+            "max_probability": 0.030869034042205347,
+            "probability_std": 0.008223545152420755
+          },
+          "garch": {
+            "brier": 1.6673731751824815e-05,
+            "mean_probability": 0.0037012773722627733,
+            "min_probability": 0.00215,
+            "max_probability": 0.0211,
+            "probability_std": 0.001724609395022651
+          }
+        },
+        "differences": {
+          "markov_minus_gbm": {
+            "mean": 2.293763940066293e-07,
+            "ci95": [
+              -6.069885694970202e-07,
+              1.1944128903569944e-06
+            ],
+            "two_sided_centered_bootstrap_p": 0.6401199600133289,
+            "bootstrap_block": 30
+          },
+          "markov_minus_historical": {
+            "mean": -1.7863989446832913e-05,
+            "ci95": [
+              -1.8700354410336565e-05,
+              -1.689895295048255e-05
+            ],
+            "two_sided_centered_bootstrap_p": 0.0003332222592469177,
+            "bootstrap_block": 30
+          },
+          "ewma_minus_gbm": {
+            "mean": 0.00015578449537210885,
+            "ci95": [
+              -2.2636206402256733e-07,
+              0.0004577554682279483
+            ],
+            "two_sided_centered_bootstrap_p": 0.14228590469843386,
+            "bootstrap_block": 30
+          },
+          "ewma_minus_markov": {
+            "mean": 0.00015555511897810218,
+            "ci95": [
+              2.9058987226277394e-07,
+              0.0004568677087591242
+            ],
+            "two_sided_centered_bootstrap_p": 0.13262245918027324,
+            "bootstrap_block": 30
+          },
+          "ewma_minus_historical": {
+            "mean": 0.0001376911295312693,
+            "ci95": [
+              -1.8319727904862106e-05,
+              0.0004396621023871087
+            ],
+            "two_sided_centered_bootstrap_p": 0.3915361546151283,
+            "bootstrap_block": 30
+          },
+          "adaptive_gbm_minus_gbm": {
+            "mean": 7.309211641272137e-05,
+            "ci95": [
+              -3.877804042569021e-06,
+              0.00020304514156188302
+            ],
+            "two_sided_centered_bootstrap_p": 0.22759080306564478,
+            "bootstrap_block": 30
+          },
+          "adaptive_gbm_minus_markov": {
+            "mean": 7.286274001871474e-05,
+            "ci95": [
+              -3.7270047493428893e-06,
+              0.00020163681224816846
+            ],
+            "two_sided_centered_bootstrap_p": 0.22292569143618793,
+            "bootstrap_block": 30
+          },
+          "adaptive_gbm_minus_historical": {
+            "mean": 5.499875057188185e-05,
+            "ci95": [
+              -2.1971169883408563e-05,
+              0.00018495177572104354
+            ],
+            "two_sided_centered_bootstrap_p": 0.3678773742085971,
+            "bootstrap_block": 30
+          },
+          "garch_minus_gbm": {
+            "mean": 1.2766949751670863e-05,
+            "ci95": [
+              7.948924204225608e-06,
+              2.1500011339262104e-05
+            ],
+            "two_sided_centered_bootstrap_p": 0.003332222592469177,
+            "bootstrap_block": 30
+          },
+          "garch_minus_markov": {
+            "mean": 1.2537573357664234e-05,
+            "ci95": [
+              8.099720164233576e-06,
+              2.0755617518248172e-05
+            ],
+            "two_sided_centered_bootstrap_p": 0.0013328890369876708,
+            "bootstrap_block": 30
+          },
+          "garch_minus_historical": {
+            "mean": -5.326416089168679e-06,
+            "ci95": [
+              -1.0144441636613933e-05,
+              3.4066454984225646e-06
+            ],
+            "two_sided_centered_bootstrap_p": 0.08330556481172942,
+            "bootstrap_block": 30
+          }
+        }
+      }
+    },
+    "60": {
+      "10": {
+        "n": 244,
+        "events": 91,
+        "frequency": 0.3729508196721312,
+        "models": {
+          "historical": {
+            "brier": 0.24804089000794477,
+            "mean_probability": 0.25386100386100374,
+            "min_probability": 0.25386100386100385,
+            "max_probability": 0.25386100386100385,
+            "probability_std": 1.1102230246251565e-16
+          },
+          "gbm": {
+            "brier": 0.24676034492370985,
+            "mean_probability": 0.25936455665721736,
+            "min_probability": 0.25936455665721725,
+            "max_probability": 0.25936455665721725,
+            "probability_std": 1.1102230246251565e-16
+          },
+          "markov": {
+            "brier": 0.2519919345670082,
+            "mean_probability": 0.24653709016393438,
+            "min_probability": 0.24292,
+            "max_probability": 0.257155,
+            "probability_std": 0.006197252393567292
+          },
+          "ewma": {
+            "brier": 0.3139720483094262,
+            "mean_probability": 0.15903872950819672,
+            "min_probability": 0.0257,
+            "max_probability": 0.36545,
+            "probability_std": 0.0747018752783835
+          },
+          "adaptive_gbm": {
+            "brier": 0.3073856602840853,
+            "mean_probability": 0.18396920358969715,
+            "min_probability": 0.05481464229442739,
+            "max_probability": 0.337857273632422,
+            "probability_std": 0.0748884344199154
+          },
+          "garch": {
+            "brier": 0.24784498379098363,
+            "mean_probability": 0.25829098360655733,
+            "min_probability": 0.2495,
+            "max_probability": 0.29045,
+            "probability_std": 0.005082671123910106
+          }
+        },
+        "differences": {
+          "markov_minus_gbm": {
+            "mean": 0.00523158964329834,
+            "ci95": [
+              -0.0031039279852327966,
+              0.013646021697829412
+            ],
+            "bootstrap_block": 60,
+            "exploratory": true
+          },
+          "markov_minus_historical": {
+            "mean": 0.003951044559063312,
+            "ci95": [
+              -0.0015305567919205285,
+              0.009340513874041462
+            ],
+            "bootstrap_block": 60,
+            "exploratory": true
+          },
+          "ewma_minus_gbm": {
+            "mean": 0.06721170338571637,
+            "ci95": [
+              -0.007102509413077789,
+              0.14161696367228144
+            ],
+            "bootstrap_block": 60,
+            "exploratory": true
+          },
+          "ewma_minus_historical": {
+            "mean": 0.06593115830148134,
+            "ci95": [
+              -0.0052986282184645335,
+              0.13771320879214632
+            ],
+            "bootstrap_block": 60,
+            "exploratory": true
+          },
+          "adaptive_gbm_minus_gbm": {
+            "mean": 0.0606253153603754,
+            "ci95": [
+              -0.0014497246688834771,
+              0.11866435009812631
+            ],
+            "bootstrap_block": 60,
+            "exploratory": true
+          },
+          "adaptive_gbm_minus_historical": {
+            "mean": 0.05934477027614038,
+            "ci95": [
+              -8.564714934702471e-05,
+              0.11458266361533771
+            ],
+            "bootstrap_block": 60,
+            "exploratory": true
+          },
+          "garch_minus_gbm": {
+            "mean": 0.00108463886727376,
+            "ci95": [
+              -0.00029060797116456437,
+              0.0024824925423074565
+            ],
+            "bootstrap_block": 60,
+            "exploratory": true
+          },
+          "garch_minus_historical": {
+            "mean": -0.00019590621696126848,
+            "ci95": [
+              -0.0020590521350889904,
+              0.0014766879097615393
+            ],
+            "bootstrap_block": 60,
+            "exploratory": true
+          }
+        }
+      },
+      "20": {
+        "n": 244,
+        "events": 46,
+        "frequency": 0.1885245901639344,
+        "models": {
+          "historical": {
+            "brier": 0.16075146244777233,
+            "mean_probability": 0.10038610038610038,
+            "min_probability": 0.10038610038610038,
+            "max_probability": 0.10038610038610038,
+            "probability_std": 0.0
+          },
+          "gbm": {
+            "brier": 0.1578054230672875,
+            "mean_probability": 0.11908141915459437,
+            "min_probability": 0.11908141915459436,
+            "max_probability": 0.11908141915459436,
+            "probability_std": 1.3877787807814457e-17
+          },
+          "markov": {
+            "brier": 0.1600861124489754,
+            "mean_probability": 0.1110925819672131,
+            "min_probability": 0.10822,
+            "max_probability": 0.119525,
+            "probability_std": 0.004921667601635276
+          },
+          "ewma": {
+            "brier": 0.18610884226434427,
+            "mean_probability": 0.05979651639344263,
+            "min_probability": 0.00235,
+            "max_probability": 0.2708,
+            "probability_std": 0.054060735787150475
+          },
+          "adaptive_gbm": {
+            "brier": 0.18869259232381208,
+            "mean_probability": 0.06505647080734488,
+            "min_probability": 0.0017251684236769445,
+            "max_probability": 0.22223473893642864,
+            "probability_std": 0.06350290918532885
+          },
+          "garch": {
+            "brier": 0.15829350340163933,
+            "mean_probability": 0.11968565573770491,
+            "min_probability": 0.11155,
+            "max_probability": 0.1609,
+            "probability_std": 0.00531727766654355
+          }
+        },
+        "differences": {
+          "markov_minus_gbm": {
+            "mean": 0.002280689381687985,
+            "ci95": [
+              -0.0012324337890892063,
+              0.0060937627299096795
+            ],
+            "bootstrap_block": 60,
+            "exploratory": true
+          },
+          "markov_minus_historical": {
+            "mean": -0.0006653499987969165,
+            "ci95": [
+              -0.003288448194643041,
+              0.0019341825738946295
+            ],
+            "bootstrap_block": 60,
+            "exploratory": true
+          },
+          "ewma_minus_gbm": {
+            "mean": 0.028303419197056832,
+            "ci95": [
+              -0.0025787672306457335,
+              0.06211111050096955
+            ],
+            "bootstrap_block": 60,
+            "exploratory": true
+          },
+          "ewma_minus_historical": {
+            "mean": 0.025357379816571938,
+            "ci95": [
+              0.0002623763212191761,
+              0.05274324932198369
+            ],
+            "bootstrap_block": 60,
+            "exploratory": true
+          },
+          "adaptive_gbm_minus_gbm": {
+            "mean": 0.030887169256524672,
+            "ci95": [
+              -0.00018379961264108641,
+              0.06790964544335004
+            ],
+            "bootstrap_block": 60,
+            "exploratory": true
+          },
+          "adaptive_gbm_minus_historical": {
+            "mean": 0.02794112987603977,
+            "ci95": [
+              0.0021310282311892614,
+              0.05902303489836742
+            ],
+            "bootstrap_block": 60,
+            "exploratory": true
+          },
+          "garch_minus_gbm": {
+            "mean": 0.00048808033435191844,
+            "ci95": [
+              4.0882552751410106e-05,
+              0.0009438277091307594
+            ],
+            "bootstrap_block": 60,
+            "exploratory": true
+          },
+          "garch_minus_historical": {
+            "mean": -0.0024579590461329807,
+            "ci95": [
+              -0.008549441469486501,
+              0.0032422045559541667
+            ],
+            "bootstrap_block": 60,
+            "exploratory": true
+          }
+        }
+      },
+      "35": {
+        "n": 244,
+        "events": 0,
+        "frequency": 0.0,
+        "models": {
+          "historical": {
+            "brier": 0.0008953727583071208,
+            "mean_probability": 0.029922779922779925,
+            "min_probability": 0.029922779922779922,
+            "max_probability": 0.029922779922779922,
+            "probability_std": 3.469446951953614e-18
+          },
+          "gbm": {
+            "brier": 0.0002869855237814452,
+            "mean_probability": 0.016940647088628136,
+            "min_probability": 0.016940647088628143,
+            "max_probability": 0.016940647088628143,
+            "probability_std": 6.938893903907228e-18
+          },
+          "markov": {
+            "brier": 0.0002543736809426229,
+            "mean_probability": 0.015861926229508203,
+            "min_probability": 0.01489,
+            "max_probability": 0.018715,
+            "probability_std": 0.001665225880252535
+          },
+          "ewma": {
+            "brier": 0.0007365752561475411,
+            "mean_probability": 0.013885450819672133,
+            "min_probability": 0.0,
+            "max_probability": 0.14365,
+            "probability_std": 0.02331886600334604
+          },
+          "adaptive_gbm": {
+            "brier": 0.000748735342912131,
+            "mean_probability": 0.011815792157442136,
+            "min_probability": 7.216797139600699e-08,
+            "max_probability": 0.08452756412799711,
+            "probability_std": 0.024680405154783418
+          },
+          "garch": {
+            "brier": 0.0003834721721311475,
+            "mean_probability": 0.01941680327868853,
+            "min_probability": 0.01565,
+            "max_probability": 0.04195,
+            "probability_std": 0.002541637772747742
+          }
+        },
+        "differences": {
+          "markov_minus_gbm": {
+            "mean": -3.261184283882223e-05,
+            "ci95": [
+              -5.3157030851117315e-05,
+              -6.798657900297635e-06
+            ],
+            "bootstrap_block": 60,
+            "exploratory": true
+          },
+          "markov_minus_historical": {
+            "mean": -0.0006409990773644982,
+            "ci95": [
+              -0.0006615442653767934,
+              -0.0006151858924259738
+            ],
+            "bootstrap_block": 60,
+            "exploratory": true
+          },
+          "ewma_minus_gbm": {
+            "mean": 0.0004495897323660959,
+            "ci95": [
+              -0.00022648666210111729,
+              0.0016670015702247023
+            ],
+            "bootstrap_block": 60,
+            "exploratory": true
+          },
+          "ewma_minus_historical": {
+            "mean": -0.00015879750215958024,
+            "ci95": [
+              -0.0008348738966267934,
+              0.0010586143356990266
+            ],
+            "bootstrap_block": 60,
+            "exploratory": true
+          },
+          "adaptive_gbm_minus_gbm": {
+            "mean": 0.0004617498191306858,
+            "ci95": [
+              -0.00028322661284196086,
+              0.0017336582476185354
+            ],
+            "bootstrap_block": 60,
+            "exploratory": true
+          },
+          "adaptive_gbm_minus_historical": {
+            "mean": -0.00014663741539499027,
+            "ci95": [
+              -0.0008916138473676369,
+              0.001125271013092859
+            ],
+            "bootstrap_block": 60,
+            "exploratory": true
+          },
+          "garch_minus_gbm": {
+            "mean": 9.648664834970239e-05,
+            "ci95": [
+              7.098961505052206e-05,
+              0.00013523644317552203
+            ],
+            "bootstrap_block": 60,
+            "exploratory": true
+          },
+          "garch_minus_historical": {
+            "mean": -0.0005119005861759737,
+            "ci95": [
+              -0.0005373976194751539,
+              -0.00047315079135015395
+            ],
+            "bootstrap_block": 60,
+            "exploratory": true
+          }
+        }
+      }
+    },
+    "90": {
+      "10": {
+        "n": 214,
+        "events": 88,
+        "frequency": 0.411214953271028,
+        "models": {
+          "historical": {
+            "brier": 0.2613963014059971,
+            "mean_probability": 0.27236580516898595,
+            "min_probability": 0.27236580516898606,
+            "max_probability": 0.27236580516898606,
+            "probability_std": 1.1102230246251565e-16
+          },
+          "gbm": {
+            "brier": 0.26044126138878226,
+            "mean_probability": 0.2758486136165629,
+            "min_probability": 0.27584861361656293,
+            "max_probability": 0.27584861361656293,
+            "probability_std": 5.551115123125783e-17
+          },
+          "markov": {
+            "brier": 0.26536488680420567,
+            "mean_probability": 0.26196738317757007,
+            "min_probability": 0.260055,
+            "max_probability": 0.26824,
+            "probability_std": 0.0034634732409184457
+          },
+          "ewma": {
+            "brier": 0.32952521279205604,
+            "mean_probability": 0.1718320093457944,
+            "min_probability": 0.06225,
+            "max_probability": 0.37035,
+            "probability_std": 0.07092777352474475
+          },
+          "adaptive_gbm": {
+            "brier": 0.31324210868619196,
+            "mean_probability": 0.20762464921296325,
+            "min_probability": 0.09760707295894128,
+            "max_probability": 0.34980410594568223,
+            "probability_std": 0.07311869670725597
+          },
+          "garch": {
+            "brier": 0.2606929185046729,
+            "mean_probability": 0.2762841121495327,
+            "min_probability": 0.26825,
+            "max_probability": 0.3007,
+            "probability_std": 0.0042369568856638
+          }
+        },
+        "differences": {
+          "markov_minus_gbm": {
+            "mean": 0.004923625415423411,
+            "ci95": [
+              -0.0005724472874817818,
+              0.010725519446617114
+            ],
+            "bootstrap_block": 90,
+            "exploratory": true
+          },
+          "markov_minus_historical": {
+            "mean": 0.003968585398208627,
+            "ci95": [
+              -0.0002562527703331882,
+              0.008390961940006934
+            ],
+            "bootstrap_block": 90,
+            "exploratory": true
+          },
+          "ewma_minus_gbm": {
+            "mean": 0.06908395140327386,
+            "ci95": [
+              0.025147176658345746,
+              0.11378255617873086
+            ],
+            "bootstrap_block": 90,
+            "exploratory": true
+          },
+          "ewma_minus_historical": {
+            "mean": 0.06812891138605907,
+            "ci95": [
+              0.02542983562448713,
+              0.11135025957279618
+            ],
+            "bootstrap_block": 90,
+            "exploratory": true
+          },
+          "adaptive_gbm_minus_gbm": {
+            "mean": 0.05280084729740979,
+            "ci95": [
+              0.019966852139124632,
+              0.08511349623069676
+            ],
+            "bootstrap_block": 90,
+            "exploratory": true
+          },
+          "adaptive_gbm_minus_historical": {
+            "mean": 0.051845807280195014,
+            "ci95": [
+              0.020005155514505945,
+              0.08346289119505856
+            ],
+            "bootstrap_block": 90,
+            "exploratory": true
+          },
+          "garch_minus_gbm": {
+            "mean": 0.0002516571158906722,
+            "ci95": [
+              -0.00016484528645146338,
+              0.0007250536252006779
+            ],
+            "bootstrap_block": 90,
+            "exploratory": true
+          },
+          "garch_minus_historical": {
+            "mean": -0.0007033829013241124,
+            "ci95": [
+              -0.0023097395552161646,
+              0.000616157493792331
+            ],
+            "bootstrap_block": 90,
+            "exploratory": true
+          }
+        }
+      },
+      "20": {
+        "n": 214,
+        "events": 24,
+        "frequency": 0.11214953271028037,
+        "models": {
+          "historical": {
+            "brier": 0.10030185103311494,
+            "mean_probability": 0.13916500994035785,
+            "min_probability": 0.13916500994035785,
+            "max_probability": 0.13916500994035785,
+            "probability_std": 0.0
+          },
+          "gbm": {
+            "brier": 0.10109401243616814,
+            "mean_probability": 0.15116231796104238,
+            "min_probability": 0.15116231796104235,
+            "max_probability": 0.15116231796104235,
+            "probability_std": 2.7755575615628914e-17
+          },
+          "markov": {
+            "brier": 0.10088510253107477,
+            "mean_probability": 0.14131350467289722,
+            "min_probability": 0.13931,
+            "max_probability": 0.147885,
+            "probability_std": 0.003628501287828427
+          },
+          "ewma": {
+            "brier": 0.11556057911214952,
+            "mean_probability": 0.07649626168224298,
+            "min_probability": 0.01275,
+            "max_probability": 0.28745,
+            "probability_std": 0.05833374918892317
+          },
+          "adaptive_gbm": {
+            "brier": 0.1189933601341582,
+            "mean_probability": 0.09203152902742351,
+            "min_probability": 0.012395222992921224,
+            "max_probability": 0.25186174549976603,
+            "probability_std": 0.071809069825564
+          },
+          "garch": {
+            "brier": 0.10153582522196261,
+            "mean_probability": 0.15274322429906542,
+            "min_probability": 0.14515,
+            "max_probability": 0.1809,
+            "probability_std": 0.004236682088369887
+          }
+        },
+        "differences": {
+          "markov_minus_gbm": {
+            "mean": -0.0002089099050934245,
+            "ci95": [
+              -0.0017323546402862827,
+              0.0015232084315514695
+            ],
+            "bootstrap_block": 90,
+            "exploratory": true
+          },
+          "markov_minus_historical": {
+            "mean": 0.0005832514979597919,
+            "ci95": [
+              0.00022244051089038478,
+              0.0010408952547052773
+            ],
+            "bootstrap_block": 90,
+            "exploratory": true
+          },
+          "ewma_minus_gbm": {
+            "mean": 0.014466566675981354,
+            "ci95": [
+              -0.0013224800064669047,
+              0.033901102195438765
+            ],
+            "bootstrap_block": 90,
+            "exploratory": true
+          },
+          "ewma_minus_historical": {
+            "mean": 0.015258728079034571,
+            "ci95": [
+              0.0010791288863989145,
+              0.033066582763675564
+            ],
+            "bootstrap_block": 90,
+            "exploratory": true
+          },
+          "adaptive_gbm_minus_gbm": {
+            "mean": 0.017899347697990023,
+            "ci95": [
+              0.00024280789004894302,
+              0.04011048802011364
+            ],
+            "bootstrap_block": 90,
+            "exploratory": true
+          },
+          "adaptive_gbm_minus_historical": {
+            "mean": 0.018691509101043238,
+            "ci95": [
+              0.0020884270686153572,
+              0.039695317349788116
+            ],
+            "bootstrap_block": 90,
+            "exploratory": true
+          },
+          "garch_minus_gbm": {
+            "mean": 0.0004418127857944373,
+            "ci95": [
+              0.00013638390969366462,
+              0.0008121129166555569
+            ],
+            "bootstrap_block": 90,
+            "exploratory": true
+          },
+          "garch_minus_historical": {
+            "mean": 0.0012339741888476535,
+            "ci95": [
+              -0.000638834680650896,
+              0.0031167401501737413
+            ],
+            "bootstrap_block": 90,
+            "exploratory": true
+          }
+        }
+      },
+      "35": {
+        "n": 214,
+        "events": 0,
+        "frequency": 0.0,
+        "models": {
+          "historical": {
+            "brier": 0.0034396009628116,
+            "mean_probability": 0.05864811133200798,
+            "min_probability": 0.05864811133200795,
+            "max_probability": 0.05864811133200795,
+            "probability_std": 2.7755575615628914e-17
+          },
+          "gbm": {
+            "brier": 0.001288089442711447,
+            "mean_probability": 0.03588996298007908,
+            "min_probability": 0.035889962980079085,
+            "max_probability": 0.035889962980079085,
+            "probability_std": 6.938893903907228e-18
+          },
+          "markov": {
+            "brier": 0.001114761823130841,
+            "mean_probability": 0.03334294392523364,
+            "min_probability": 0.032385,
+            "max_probability": 0.036485,
+            "probability_std": 0.0017349102367459535
+          },
+          "ewma": {
+            "brier": 0.0014474483060747665,
+            "mean_probability": 0.022633878504672893,
+            "min_probability": 0.00105,
+            "max_probability": 0.17105,
+            "probability_std": 0.03058031801519521
+          },
+          "adaptive_gbm": {
+            "brier": 0.0019239134408272679,
+            "mean_probability": 0.022615567595603476,
+            "min_probability": 4.4597084990103856e-05,
+            "max_probability": 0.12156926549521974,
+            "probability_std": 0.0375825696720695
+          },
+          "garch": {
+            "brier": 0.0015044592523364487,
+            "mean_probability": 0.03869719626168224,
+            "min_probability": 0.0348,
+            "max_probability": 0.06035,
+            "probability_std": 0.002643152250872892
+          }
+        },
+        "differences": {
+          "markov_minus_gbm": {
+            "mean": -0.00017332761958060617,
+            "ci95": [
+              -0.0002142312504217277,
+              -0.00012186821303855013
+            ],
+            "bootstrap_block": 90,
+            "exploratory": true
+          },
+          "markov_minus_historical": {
+            "mean": -0.0023248391396807587,
+            "ci95": [
+              -0.0023657427705218803,
+              -0.0022733797331387024
+            ],
+            "bootstrap_block": 90,
+            "exploratory": true
+          },
+          "ewma_minus_gbm": {
+            "mean": 0.00015935886336331938,
+            "ci95": [
+              -0.0011264082718586436,
+              0.0019326884022067771
+            ],
+            "bootstrap_block": 90,
+            "exploratory": true
+          },
+          "ewma_minus_historical": {
+            "mean": -0.001992152656736833,
+            "ci95": [
+              -0.003277919791958796,
+              -0.00021882311789337482
+            ],
+            "bootstrap_block": 90,
+            "exploratory": true
+          },
+          "adaptive_gbm_minus_gbm": {
+            "mean": 0.0006358239981158209,
+            "ci95": [
+              -0.0012495086060005187,
+              0.003148916112795613
+            ],
+            "bootstrap_block": 90,
+            "exploratory": true
+          },
+          "adaptive_gbm_minus_historical": {
+            "mean": -0.0015156875219843313,
+            "ci95": [
+              -0.0034010201261006714,
+              0.0009974045926954603
+            ],
+            "bootstrap_block": 90,
+            "exploratory": true
+          },
+          "garch_minus_gbm": {
+            "mean": 0.0002163698096250014,
+            "ci95": [
+              0.00016645482043107615,
+              0.0002773440114357491
+            ],
+            "bootstrap_block": 90,
+            "exploratory": true
+          },
+          "garch_minus_historical": {
+            "mean": -0.001935141710475151,
+            "ci95": [
+              -0.0019850566996690764,
+              -0.0018741675086644033
+            ],
+            "bootstrap_block": 90,
+            "exploratory": true
+          }
+        }
+      }
+    }
+  }
+}
