@@ -40,7 +40,7 @@ try:
         page.locator('input[name="pathCount"][value="1000"]').check(force=True)
         page.locator("#startBtn").click()
         page.wait_for_function(
-            "() => window.simulation && window.simulation.completed >= 1000 && window.simulation.returns",
+            "() => typeof simulation !== 'undefined' && simulation && simulation.completed >= 1000 && simulation.returns",
             timeout=90000
         )
         page.wait_for_function("() => document.querySelector('#replayPlay').disabled === false", timeout=10000)
@@ -52,7 +52,7 @@ try:
         current_day = int(page.locator("#replayDay").input_value())
         assert current_day > 0
         page.locator("#replayPlay").click()
-        page.locator("#replayDay").fill("12")
+        page.locator("#replayDay").evaluate("(el) => { el.value = 12; el.dispatchEvent(new Event('input', {bubbles:true})); }")
         assert "Day 12" in page.locator("#replayDayText").inner_text()
         assert "Investment:" in page.locator("#replayDescription").inner_text()
         print("PASS: Genuine simulated price and regime replay", flush=True)
