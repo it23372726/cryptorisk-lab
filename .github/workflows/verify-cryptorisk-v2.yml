@@ -68,5 +68,6 @@ jobs:
           path: |
             browser-verification.png
             browser-verification-full-year.png
+            browser-verification-crosshair.png
             browser-verification-mobile.png
           if-no-files-found: ignore
