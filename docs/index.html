@@ -655,15 +655,16 @@
         <div class="table-scroll"><table class="validation-table">
           <thead><tr><th>Loss threshold</th><th>Observed in 2025</th><th>GBM forecast</th><th>Markov forecast</th></tr></thead>
           <tbody>
-            <tr><td>Loss ≥ 10%</td><td>18.51% (62/335)</td><td>21.35%</td><td>Regime-dependent; ≈ 19.6–21.9%</td></tr>
-            <tr><td>Loss ≥ 20%</td><td>2.39% (8/335)</td><td>6.06%</td><td>Regime-dependent; ≈ 5.16–6.64%</td></tr>
-            <tr><td>Loss ≥ 35%</td><td>0% (0/335)</td><td>0.20%</td><td>Regime-dependent; ≈ 0.16–0.29%</td></tr>
+            <tr><td>Loss ≥ 10%</td><td>18.51% (62/335)</td><td>21.35%</td><td>20.05%</td></tr>
+            <tr><td>Loss ≥ 20%</td><td>2.39% (8/335)</td><td>6.06%</td><td>5.45%</td></tr>
+            <tr><td>Loss ≥ 35%</td><td>0% (0/335)</td><td>0.20%</td><td>0.19%</td></tr>
           </tbody></table></div>
         <div class="research-grid" style="margin-top:16px">
           <div class="research-stat"><span>Brier score · loss ≥ 10% (lower is better)</span><strong style="font:600 14px system-ui">GBM 0.151631<br>Markov 0.151176<br>Historical 0.150874</strong></div>
           <div class="research-stat"><span>Brier score · loss ≥ 20% (lower is better)</span><strong style="font:600 14px system-ui">GBM 0.024658<br>Markov 0.024159<br>Historical 0.024360</strong></div>
         </div>
         <p id="validationNote" class="research-caption"></p>
+        <p class="research-caption">The Markov forecasts above average over the actual initial regimes observed in 2025 (269 Calm and 66 Volatile). Conditional estimates range from 19.58% to 21.93% for ≥10% losses, and from 5.16% to 6.64% for ≥20% losses. All probabilities refer to 30-day outcomes.</p>
         <p class="research-caption"><strong>Interpretation:</strong> Markov's small Brier-score improvements over GBM were not statistically confirmed across all three thresholds after adjusting for multiple comparisons. The historical-frequency benchmark was better at ≥10%. The 2025 backtest does not prove superiority. Figures are rounded from the existing notebook.</p>
       </section>
     </div>
