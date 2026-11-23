@@ -23,7 +23,8 @@ for marker in required_markers:
     assert any(marker in content for content in cells), marker
 # Add a read-only provenance probe to the in-memory executed copy.
 # The committed scientific notebook is unchanged and still contains 97 cells.
-nb.cells[-1].source += """
+last_code_index = max(i for i, cell in enumerate(nb.cells) if cell.cell_type == "code")
+nb.cells[last_code_index].source += """
 import json as _crl_export_json
 print("WEB_CALIBRATION_JSON=" + _crl_export_json.dumps({
   "origin_date": "2024-12-31",
