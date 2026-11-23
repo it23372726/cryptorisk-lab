@@ -4,7 +4,10 @@ const $=id=>document.getElementById(id),core=window.CRLCore;
 if(!window.CRL_HISTORY||!core||!window.CRLForecastChart){document.body.textContent="CryptoRisk Lab failed to initialize its local assets.";throw Error("Missing local assets");}
 const chart=new window.CRLForecastChart($("mainChart"),$("chartTooltip"));
 chart.onSelectPath=()=>renderPathInspector();
-const modelNames=["gbm","markov","ewma"];
+const modelNames=core.models;
+const modelIds={gbm:"Gbm",markov:"Markov",ewma:"Ewma",adaptive_gbm:"Adaptive",garch:"Garch"};
+const modelLabels={gbm:"GBM",markov:"Markov",ewma:"EWMA",adaptive_gbm:"Adaptive GBM",garch:"GARCH"};
+const modelColors={gbm:"#64aafa",markov:"#f0bd6a",ewma:"#3cd7ad",adaptive_gbm:"#a59cff",garch:"#f39bd4"};
 let result=null,runner=null,token=0,phase="ready",paused=false,day=0,view="all",actual=false,animating=false,frame=null,lastFrame=null;
 const pct=v=>(100*v).toFixed(2)+"%",money=v=>v.toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2}),int=v=>Number(v).toLocaleString("en-US");
 function option(name){return document.querySelector('input[name="'+name+'"]:checked')?.value;}
@@ -31,8 +34,8 @@ function clearResults(){
  phase="ready";paused=false;animating=false;day=0;lastFrame=null;result=null;chart.selectedPath=null;
  $("computeBar").style.width="0%";setStatus("Ready. Press Run simulation to generate paths.");
  for(let m of modelNames){
-  $(m==="gbm"?"kpiGbm":m==="markov"?"kpiMarkov":"kpiEwma").textContent="—";
-  $(m==="gbm"?"kpiGbmCi":m==="markov"?"kpiMarkovCi":"kpiEwmaCi").textContent=m==="ewma"?"Dynamic variance · full-history calibration":"Run to estimate the probability";
+  $("kpi"+modelIds[m]).textContent="—";
+  $("kpi"+modelIds[m]+"Ci").textContent=m==="ewma"?"Dynamic variance · 2024 state":m==="adaptive_gbm"?"Last 30 pre-origin returns":m==="garch"?"Frozen GARCH coefficients and variance":"Run to estimate probability";
   document.querySelectorAll('[data-model="'+m+'"]').forEach(e=>e.textContent="—");
  }
  $("verifyStatus").textContent="Run a simulation to execute browser-side structural and risk-ordering checks.";
@@ -59,7 +62,7 @@ function simulate(){
  clearResults();
  let s=readSettings();
  try{runner=core.createRunner(s);}catch(e){setStatus("Invalid settings: "+e.message);return;}
- phase="computing";paused=false;let own=token;setStatus("Computing three independent Monte Carlo path ensembles…");
+ phase="computing";paused=false;let own=token;setStatus("Computing five independent Monte Carlo path ensembles…");
  setRunBtns();
  function nextBatch(){
   if(own!==token||phase!=="computing"||!runner)return;
@@ -70,7 +73,7 @@ function simulate(){
    setStatus("Computing: "+int(r.done)+" / "+int(r.total)+" paths per model · "+Math.round(progress)+"%");
    if(!r.complete){requestAnimationFrame(nextBatch);return;}
    result=runner.finish();runner=null;phase="ready";renderResults();day=0;animating=true;lastFrame=null;
-   setStatus("Three-model simulation completed. Playing actual generated paths.");
+   setStatus("Five-model simulation completed. Playing generated paths.");
    setRunBtns();renderDay();frame=requestAnimationFrame(animate);
   }catch(e){clearResults();setStatus("Simulation failed: "+e.message);console.error(e);}
  }
@@ -92,14 +95,15 @@ function verify(){
 function renderResults(){
  let s=result.settings;
  for(let m of modelNames){
-  const o=result.models[m],id=m==="gbm"?"Gbm":m==="markov"?"Markov":"Ewma",hit=o.prob[s.threshold.toFixed(3)];
+  const o=result.models[m],id=modelIds[m],hit=o.prob[s.threshold.toFixed(3)];
   $("kpi"+id).textContent=pct(hit.p);
   $("kpi"+id+"Ci").textContent="MC 95% interval "+pct(hit.low)+" – "+pct(hit.high)+(m==="ewma"?" · notebook state":"");
   const vals={p10:pct(o.prob["0.100"].p),p20:pct(o.prob["0.200"].p),p35:pct(o.prob["0.350"].p),custom:pct(hit.p),var:money(o.var95),es:money(o.es95),touch:pct(o.touch),dd:pct(o.drawdown)};
   for(let [k,v] of Object.entries(vals)){const cell=document.querySelector('[data-model="'+m+'"][data-metric="'+k+'"]');if(cell)cell.textContent=v;}
  }
- let gbm=result.models.gbm.prob[s.threshold.toFixed(3)].p,markov=result.models.markov.prob[s.threshold.toFixed(3)].p,ewma=result.models.ewma.prob[s.threshold.toFixed(3)].p;
- $("insight").innerHTML="<strong>Scenario findings.</strong> Terminal loss ≥ "+Math.round(s.threshold*100)+"%: GBM "+pct(gbm)+", Markov "+pct(markov)+", EWMA "+pct(ewma)+". All are model-dependent simulated probabilities, not validated real-world accuracy. EWMA's starting variance is copied from the executed notebook.";
+ const summary=modelNames.map(m=>modelLabels[m]+" "+pct(result.models[m].prob[s.threshold.toFixed(3)].p)).join(" · ");
+ $("insight").innerHTML="<strong>Five-model scenario.</strong> Terminal loss ≥ "+Math.round(s.threshold*100)+"%: "+summary+
+   ". These are model-dependent simulated risks, not claims of 2026 predictive accuracy. Frozen 2022–2024 parameters, 31 Dec 2024 origin.";
  verify();drawDistribution();
 }
 function updatePlay(){
@@ -164,7 +168,7 @@ let activeBatch=null;
 function run(){
  clearResults();let s=readSettings();
  try{runner=core.createRunner(s);}catch(e){setStatus("Invalid settings: "+e.message);return;}
- phase="computing";paused=false;const own=token;setStatus("Generating reproducible Monte Carlo ensembles…");setRunBtns();
+ phase="computing";paused=false;const own=token;setStatus("Generating five reproducible Monte Carlo ensembles…");setRunBtns();
  activeBatch=()=>{if(own!==token||phase!=="computing"||!runner||paused)return;
   try{
    let r=runner.step(s.paths>=30000?120:200);
@@ -172,7 +176,7 @@ function run(){
    setStatus("Computing: "+int(r.done)+" / "+int(r.total)+" paths per model");
    if(!r.complete){requestAnimationFrame(activeBatch);return;}
    result=runner.finish();runner=null;activeBatch=null;phase="ready";day=0;animating=true;lastFrame=null;
-   renderResults();if(window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches){day=s.horizon;animating=false;setStatus("Simulation complete. Automatic motion disabled by accessibility preference; use the day scrubber.");renderDay();}else{setStatus("Simulation complete. Animating "+int(s.paths)+"-path results.");renderDay();frame=requestAnimationFrame(animate);}
+   renderResults();if(window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches){day=s.horizon;animating=false;setStatus("Simulation complete. Automatic motion disabled by accessibility preference; use the day scrubber.");renderDay();}else{setStatus("Five-model simulation complete. Animating "+int(s.paths)+" paths per model.");renderDay();frame=requestAnimationFrame(animate);}
   }catch(e){clearResults();setStatus("Simulation error: "+e.message);console.error(e);}
  };
  requestAnimationFrame(activeBatch);
@@ -209,7 +213,7 @@ $("fitYear").addEventListener("click",()=>revealActual2025(true));
 function drawDistribution(){
  const c=$("distribution"),w=c.clientWidth,h=c.clientHeight;if(!w||!h)return;
  const ratio=Math.min(2,window.devicePixelRatio||1),g=c.getContext("2d");c.width=Math.round(w*ratio);c.height=Math.round(h*ratio);g.setTransform(ratio,0,0,ratio,0,0);g.clearRect(0,0,w,h);
- const pad={l:46,r:12,t:21,b:42},W=w-pad.l-pad.r,H=h-pad.t-pad.b,colors={gbm:"#64aafa",markov:"#f0bd6a",ewma:"#3cd7ad"};
+ const pad={l:46,r:12,t:21,b:42},W=w-pad.l-pad.r,H=h-pad.t-pad.b,colors=modelColors;
  g.font="11px system-ui";g.textBaseline="middle";g.textAlign="right";
  let values=result?modelNames.flatMap(m=>result.models[m].returns):[];
  let minReturn=Infinity,maxReturn=-Infinity;for(let v of values){if(v<minReturn)minReturn=v;if(v>maxReturn)maxReturn=v;}
@@ -225,7 +229,7 @@ function drawDistribution(){
  }
  for(let i=0;i<=4;i++){const Y=pad.t+H*i/4;g.strokeStyle="#283849";g.beginPath();g.moveTo(pad.l,Y);g.lineTo(w-pad.r,Y);g.stroke();g.fillStyle="#92a8bb";g.fillText(((1-i/4)*maxP*100).toFixed(0)+"%",pad.l-7,Y);}
  for(let i=0;i<=5;i++){const v=lo+span*i/5;g.textAlign="center";g.fillStyle="#95abbc";g.fillText(Math.round(v)+"%",x(v),h-18);}
- if(result){for(let m of modelNames){g.fillStyle=colors[m];g.globalAlpha=.47;hists[m].forEach((p,i)=>{const bh=H*p/maxP;g.fillRect(pad.l+i*W/bins,pad.t+H-bh,Math.max(1,W/bins-1),bh);});}g.globalAlpha=1;}
+ if(result){for(let m of modelNames){g.fillStyle=colors[m];g.globalAlpha=.28;hists[m].forEach((p,i)=>{const bh=H*p/maxP;g.fillRect(pad.l+i*W/bins,pad.t+H-bh,Math.max(1,W/bins-1),bh);});}g.globalAlpha=1;}
  const cut=-100*readSettings().threshold,X=x(cut);
  if(X>=pad.l&&X<=w-pad.r){g.save();g.setLineDash([4,4]);g.strokeStyle="#f09aa1";g.beginPath();g.moveTo(X,pad.t);g.lineTo(X,pad.t+H);g.stroke();g.restore();g.textAlign="left";g.fillStyle="#f6a6a9";g.font="10px system-ui";g.fillText("LOSS LIMIT",Math.max(pad.l,Math.min(w-90,X+4)),pad.t+8);}
  g.textAlign="right";g.fillStyle="#9eb6ca";g.fillText("TERMINAL RETURN",w-12,h-4);
@@ -234,7 +238,7 @@ const dialog=$("helpDialog");
 $("helpOpen").addEventListener("click",()=>dialog.showModal());
 $("helpClose").addEventListener("click",()=>dialog.close());
 dialog.addEventListener("click",e=>{if(e.target===dialog)dialog.close();});
-const sections=["simulation","comparison","validation","methodology"];
+const sections=["simulation","comparison","validation","validation2026","methodology"];
 if("IntersectionObserver" in window){const observer=new IntersectionObserver(entries=>{for(let e of entries)if(e.isIntersecting){document.querySelectorAll(".nav a").forEach(a=>a.classList.toggle("active",a.hash==="#"+e.target.id));}},{rootMargin:"-20% 0px -65% 0px"});sections.forEach(id=>observer.observe($(id)));}
 window.addEventListener("resize",drawDistribution);
 labels();clearResults();chart.resetZoom();updateActualSummary();

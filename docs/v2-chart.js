@@ -267,7 +267,7 @@ class ForecastChart {
   const barW=Math.max(2,Math.min(18,graphW/this.view.count*.65));
   const leftIndex=Math.floor(this.view.start)-1,rightIndex=Math.ceil(this.view.start+this.view.count)+1;
   const {result,day,view,reveal,threshold,horizon}=this.state;
-  const displayed=view==="all"?["gbm","markov","ewma"]:[view];
+  const displayed=view==="all"?global.CRLCore.models:[view];
   const values=[];
   for(let i=Math.max(0,leftIndex);i<=Math.min(this.candles.length-1,rightIndex);i++){
     if(i<=this.originIdx||reveal){let row=this.candles[i];values.push(row.low,row.high);}
@@ -301,7 +301,7 @@ class ForecastChart {
    g.fillStyle=col;g.fillRect(xx-barW/2,Math.min(y(row.open),y(row.close)),barW,Math.max(1.6,Math.abs(y(row.open)-y(row.close))));
   }
   // Forecast fan and median: percentile bands include ALL simulated paths, never just visible traces.
-  const colors={gbm:"#66b2ff",markov:"#f0c274",ewma:"#42d6b9"};
+  const colors={gbm:"#66b2ff",markov:"#f0c274",ewma:"#42d6b9",adaptive_gbm:"#a59cff",garch:"#f39bd4"};
   const dmax=Math.min(horizon,day);
   if(result&&dmax>.001){
    for(let m of displayed){
@@ -312,7 +312,7 @@ class ForecastChart {
     // The fan represents 5th–95th price percentiles, NOT a forecast-mean confidence interval.
     g.save();g.beginPath();iterate((d,ix)=>{const xx=x(this.originIdx+d),yy=y(interpolate(ix,4));if(d===0)g.moveTo(xx,yy);else g.lineTo(xx,yy);});
     for(let d=dmax;d>=0;){const ix=d;g.lineTo(x(this.originIdx+ix),y(interpolate(ix,0)));if(d===dmax&&fractional>0)d=maxWhole;else d--;}
-    g.closePath();g.fillStyle=colors[m];g.globalAlpha=view==="all"?.065:.17;g.fill();g.restore();
+    g.closePath();g.fillStyle=colors[m];g.globalAlpha=view==="all"?.038:.17;g.fill();g.restore();
     if(view!=="all"){
       g.save();g.strokeStyle=colors[m];g.globalAlpha=.24;g.lineWidth=.9;
       for(let obj of visible){const path=obj.values;g.beginPath();iterate((d,ix)=>{let ix0=Math.floor(ix),frac=ix-ix0;const price=path[ix0]*(1-frac)+path[Math.min(ix0+1,path.length-1)]*frac;const xx=x(this.originIdx+d),yy=y(price);d===0?g.moveTo(xx,yy):g.lineTo(xx,yy);});g.stroke();}
