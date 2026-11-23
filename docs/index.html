@@ -3,24 +3,27 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#0a1019">
-<meta name="description" content="Explore historical Bitcoin prices and compare reproducible 30-day downside-risk simulations under GBM, Markov switching and EWMA volatility.">
-<title>CryptoRisk Lab · Bitcoin Risk Simulation Terminal</title>
+<meta name="description" content="Scientific Bitcoin risk lab: compare GBM, Markov, EWMA, Adaptive GBM and GARCH(1,1) simulations against observed 2025 and 2026 market outcomes.">
+<title>CryptoRisk Lab · Five-Model Bitcoin Risk Research</title>
 <link rel="stylesheet" href="./v2.css">
 <link rel="stylesheet" href="./v2-validation.css">
+<link rel="stylesheet" href="./v3.css">
 <script defer src="./v2-history.js"></script><script defer src="./v2-models.js"></script>
 <script defer src="./v2-validation-data.js"></script><script defer src="./v2-chart.js"></script><script defer src="./v2-app.js"></script>
 <script defer src="./v2-validation.js"></script>
+<script defer src="./v3-evidence-2026.js"></script>
+<script defer src="./v3-validation.js"></script>
 </head>
 <body>
 <header class="topbar"><div class="wrap top-inner">
 <a class="brand" href="#simulation" aria-label="CryptoRisk Lab, home"><span class="mark">₿</span><span><strong>CryptoRisk Lab</strong><small>SCIENTIFIC SIMULATION TERMINAL</small></span></a>
-<nav class="nav" aria-label="Main sections"><a class="active" href="#simulation">Simulation Lab</a><a href="#comparison">Risk Comparison</a><a href="#validation">Predictions vs Reality</a><a href="#methodology">Methodology</a></nav>
+<nav class="nav" aria-label="Main sections"><a class="active" href="#simulation">Simulation</a><a href="#comparison">Risk Comparison</a><a href="#validation">2025 Validation</a><a href="#validation2026">2026 Holdout</a><a href="#methodology">Methodology</a></nav>
 <div class="top-right"><span class="pill"><span class="live-dot"></span>Historical research · Not live</span><button class="top-help" id="helpOpen" type="button">How it works <span aria-hidden="true">?</span></button></div>
 </div></header>
 <main class="wrap">
 <div class="intro" id="simulation">
-  <div><div class="overline">Quantitative Bitcoin Risk Research</div><h1>Model uncertainty. <em>See the downside.</em></h1><p>Explore actual BTC/USDT daily candles, animate thousands of possible future paths, and compare three scientifically distinct risk models against what happened in 2025.</p></div>
-  <div class="intro-note">2022–2024 model calibration · 2025 retrospective evaluation · Forecast origin <strong>31 Dec 2024</strong>. Results are historical experiments, not current trading advice.</div>
+  <div><div class="overline">Quantitative Bitcoin Risk Research</div><h1>Model uncertainty. <em>See the downside.</em></h1><p>Explore actual BTC/USDT daily candles, animate thousands of possible paths from five risk models, and compare their historical accuracy across 2025 and a separate 2026 holdout.</p></div>
+  <div class="intro-note">2022–2024 model calibration · 2025 validation · 2026 retrospective holdout. Interactive forecast origin <strong>31 Dec 2024</strong>, not a live signal.</div>
 </div>
 <div class="workspace">
 <aside class="card controls" aria-labelledby="settingsTitle">
@@ -40,14 +43,14 @@
  <div class="run-actions"><button id="startBtn" class="button-primary" type="button">▶ Run simulation</button><button id="pauseBtn" class="button-secondary" type="button" disabled>Pause</button><button id="resetBtn" class="button-secondary" type="button">Reset</button></div>
  <p class="status" id="runStatus" role="status">Ready. Press Run simulation to generate paths.</p>
  <div class="progress" aria-label="Monte Carlo computation progress"><span id="computeBar"></span></div>
- <p class="subtle">EWMA starting variances for every allowed decay were exported from the executed 2022–2024 notebook at the 31 Dec 2024 forecast origin. Fixed 2025 validation remains separate.</p>
+ <p class="subtle">All five interactive models start at the same audited December 2024 origin. Historical 2025 and 2026 backtest scores never change when scenario sliders change.</p>
 </div></aside>
 <div class="main-column">
 <section class="card chart-card" aria-labelledby="chartTitle">
  <div class="ticker-row"><div class="ticker-title"><div class="bitcoin-icon">₿</div><div><strong id="chartTitle">BTC / USDT</strong><small>Binance Spot · 1D candles · UTC · Historical anchor</small></div></div><div class="ticker-price" id="tickerPrice">93,576.00 <small>31 Dec 2024 · fixed forecast origin</small></div></div>
- <div class="model-tabs" role="group" aria-label="Forecast model overlays"><button type="button" data-view="all" aria-pressed="true">All models</button><button type="button" data-view="gbm" aria-pressed="false"><span class="legend-dot" style="background:var(--blue)"></span>GBM</button><button type="button" data-view="markov" aria-pressed="false"><span class="legend-dot" style="background:var(--gold)"></span>Markov</button><button type="button" data-view="ewma" aria-pressed="false"><span class="legend-dot" style="background:var(--green)"></span>EWMA</button><button id="resetView" type="button" title="Fit the selected simulation horizon">Fit forecast</button><button id="fitYear" type="button" title="Reveal and fit the complete observed 2025 market history">Full 2025 view</button></div>
+ <div class="model-tabs" role="group" aria-label="Forecast model overlays"><button type="button" data-view="all" aria-pressed="true">All models</button><button type="button" data-view="gbm" aria-pressed="false"><span class="legend-dot" style="background:var(--blue)"></span>GBM</button><button type="button" data-view="markov" aria-pressed="false"><span class="legend-dot" style="background:var(--gold)"></span>Markov</button><button type="button" data-view="ewma" aria-pressed="false"><span class="legend-dot" style="background:var(--green)"></span>EWMA</button><button type="button" data-view="adaptive_gbm" aria-pressed="false"><span class="legend-dot" style="background:#a59cff"></span>Adaptive GBM</button><button type="button" data-view="garch" aria-pressed="false"><span class="legend-dot" style="background:#f39bd4"></span>GARCH</button><button id="resetView" type="button" title="Fit the selected simulation horizon">Fit forecast</button><button id="fitYear" type="button" title="Reveal and fit the complete observed 2025 market history">Full 2025 view</button></div>
  <div class="chart-canvas-wrap" id="chartWrap"><canvas id="mainChart" aria-label="Historical BTC/USDT daily candles with interactive price and time crosshair. Drag left or right to pan, scroll or pinch to zoom, drag the right price scale to rescale. Arrow keys pan or zoom." role="img"></canvas><div id="chartTooltip" class="chart-tooltip"></div></div>
- <div class="chart-legend"><span><span class="legend-dot" style="background:var(--green)"></span>Actual up candle</span><span><span class="legend-dot" style="background:var(--red)"></span>Actual down candle</span><span><span class="legend-dot" style="background:var(--blue)"></span>GBM projection</span><span><span class="legend-dot" style="background:var(--gold)"></span>Markov projection</span><span><span class="legend-dot" style="background:#31cbb0"></span>EWMA projection</span></div>
+ <div class="chart-legend"><span><span class="legend-dot" style="background:var(--green)"></span>Actual up candle</span><span><span class="legend-dot" style="background:var(--red)"></span>Actual down candle</span><span><span class="legend-dot" style="background:var(--blue)"></span>GBM projection</span><span><span class="legend-dot" style="background:var(--gold)"></span>Markov projection</span><span><span class="legend-dot" style="background:#31cbb0"></span>EWMA projection</span><span><span class="legend-dot" style="background:#a59cff"></span>Adaptive GBM projection</span><span><span class="legend-dot" style="background:#f39bd4"></span>GARCH projection</span></div>
  <p class="mobile-config-hint">Ready to test a scenario? <a href="#settingsTitle">Configure and run the simulation</a> below this chart.</p>
  <div class="timeline">
   <div class="timeline-row"><div class="timeline-left"><button class="button-secondary" id="playBtn" disabled type="button">▶ Play</button><button class="button-secondary" id="restartPlayback" disabled type="button">↺ Replay</button><output id="dayLabel">Day 0 / 30</output><span class="status" id="regimeStatus"></span></div><div class="timeline-left"><label for="speed" class="subtle">Speed</label><select id="speed"><option value=".5">0.5×</option><option selected value="1">1×</option><option value="2">2×</option><option value="4">4×</option></select><button class="button-secondary" id="revealBtn" type="button" aria-pressed="false">Reveal actual 2025</button></div></div>
@@ -61,22 +64,24 @@
  <div class="kpi kpi--gbm"><small>GBM · TERMINAL LOSS ≥ <span class="thresholdName">10</span>%</small><strong class="color-gbm" id="kpiGbm">—</strong><p id="kpiGbmCi">Constant volatility baseline</p></div>
  <div class="kpi kpi--markov"><small>MARKOV · TERMINAL LOSS ≥ <span class="thresholdName">10</span>%</small><strong class="color-markov" id="kpiMarkov">—</strong><p id="kpiMarkovCi">Two-state calm/volatile model</p></div>
  <div class="kpi kpi--ewma"><small>EWMA · TERMINAL LOSS ≥ <span class="thresholdName">10</span>%</small><strong class="color-ewma" id="kpiEwma">—</strong><p id="kpiEwmaCi">Dynamic variance · notebook-calibrated</p></div>
+<div class="kpi kpi--adaptive"><small>ADAPTIVE GBM · TERMINAL LOSS ≥ <span class="thresholdName">10</span>%</small><strong class="color-adaptive" id="kpiAdaptive">—</strong><p id="kpiAdaptiveCi">30-day rolling historical sigma</p></div>
+<div class="kpi kpi--garch"><small>GARCH · TERMINAL LOSS ≥ <span class="thresholdName">10</span>%</small><strong class="color-garch" id="kpiGarch">—</strong><p id="kpiGarchCi">Gaussian conditional volatility</p></div>
 </div>
-<p class="validation-linkline"><strong>Did the models get it right?</strong> <a href="#validation">Compare 335 historical 2025 forecasts with actual Bitcoin losses and Brier scores</a></p>
+<p class="validation-linkline"><strong>Did the models get it right?</strong> <a href="#validation">Explore original 2025 validation</a> or <a href="#validation2026">compare all five models on the 2026 holdout</a></p>
 <div class="insight" id="insight" role="status"><strong>Explore how risk evolves.</strong> Run the experiment to animate genuine simulations. Pale forecast bands represent projected price percentiles, not observed prices or confidence intervals for estimates.</div>
 </div></div>
 <section class="section" id="comparison"><div class="section-heading"><div><div class="overline">01 · Scenario Analysis</div><h2>Risk comparison</h2><p>Identical horizon, investment and thresholds; all metrics are calculated from simulated paths.</p></div><span class="pill">INTERACTIVE OUTPUTS</span></div>
  <div class="grid2">
- <div class="card"><div class="card-head"><div><h2>Quantified downside risk</h2><p>Loss probability and tail severity for each model</p></div></div><div class="content-pad table-scroll"><table id="riskTable"><thead><tr><th>Risk metric</th><th class="color-gbm">GBM</th><th class="color-markov">Markov</th><th class="color-ewma">EWMA*</th></tr></thead><tbody>
- <tr><td>Terminal loss ≥ 10%</td><td data-metric="p10" data-model="gbm">—</td><td data-metric="p10" data-model="markov">—</td><td data-metric="p10" data-model="ewma">—</td></tr>
- <tr><td>Terminal loss ≥ 20%</td><td data-metric="p20" data-model="gbm">—</td><td data-metric="p20" data-model="markov">—</td><td data-metric="p20" data-model="ewma">—</td></tr>
- <tr><td>Terminal loss ≥ 35%</td><td data-metric="p35" data-model="gbm">—</td><td data-metric="p35" data-model="markov">—</td><td data-metric="p35" data-model="ewma">—</td></tr>
- <tr><td>Custom terminal loss ≥ <span class="thresholdName">10</span>%</td><td data-metric="custom" data-model="gbm">—</td><td data-metric="custom" data-model="markov">—</td><td data-metric="custom" data-model="ewma">—</td></tr>
- <tr><td>95% Value at Risk (USDT)</td><td data-metric="var" data-model="gbm">—</td><td data-metric="var" data-model="markov">—</td><td data-metric="var" data-model="ewma">—</td></tr>
- <tr><td>95% Expected Shortfall (USDT)</td><td data-metric="es" data-model="gbm">—</td><td data-metric="es" data-model="markov">—</td><td data-metric="es" data-model="ewma">—</td></tr>
- <tr><td>Daily-close touch ≥ <span class="thresholdName">10</span>%</td><td data-metric="touch" data-model="gbm">—</td><td data-metric="touch" data-model="markov">—</td><td data-metric="touch" data-model="ewma">—</td></tr>
- <tr><td>Mean maximum drawdown</td><td data-metric="dd" data-model="gbm">—</td><td data-metric="dd" data-model="markov">—</td><td data-metric="dd" data-model="ewma">—</td></tr>
- </tbody></table><p class="risk-note">* EWMA scenario starting variance is from the full-history notebook at the fixed forecast origin. Terminal loss refers to day N only; touch means the path crossed the threshold at a daily close at least once.</p></div></div>
+ <div class="card"><div class="card-head"><div><h2>Quantified downside risk</h2><p>Loss probability and tail severity for each model</p></div></div><div class="content-pad table-scroll"><table id="riskTable"><thead><tr><th>Risk metric</th><th class="color-gbm">GBM</th><th class="color-markov">Markov</th><th class="color-ewma">EWMA*</th><th class="color-adaptive">Adaptive GBM*</th><th class="color-garch">GARCH*</th></tr></thead><tbody>
+ <tr><td>Terminal loss ≥ 10%</td><td data-metric="p10" data-model="gbm">—</td><td data-metric="p10" data-model="markov">—</td><td data-metric="p10" data-model="ewma">—</td><td data-metric="p10" data-model="adaptive_gbm">—</td><td data-metric="p10" data-model="garch">—</td></tr>
+ <tr><td>Terminal loss ≥ 20%</td><td data-metric="p20" data-model="gbm">—</td><td data-metric="p20" data-model="markov">—</td><td data-metric="p20" data-model="ewma">—</td><td data-metric="p20" data-model="adaptive_gbm">—</td><td data-metric="p20" data-model="garch">—</td></tr>
+ <tr><td>Terminal loss ≥ 35%</td><td data-metric="p35" data-model="gbm">—</td><td data-metric="p35" data-model="markov">—</td><td data-metric="p35" data-model="ewma">—</td><td data-metric="p35" data-model="adaptive_gbm">—</td><td data-metric="p35" data-model="garch">—</td></tr>
+ <tr><td>Custom terminal loss ≥ <span class="thresholdName">10</span>%</td><td data-metric="custom" data-model="gbm">—</td><td data-metric="custom" data-model="markov">—</td><td data-metric="custom" data-model="ewma">—</td><td data-metric="custom" data-model="adaptive_gbm">—</td><td data-metric="custom" data-model="garch">—</td></tr>
+ <tr><td>95% Value at Risk (USDT)</td><td data-metric="var" data-model="gbm">—</td><td data-metric="var" data-model="markov">—</td><td data-metric="var" data-model="ewma">—</td><td data-metric="var" data-model="adaptive_gbm">—</td><td data-metric="var" data-model="garch">—</td></tr>
+ <tr><td>95% Expected Shortfall (USDT)</td><td data-metric="es" data-model="gbm">—</td><td data-metric="es" data-model="markov">—</td><td data-metric="es" data-model="ewma">—</td><td data-metric="es" data-model="adaptive_gbm">—</td><td data-metric="es" data-model="garch">—</td></tr>
+ <tr><td>Daily-close touch ≥ <span class="thresholdName">10</span>%</td><td data-metric="touch" data-model="gbm">—</td><td data-metric="touch" data-model="markov">—</td><td data-metric="touch" data-model="ewma">—</td><td data-metric="touch" data-model="adaptive_gbm">—</td><td data-metric="touch" data-model="garch">—</td></tr>
+ <tr><td>Mean maximum drawdown</td><td data-metric="dd" data-model="gbm">—</td><td data-metric="dd" data-model="markov">—</td><td data-metric="dd" data-model="ewma">—</td><td data-metric="dd" data-model="adaptive_gbm">—</td><td data-metric="dd" data-model="garch">—</td></tr>
+ </tbody></table><p class="risk-note">* Model states use only 2022–2024 data at the fixed scenario origin. Adaptive GBM uses the prior 30 observed returns; GARCH uses the frozen training-period fit and initial variance. Volatility multipliers are hypothetical stress scenarios. Terminal loss is measured at day N; daily-close touch may happen earlier.</p></div></div>
  <div class="card"><div class="card-head"><div><h2>Terminal return distribution</h2><p>Actual Monte Carlo final returns; custom threshold is highlighted</p></div></div><div class="content-pad"><canvas id="distribution" class="canvas-small" aria-label="Comparison of simulated terminal return histograms"></canvas><p class="risk-note">Shaded bars show the share of outcomes in each return bin. A model's plotted dispersion is not proof of its historical accuracy.</p></div></div>
  </div>
 </section>
@@ -138,15 +143,15 @@
  </div>
 </section>
 </main>
-<footer class="wrap footer"><span>CryptoRisk Lab · Historical model comparison · Research and education, not personalized investment advice.</span><span>2022–2024 calibration · 2025 evaluation · UTC daily data</span></footer>
+<footer class="wrap footer"><span>CryptoRisk Lab · Historical model comparison · Research and education, not personalized investment advice.</span><span>2022–2024 calibration · 2025 original test · 2026 holdout · UTC daily data</span></footer>
 <dialog id="helpDialog" aria-labelledby="helpTitle"><div class="dialog-head"><h2 id="helpTitle">How to use CryptoRisk Lab</h2><button id="helpClose" type="button">Close ✕</button></div><div class="dialog-body">
 <p>CryptoRisk Lab examines how different assumptions about Bitcoin volatility change the distribution of possible losses. It does not predict tomorrow's live market.</p>
 <ol><li><strong>Configure.</strong> Choose an investment, 30-day horizon, Monte Carlo path count, loss threshold and volatility scenario. Advanced settings include the seed and EWMA decay.</li>
-<li><strong>Run.</strong> The simulator generates independent seeded GBM, Markov and EWMA scenarios. Computation progress appears beside the controls.</li>
+<li><strong>Run.</strong> The simulator generates independent seeded GBM, Markov, EWMA, Adaptive GBM and GARCH(1,1) scenarios. Computation progress appears beside the controls.</li>
 <li><strong>Watch.</strong> Forecast paths and percentile fans extend day by day from the real 31 Dec 2024 closing price. Use Pause, Play, Replay and the day slider to inspect the same generated paths.</li>
 <li><strong>Explore the chart.</strong> Scroll or pinch to zoom, drag horizontally to pan, drag the right price axis for vertical zoom, and hover to see the exact price level alongside candle values. Double-click to fit the forecast or double-click the price scale to reset vertical zoom. Keyboard: Left/Right pan, Up/Down zoom, Home fits forecast, End fits 2025. Use Reveal actual 2025 to inspect the entire observed year and Fit forecast to zoom back to the original simulation; no forecast is extended beyond the selected horizon.</li>
 <li><strong>Interpret risk.</strong> Terminal-loss probability is measured at day N. Daily-close touch probability asks whether the loss boundary was crossed at any simulated close. VaR95 and ES95 describe the estimated loss tail.</li>
 <li><strong>Validate.</strong> Historical Brier scores are fixed notebook results. They are not recalculated from your scenario sliders and do not establish which model will perform best in future markets.</li></ol>
-<h3>Important limitations</h3><p>These Monte Carlo paths use historical parameters, normal log-return shocks and no fees, leverage or market frictions. The Markov classification's persistence is partly mechanical. EWMA decay sensitivities retain full-history origin states, but do not establish real-world superiority. Past forecasts and simulations are not financial advice.</p>
+<h3>Important limitations</h3><p>These Monte Carlo paths use historical parameters, normal log-return shocks and no fees, leverage or market frictions. The Markov classification's persistence is partly mechanical. EWMA decay sensitivities retain full-history origin states; Adaptive GBM and GARCH use frozen historical calibration. Neither more parameters nor faster volatility changes guarantee better accuracy. Past forecasts and simulations are not financial advice.</p>
 </div></dialog>
 </body></html>
