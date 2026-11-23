@@ -38,7 +38,7 @@
  <div class="run-actions"><button id="startBtn" class="button-primary" type="button">▶ Run simulation</button><button id="pauseBtn" class="button-secondary" type="button" disabled>Pause</button><button id="resetBtn" class="button-secondary" type="button">Reset</button></div>
  <p class="status" id="runStatus" role="status">Ready. Press Run simulation to generate paths.</p>
  <div class="progress" aria-label="Monte Carlo computation progress"><span id="computeBar"></span></div>
- <p class="subtle">EWMA interactive scenarios currently use a December-only volatility warm start. Frozen notebook benchmarks are shown separately. Full-history parity is pending.</p>
+ <p class="subtle">EWMA starting variances for every allowed decay were exported from the executed 2022–2024 notebook at the 31 Dec 2024 forecast origin. Fixed 2025 validation remains separate.</p>
 </div></aside>
 <div class="main-column">
 <section class="card chart-card" aria-labelledby="chartTitle">
@@ -57,7 +57,7 @@
 <div class="kpi-grid" aria-label="Model risk summary">
  <div class="kpi kpi--gbm"><small>GBM · TERMINAL LOSS ≥ <span class="thresholdName">10</span>%</small><strong class="color-gbm" id="kpiGbm">—</strong><p id="kpiGbmCi">Constant volatility baseline</p></div>
  <div class="kpi kpi--markov"><small>MARKOV · TERMINAL LOSS ≥ <span class="thresholdName">10</span>%</small><strong class="color-markov" id="kpiMarkov">—</strong><p id="kpiMarkovCi">Two-state calm/volatile model</p></div>
- <div class="kpi kpi--ewma"><small>EWMA · TERMINAL LOSS ≥ <span class="thresholdName">10</span>%</small><strong class="color-ewma" id="kpiEwma">—</strong><p id="kpiEwmaCi">Dynamic variance · warm-start approximation</p></div>
+ <div class="kpi kpi--ewma"><small>EWMA · TERMINAL LOSS ≥ <span class="thresholdName">10</span>%</small><strong class="color-ewma" id="kpiEwma">—</strong><p id="kpiEwmaCi">Dynamic variance · notebook-calibrated</p></div>
 </div>
 <div class="insight" id="insight" role="status"><strong>Explore how risk evolves.</strong> Run the experiment to animate genuine simulations. Pale forecast bands represent projected price percentiles, not observed prices or confidence intervals for estimates.</div>
 </div></div>
@@ -72,7 +72,7 @@
  <tr><td>95% Expected Shortfall (USDT)</td><td data-metric="es" data-model="gbm">—</td><td data-metric="es" data-model="markov">—</td><td data-metric="es" data-model="ewma">—</td></tr>
  <tr><td>Daily-close touch ≥ <span class="thresholdName">10</span>%</td><td data-metric="touch" data-model="gbm">—</td><td data-metric="touch" data-model="markov">—</td><td data-metric="touch" data-model="ewma">—</td></tr>
  <tr><td>Mean maximum drawdown</td><td data-metric="dd" data-model="gbm">—</td><td data-metric="dd" data-model="markov">—</td><td data-metric="dd" data-model="ewma">—</td></tr>
- </tbody></table><p class="risk-note">* EWMA interactive results use a documented December 2024 warm-start approximation pending full-history notebook parity. Terminal loss refers to day N only; touch means the path crossed the threshold at a daily close at least once.</p></div></div>
+ </tbody></table><p class="risk-note">* EWMA scenario starting variance is from the full-history notebook at the fixed forecast origin. Terminal loss refers to day N only; touch means the path crossed the threshold at a daily close at least once.</p></div></div>
  <div class="card"><div class="card-head"><div><h2>Terminal return distribution</h2><p>Actual Monte Carlo final returns; custom threshold is highlighted</p></div></div><div class="content-pad"><canvas id="distribution" class="canvas-small" aria-label="Comparison of simulated terminal return histograms"></canvas><p class="risk-note">Shaded bars show the share of outcomes in each return bin. A model's plotted dispersion is not proof of its historical accuracy.</p></div></div>
  </div>
 </section>
@@ -90,7 +90,7 @@
  <div class="info-grid">
  <article class="info-box"><h3 class="color-gbm">Geometric Brownian Motion</h3><p>Constant daily log-return parameters μ = 0.000615 and σ = 0.028460 estimated from 2022–2024. Each day uses a seeded independent normal shock; prices evolve multiplicatively.</p><p><code>ln(Pₜ₊₁/Pₜ) = μ + σZₜ</code></p></article>
  <article class="info-box"><h3 class="color-markov">Two-state Markov model</h3><p>Calm/volatile log-return means and standard deviations differ by state. State transitions use 499/540 for Calm→Calm and 500/541 for Volatile→Volatile. Overlapping 14-day volatility windows mechanically inflate apparent persistence.</p><p><code>rₜ ∼ Normal(μ_state, σ_state²)</code></p></article>
- <article class="info-box"><h3 class="color-ewma">EWMA volatility benchmark</h3><p>Variance evolves from simulated log-return shocks, not unseen future prices. The decay λ=0.90 was selected using 2024. Our interactive warm start uses only the bundled December 2024 candles and must not be confused with the frozen notebook's full-history EWMA result.</p><p><code>vₜ₊₁ = λvₜ + (1−λ)(rₜ−μ)²</code></p></article>
+ <article class="info-box"><h3 class="color-ewma">EWMA volatility benchmark</h3><p>Variance evolves from simulated log-return shocks, not unseen future prices. The decay λ=0.90 was selected using 2024. Every EWMA slider starting variance is from the executed notebook using 2022–2024 information only; simulated shocks update variance after the forecast origin.</p><p><code>vₜ₊₁ = λvₜ + (1−λ)(rₜ−μ)²</code></p></article>
  </div>
  <div class="grid2" style="margin-top:18px">
   <div class="card"><div class="card-head"><h2>Verification and numerical integrity</h2></div><div class="content-pad"><p id="verifyStatus" class="status">Run a simulation to execute browser-side structural and risk-ordering checks.</p><p class="risk-note">Monte Carlo probabilities have sampling uncertainty. A displayed probability interval estimates numerical precision, not predictive validity. Model outcomes are not guarantees.</p></div></div>
@@ -107,6 +107,6 @@
 <li><strong>Explore the chart.</strong> Scroll to zoom, drag horizontally to pan, hover for historical candle or forecast information, double-click to reset. Use Reveal actual 2025 to compare a genuine subsequent market outcome with the earlier forecast.</li>
 <li><strong>Interpret risk.</strong> Terminal-loss probability is measured at day N. Daily-close touch probability asks whether the loss boundary was crossed at any simulated close. VaR95 and ES95 describe the estimated loss tail.</li>
 <li><strong>Validate.</strong> Historical Brier scores are fixed notebook results. They are not recalculated from your scenario sliders and do not establish which model will perform best in future markets.</li></ol>
-<h3>Important limitations</h3><p>These Monte Carlo paths use historical parameters, normal log-return shocks and no fees, leverage or market frictions. The Markov classification's persistence is partly mechanical. The EWMA interactive warm-start is a provisional shortened-history implementation and is labelled accordingly. Past forecasts and simulations are not financial advice.</p>
+<h3>Important limitations</h3><p>These Monte Carlo paths use historical parameters, normal log-return shocks and no fees, leverage or market frictions. The Markov classification's persistence is partly mechanical. EWMA decay sensitivities retain full-history origin states, but do not establish real-world superiority. Past forecasts and simulations are not financial advice.</p>
 </div></dialog>
 </body></html>
