@@ -13,6 +13,7 @@ from nbclient import NotebookClient
 source = pathlib.Path("notebook/cryptorisk-lab.ipynb")
 report_path = pathlib.Path("verification-results.json")
 nb = nbformat.read(source, as_version=4)
+source_nb = nbformat.read(source, as_version=4)  # Preserve exactly the submitted cell sources.
 required_markers = [
     "# M2: Model-selection experiment",
     "# M3: Verify the entire",
@@ -24,7 +25,7 @@ cells = ["".join(c.get("source", "")) for c in nb.cells]
 for marker in required_markers:
     assert any(marker in content for content in cells), marker
 # Add a read-only provenance probe to the in-memory executed copy.
-# The committed scientific notebook is unchanged and still contains 97 cells.
+# The committed scientific notebook is unchanged; the probe exists in memory only.
 last_code_index = max(i for i, cell in enumerate(nb.cells) if cell.cell_type == "code")
 nb.cells[last_code_index].source += """
 import json as _crl_export_json
@@ -224,7 +225,7 @@ target = Path("docs/v2-validation-data.js")
 target.parent.mkdir(exist_ok=True, parents=True)
 target.write_text(
     "/* Frozen 2025 30-day historical predictions and actual outcomes, exported "
-    "from the executed 97-cell notebook. 335 overlapping windows. */\n"
+    "from the executed primary notebook. 335 overlapping windows. */\n"
     "window.CRL_VALIDATION = " + json.dumps(backtest, separators=(",", ":"), allow_nan=False) + ";\n",
     encoding="utf-8"
 )
@@ -240,4 +241,18 @@ print("PASS: Exported all 335 frozen per-origin forecasts, outcomes, EWMA states
 print("PASS: Exact notebook-derived 2024-12-31 EWMA initial variance exported", flush=True)
 print("PHASE1_VERIFIED_RESULTS=" + json.dumps(phase1_results, separators=(",", ":")), flush=True)
 
+# Archive every executed cell, including previously unsaved X2/X5 figures and tests.
+# Restore the ORIGINAL code and Markdown source to avoid baking the CI-only
+# provenance probe into the notebook a reader downloads.
+assert len(source_nb.cells) == len(executed.cells)
+for source_cell, executed_cell in zip(source_nb.cells, executed.cells):
+    if source_cell.cell_type == "code":
+        source_cell.outputs = executed_cell.outputs
+        source_cell.execution_count = executed_cell.execution_count
+executed_path = pathlib.Path("verification-artifacts/cryptorisk-lab-executed.ipynb")
+executed_path.parent.mkdir(exist_ok=True, parents=True)
+nbformat.validate(source_nb)
+nbformat.write(source_nb, executed_path)
+report["executed_notebook_artifact"] = str(executed_path)
+print(f"PASS: Fully executed {len(source_nb.cells)}-cell notebook archived with unchanged sources", flush=True)
 report_path.write_text(json.dumps(report, indent=2) + "\n")

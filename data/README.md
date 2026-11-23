@@ -10,7 +10,7 @@ CryptoRisk Lab derives its research inputs from Binance's **public BTCUSDT spot,
 |---|---|---|---|
 | Notebook daily spot closes | 2022-01-01 to 2025-12-31 | Fit 2022–2024 models, evaluate 2025 | Official monthly Binance BTCUSDT/1d archives, live download in notebook |
 | docs/btc-historical.json | 2024-12 to 2025-12 | Website historical BTC OHLC candles | Derived from official Binance archive; source proof in docs/btc-2025-sources.json |
-| docs/v2-validation-data.{js,json} | 2025 daily eligible origin dates | Archived original 335-origin 30-day events and probabilities | Exact export from executed 97-cell original research notebook |
+| docs/v2-validation-data.{js,json} | 2025 daily eligible origin dates | Archived original 335-origin 30-day events and probabilities | Exact export from executed primary research notebook |
 | research/phase3_2026/results/forecast_ledger_2026.csv | 2026-01-01 to 2026-10-01 origins | Separate retrospective 30-day evaluation | Archived 2026 prices to 2026-10-31; official-source SHA-256 proof and frozen 2022–2024 fitting |
 | research/phase4_2025/results/forecast_ledger_2025_extended.csv | 2025 original 335 origins | Added 2025 adaptive/GARCH exploratory scores | Original notebook forecasts preserved; extra models labelled post-hoc |
 | research/phase5_horizons/results/forecasts_*.csv | 2025 and 2026, 7/14/60/90 days | Additional exploratory historical horizons | Official recorded daily closes, prior-only filters, audited exact-H events |
