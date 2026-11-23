@@ -27,8 +27,11 @@ try:
         page.goto(f"http://127.0.0.1:{PORT}/index.html", wait_until="load")
         page.wait_for_function("() => !!window.CRLApp && !!window.CRLCore && !!window.CRL_HISTORY")
         assert page.locator("#mainChart").is_visible()
-        assert page.evaluate("() => window.CRL_HISTORY.candles.length") == 62
-        print("PASS: Offline-bundled observed 62 daily Binance candles render", flush=True)
+        assert page.evaluate("() => window.CRL_HISTORY.candles.length") == 396
+        assert page.evaluate("() => window.CRL_HISTORY.candles[30].close") == 93576
+        assert page.evaluate("() => window.CRL_HISTORY.candles.at(-1).date") == "2025-12-31"
+        assert "2025-12-31" in page.locator("#actual2025Summary").inner_text()
+        print("PASS: 396 authentic daily Binance candles, complete 2025, origin preserved", flush=True)
         assert page.evaluate("() => window.CRLCore.ewmaWarmStart(.9)") > 0
         page.locator('input[name="paths"][value="1000"]').check(force=True)
         page.locator("#startBtn").click()
@@ -53,7 +56,16 @@ try:
         print("PASS: Clickable simulated path reveals price, P/L, drawdown and regime", flush=True)
         page.locator("#revealBtn").click()
         assert page.locator("#revealBtn").get_attribute("aria-pressed") == "true"
-        print("PASS: Forecast scrubber, regime, overlays and actual-outcome reveal", flush=True)
+        assert page.evaluate("() => window.CRLApp.chart.view.count") == 396
+        assert "2025-12-31" in page.locator("#actual2025Summary").inner_text()
+        page.evaluate("() => window.scrollTo(0, 0)")
+        page.screenshot(path="browser-verification-full-year.png", full_page=False)
+        assert page.evaluate("() => window.CRLApp.result.settings.horizon") == 30
+        page.locator("#resetView").click()
+        assert page.evaluate("() => window.CRLApp.chart.view.count") < 396
+        page.locator("#fitYear").click()
+        assert page.evaluate("() => window.CRLApp.chart.view.count") == 396
+        print("PASS: Full-year observed 2025 navigation and finite 30-day forecast", flush=True)
         page.locator("#helpOpen").click()
         assert page.locator("#helpDialog").evaluate("(e) => e.open")
         page.locator("#helpClose").click()

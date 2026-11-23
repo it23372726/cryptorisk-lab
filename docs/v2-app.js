@@ -109,7 +109,7 @@ function updatePlay(){
  let model=result?.models.markov.paths[0],r=model?.states;
  let k=Math.min(h,Math.max(0,Math.floor(day)));
  $("regimeStatus").textContent=result&&r?"Sample Markov path: "+(r[k]===0?"CALM":"VOLATILE"):"";
- $("chartMode").textContent=result?"Animated forecast · "+int(result.settings.paths)+" paths per model"+(actual?" · actual January 2025 revealed":""):"Historical candles only · simulation not started";
+ $("chartMode").textContent=result?"Animated forecast · "+int(result.settings.paths)+" paths per model"+(actual?" · observed 2025 revealed (through 31 Dec)":""):"Historical candles only · simulation not started";
  setRunBtns();
 }
 function renderPathInspector(){
@@ -129,7 +129,19 @@ function renderPathInspector(){
  " · BTC "+money(price)+" USDT · Investment "+money(value)+" USDT · P/L "+(pnl>=0?"+":"")+money(pnl)+
  " USDT · Max drawdown so far "+pct(worst)+" · Threshold touched: "+(touched?"Yes":"No")+state;
 }
-function renderDay(){chart.update({result,day,view,reveal:actual,threshold:readSettings().threshold,horizon:readSettings().horizon});updatePlay();renderPathInspector();}
+function updateActualSummary(){
+ const candles=window.CRL_HISTORY.candles,last=candles[candles.length-1];
+ if(!last)return;
+ const annual=(last.close/core.origin-1)*100;
+ $("actual2025Summary").textContent=actual
+  ?"Observed Binance BTC/USDT close "+last.date+": "+money(last.close)+" USDT ("+
+   (annual>=0?"+":"")+annual.toFixed(2)+"% from the 31 Dec 2024 forecast origin). "+
+   "The displayed forecast stops at its selected "+readSettings().horizon+"-day horizon, "+
+   "even when the observed candles continue through the full 2025 year."
+  :"Historical data through "+last.date+" is available. Reveal actual 2025 for the year-long view; "+
+   "forecasts remain limited to the selected horizon.";
+}
+function renderDay(){chart.update({result,day,view,reveal:actual,threshold:readSettings().threshold,horizon:readSettings().horizon});updatePlay();renderPathInspector();updateActualSummary();}
 function animate(now){
  if(!animating||paused||!result){frame=null;return;}
  const dt=lastFrame===null?0:Math.min(80,now-lastFrame);lastFrame=now;
@@ -185,7 +197,15 @@ $("dayScrub").addEventListener("input",e=>{if(!result)return;paused=true;animati
 $("speed").addEventListener("change",()=>{lastFrame=null;});
 document.querySelectorAll("[data-view]").forEach(b=>b.addEventListener("click",()=>{view=b.dataset.view;chart.selectedPath=null;document.querySelectorAll("[data-view]").forEach(x=>x.setAttribute("aria-pressed",String(x===b)));renderDay();}));
 $("resetView").addEventListener("click",()=>chart.resetZoom());
-$("revealBtn").addEventListener("click",()=>{actual=!actual;$("revealBtn").setAttribute("aria-pressed",String(actual));$("revealBtn").textContent=actual?"Hide actual 2025":"Reveal actual 2025";renderDay();});
+function revealActual2025(visible){
+ actual=visible;
+ $("revealBtn").setAttribute("aria-pressed",String(actual));
+ $("revealBtn").textContent=actual?"Hide actual 2025":"Reveal actual 2025";
+ renderDay();
+ if(actual)chart.fitFullYear();else chart.resetZoom();
+}
+$("revealBtn").addEventListener("click",()=>revealActual2025(!actual));
+$("fitYear").addEventListener("click",()=>revealActual2025(true));
 function drawDistribution(){
  const c=$("distribution"),w=c.clientWidth,h=c.clientHeight;if(!w||!h)return;
  const ratio=Math.min(2,window.devicePixelRatio||1),g=c.getContext("2d");c.width=Math.round(w*ratio);c.height=Math.round(h*ratio);g.setTransform(ratio,0,0,ratio,0,0);g.clearRect(0,0,w,h);
@@ -217,6 +237,6 @@ dialog.addEventListener("click",e=>{if(e.target===dialog)dialog.close();});
 const sections=["simulation","comparison","validation","methodology"];
 if("IntersectionObserver" in window){const observer=new IntersectionObserver(entries=>{for(let e of entries)if(e.isIntersecting){document.querySelectorAll(".nav a").forEach(a=>a.classList.toggle("active",a.hash==="#"+e.target.id));}},{rootMargin:"-20% 0px -65% 0px"});sections.forEach(id=>observer.observe($(id)));}
 window.addEventListener("resize",drawDistribution);
-labels();clearResults();chart.resetZoom();
+labels();clearResults();chart.resetZoom();updateActualSummary();
 window.CRLApp={get result(){return result;},get phase(){return phase;},get chart(){return chart;}};
 })();

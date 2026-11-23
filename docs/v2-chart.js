@@ -8,7 +8,7 @@ class ForecastChart {
   if(this.originIdx<0||this.candles[this.originIdx].close!==93576)throw Error("Historical candle origin mismatch");
   this.view={start:0,count:61};this.cursor=null;this.drag=null;this.selectedPath=null;this.onSelectPath=null;
   this.state={result:null,day:0,view:"all",reveal:false,threshold:.10,horizon:30};
-  this.canvas.addEventListener("wheel",e=>{e.preventDefault();const b=this.canvas.getBoundingClientRect();let anchor=(e.clientX-b.left-55)/Math.max(10,b.width-135);anchor=Math.max(0,Math.min(1,anchor));const old=this.view.count;let next=Math.max(16,Math.min(115,old*(e.deltaY>0?1.13:.87)));this.view.start+=anchor*(old-next);this.view.count=next;this.clampView();this.draw();},{passive:false});
+  this.canvas.addEventListener("wheel",e=>{e.preventDefault();const b=this.canvas.getBoundingClientRect();let anchor=(e.clientX-b.left-55)/Math.max(10,b.width-135);anchor=Math.max(0,Math.min(1,anchor));const old=this.view.count;let next=Math.max(16,Math.min(Math.max(this.candles.length,this.originIdx+this.state.horizon+1),old*(e.deltaY>0?1.13:.87)));this.view.start+=anchor*(old-next);this.view.count=next;this.clampView();this.draw();},{passive:false});
   this.canvas.addEventListener("pointerdown",e=>{this.drag={x:e.clientX,start:this.view.start};this.canvas.setPointerCapture(e.pointerId);});
   this.canvas.addEventListener("pointermove",e=>{const b=this.canvas.getBoundingClientRect();const x=e.clientX-b.left,y=e.clientY-b.top;if(this.drag){this.view.start=this.drag.start-(e.clientX-this.drag.x)/(b.width-135)*this.view.count;this.clampView();this.cursor=null;}else this.cursor={x,y};this.draw();});
   this.canvas.addEventListener("pointerup",()=>{this.drag=null;});
@@ -30,6 +30,7 @@ class ForecastChart {
   if(typeof this.onSelectPath==="function")this.onSelectPath(this.selectedPath);
   this.draw();
  }
+ fitFullYear(){this.view={start:0,count:this.candles.length};this.clampView();this.draw();}
  resetZoom(){this.view={start:0,count:Math.max(61,this.originIdx+this.state.horizon+1)};this.clampView();this.draw();}
  clampView(){const n=Math.max(this.candles.length,this.originIdx+this.state.horizon+1);this.view.start=Math.max(-.3,Math.min(n-this.view.count+.3,this.view.start));}
  update(changes){Object.assign(this.state,changes);this.clampView();this.draw();}
@@ -109,7 +110,8 @@ class ForecastChart {
     g.save();g.setLineDash([6,5]);g.strokeStyle="#ed8c98";g.lineWidth=1.15;g.beginPath();g.moveTo(pad.l,limitY);g.lineTo(w-pad.r,limitY);g.stroke();g.restore();
     g.fillStyle="#ff9fa9";g.textAlign="right";g.font="10px ui-sans-serif,system-ui";g.fillText("LOSS "+Math.round(threshold*100)+"%",w-8,limitY-12);
   }
-  // The point of transition is always real and date labelled.
+  // The point of transition is always real and date labelled. The observed 2025
+  // candles may extend beyond the forecast, which deliberately stops at its horizon.
   const sep=x(this.originIdx+.5);g.save();g.setLineDash([3,5]);g.strokeStyle="#88a9c6";g.lineWidth=1.3;g.beginPath();g.moveTo(sep,P.top);g.lineTo(sep,volumeBottom);g.stroke();g.restore();
   if(sep>0&&sep<w){g.textAlign="center";g.fillStyle="#b5cbdd";g.font="10px ui-sans-serif,system-ui";g.fillText("FORECAST ORIGIN",Math.max(80,Math.min(w-110,sep+59)),P.top+10);}
   // Month/date ticks.
