@@ -9,7 +9,7 @@ The original research question asks whether a two-state Markov model estimates 3
 ## What the website does
 
 - **Simulation Lab:** Compare five independent, seeded Monte Carlo scenarios from the fixed December 31, 2024 BTC/USDT forecast origin. Choose investment, horizon, loss threshold, path count, volatility stress multiplier, initial Markov regime and random seed. Explore the chart, simulated paths, forecast percentiles, VaR95, Expected Shortfall and drawdowns.
-- **Predictions vs Reality:** Select **2025 or 2026** within a **single historical validation dashboard**. All five models are compared against the same real 30-day BTC outcomes for the selected year. Scrub across dates, examine six probability predictions (five models plus a historical-frequency benchmark), reveal actual daily closing prices and compare Brier scores.
+- **Predictions vs Reality:** Select **2025 or 2026** within a **single historical validation dashboard**. Compare all five models at **7, 14, 30, 60 or 90 days** on identical completed forecast dates for the chosen year. The historical horizon automatically follows a matching Simulation Lab horizon. Scrub daily forecasts, compare five model risk probabilities against actual losses, and replay exactly H days of observed daily BTC closes. Longer horizons have fewer completed observations.
 - **Methodology and research evidence:** Inspect scientific assumptions, model equations, calibration, statistical limitations, and links to original verified research outputs.
 
 All website data and simulations work as static files, including through GitHub Pages. No live prices, account connection, or API key is needed.
@@ -28,7 +28,7 @@ All website data and simulations work as static files, including through GitHub 
 
 ## Scientific validation
 
-**Primary event:** Bitcoin price is at least 10% lower **at the close 30 calendar days after forecast origin**. A model's predicted probability is scored against an actual binary event using Brier score; lower is better.
+**Original primary event:** Bitcoin price is at least 10% lower **exactly 30 calendar days after forecast origin**. This fixed 30-day evaluation is preserved. **Additional exploratory horizons: 7, 14, 60 and 90 days.** Each new forecast is scored against the actual closing price exactly H days ahead. Lower Brier score is better.
 
 | Forecast source | 2025 Brier (335 dates) | 2026 Brier (274 dates) |
 |---|---:|---:|
@@ -43,15 +43,16 @@ All website data and simulations work as static files, including through GitHub 
 
 **Crucial research distinction:** The original 2025 GBM, Markov, EWMA and historical-frequency values are preserved from the executed notebook, unchanged. Adaptive GBM and GARCH were subsequently added to the 2025 comparison **after 2025 outcomes were inspected**, so those added 2025 results are explicitly **post-hoc exploratory**, not a new independent confirmation. The 2026 fixed-protocol evaluation was conducted separately, but is also retrospective rather than genuinely prospective.
 
-Forecast windows overlap by up to 29 days and cannot be treated as independent trials. Extreme loss events are sparse (no ≥35% terminal losses in these tested windows). Gaussian shocks may underrepresent heavy tails. These are research comparisons, not investment advice.
+Daily H-day forecast windows overlap by up to **H−1 days** (89 days for 90-day comparisons) and are not independent trials. Samples become smaller at longer horizons, and event frequencies differ among horizons and years. New horizons were specified after inspecting prior 2025/2026 data and are **exploratory**, not new confirmatory evidence. Gaussian shocks may underrepresent heavy tails. These are historical educational comparisons, not investment advice.
 
 ## Reproduce the science and website
 
 - **Original assignment research:** `notebook/cryptorisk-lab.ipynb` (preserved). Run all in a fresh Colab session.
 - **Fixed 2026 extension:** `research/phase3_2026/run_research.py`, with protocol, archived Binance source hashes, dated forecast ledger, fitted GARCH parameters, Brier scores and moving-block-bootstrap uncertainty in `research/phase3_2026/`.
 - **Exploratory 2025 additional models:** `research/phase4_2025/run_exploratory.py`, with research-integrity explanation and per-origin forecasts in `research/phase4_2025/`.
+- **Five-horizon extension:** `research/phase5_horizons/generate.py`, `research/phase5_horizons/EXPLORATORY_PROTOCOL.md`, and the dated CSV/JSON files under `research/phase5_horizons/results/`. Reproduces observed terminal events for every horizon and year using unchanged training-calibrated models.
 - **Standalone website:** Open `docs/index.html`, or serve the `docs/` directory from any basic static web server.
-- **Audits:** `scripts/verify_browser.py`, `scripts/verify_v3_evidence.py`, `research/phase4_2025/verify_extension.py`, and `scripts/verify_v3_models.cjs`.
+- **Audits:** `scripts/verify_browser.py`, `scripts/verify_v3_evidence.py`, `research/phase4_2025/verify_extension.py`, `research/phase5_horizons/verify_horizons.py`, and `scripts/verify_v3_models.cjs`.
 
 GitHub Actions rerun the original scientific notebook, verify source data and stored historical score parity, stress-test five Monte Carlo ensembles, test the year selector and inspect the site in Chromium.
 
