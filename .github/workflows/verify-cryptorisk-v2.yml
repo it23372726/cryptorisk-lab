@@ -2,7 +2,7 @@ name: Verify CryptoRisk Lab scientific website
 
 on:
   push:
-    branches: [research-web-v2-2026-11-23, phase1-research-ewma-2026-11-23, website-v2-animated-lab-2026-11-23, historical-validation-lab-2026-11-23, website-v3-five-model-2026-validation-2026-11-24]
+    branches: [main, research-web-v2-2026-11-23, phase1-research-ewma-2026-11-23, website-v2-animated-lab-2026-11-23, historical-validation-lab-2026-11-23, website-v3-five-model-2026-validation-2026-11-24]
   pull_request:
     branches: [main]
   workflow_dispatch:
@@ -38,6 +38,7 @@ jobs:
             docs/v2-validation-data.js
             docs/v2-validation-data.json
             verification-results.json
+            verification-artifacts/cryptorisk-lab-executed.ipynb
           if-no-files-found: error
       - name: Upload verification report
         if: always()

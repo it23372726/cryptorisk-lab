@@ -1,8 +1,8 @@
-
-numpy
-pandas
-scipy
-matplotlib
-requests
-  
-# add any other packages your notebook uses, e.g. pandas, simpy, mesa
+# Primary notebook dependencies (Python 3.11 and Google Colab).
+# Advanced GARCH research has a separate pinned environment:
+# research/phase3_2026/requirements-lock.txt
+numpy>=1.26,<3
+pandas>=2.1,<3
+scipy>=1.11,<2
+matplotlib>=3.7,<4
+requests>=2.31,<3

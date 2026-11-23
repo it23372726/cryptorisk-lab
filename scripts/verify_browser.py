@@ -26,7 +26,8 @@ try:
         browser=pw.chromium.launch(headless=True)
         page=browser.new_page(viewport={"width":1440,"height":980},device_scale_factor=1)
         errors=[]
-        page.on("pageerror",lambda e:errors.append(str(e)))
+        page.on("pageerror",lambda e:errors.append("page exception: "+str(e)))
+        page.on("console",lambda msg:errors.append("browser console: "+msg.text) if msg.type=="error" else None)
         page.goto(f"http://127.0.0.1:{PORT}/index.html",wait_until="load")
         page.wait_for_function("() => !!window.CRLValidationUnified && !!window.CRLApp && !!window.CRLCore",
                                timeout=30000)
@@ -262,14 +263,15 @@ try:
         print("PASS: Single year selector and five model UI responsive at 390px mobile width",flush=True)
 
         file_page=browser.new_page()
-        file_page.on("pageerror",lambda e:errors.append("file mode "+str(e)))
+        file_page.on("pageerror",lambda e:errors.append("file mode exception: "+str(e)))
+        file_page.on("console",lambda msg:errors.append("file mode console: "+msg.text) if msg.type=="error" else None)
         file_page.goto(pathlib.Path("docs/index.html").resolve().as_uri())
         file_page.wait_for_function("() => !!window.CRLValidationUnified && !!window.CRLApp")
         assert file_page.locator("#mainChart").is_visible()
         assert file_page.evaluate("() => window.CRLValidationUnified.rows.length")==335
         print("PASS: Offline file:// standalone website loads both years without network access",flush=True)
-        assert not errors,"Uncaught JavaScript exceptions: "+json.dumps(errors)
-        print("PASS: No uncaught script errors",flush=True)
+        assert not errors,"Browser JavaScript/console errors: "+json.dumps(errors)
+        print("PASS: No uncaught script or browser console errors",flush=True)
         browser.close()
 finally:
     server.terminate()

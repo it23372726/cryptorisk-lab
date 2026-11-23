@@ -54,7 +54,7 @@ python research/phase4_2025/verify_extension.py
 python research/phase5_horizons/verify_horizons.py
 ~~~
 
-The automated scientific and browser workflows also exercise a full notebook run, offline site loading, 2025/2026 archived probability parity and a maximum-load five-model browser scenario. See [reproducibility evidence](research/WEB_V5_HORIZON_VALIDATION.md).
+The automated scientific and browser workflows also exercise a full notebook run, offline site loading, 2025/2026 archived probability parity and a maximum-load five-model browser scenario. A successful scientific run now uploads a **fully executed copy of the main notebook** (its original cell sources preserved) together with the machine-readable verification record. Download the `notebook-2025-per-origin-forecast-data` artifact from the [verification workflow](https://github.com/it23372726/cryptorisk-lab/actions/workflows/verify-cryptorisk-v2.yml) when reviewing all saved tests, X2 error-scaling plots and X5 sensitivity intervals. The archival copy is execution evidence, not a different scientific model. See [reproducibility evidence](research/WEB_V5_HORIZON_VALIDATION.md).
 
 ## User guide
 
@@ -80,7 +80,7 @@ Read [THEORY.md](THEORY.md) for equations, variable definitions, regimes, algori
 
 ## Verification
 
-The original **97-cell** Colab notebook has passed a clean-kernel GitHub Actions run. It checks data integrity, independent analytical GBM probabilities and VaR/ES, Markov \(P^d\) state occupancy, limiting cases, random-seed reproducibility, sensitivity and dependent historical backtesting.
+The main **101-cell** Colab notebook has passed a clean-kernel GitHub Actions run. It checks data integrity, independent analytical GBM probabilities and VaR/ES, Markov \(P^d\) state occupancy, limiting cases, random-seed reproducibility, sensitivity and dependent historical backtesting.
 
 The browser tests check local-file startup, controls, immutable historical evidence, exact archived Brier parity, mobile layout and a five-model stress scenario of **30,000 paths each for 90 days**.
 

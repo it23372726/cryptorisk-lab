@@ -4,7 +4,7 @@
 
 The original research tested 30-day terminal loss ≥10% for GBM versus observed-regime Markov (with EWMA and two other added benchmarks). The website also supported 7–90-day **hypothetical** scenario simulation, but until v5 its historical predictions were only evaluated at 30 days.
 
-v5 fills that methodological gap with **five verified historical horizons** (7, 14, **30**, 60, 90 days) for 2025 and 2026 while preserving the original assignment research exactly.
+v5 fills that methodological gap with **five verified historical horizons** (7, 14, **30**, 60, 90 days) for 2025 and 2026 while preserving the original 30-day research results exactly.
 
 ## Original science is immutable
 
