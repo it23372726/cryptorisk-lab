@@ -46,6 +46,93 @@ print("WEB_CALIBRATION_JSON=" + _crl_export_json.dumps({
   }
 }, separators=(",", ":")))
 """
+# The original code cells already produced each daily 2025 forecast and outcome.
+# Export the ACTUAL fitted out-of-sample results from this notebook execution.
+# Do not independently refit, resimulate, or replace the original scientific results.
+nb.cells[last_code_index].source += """
+_web_models = {"gbm": "GBM", "markov": "Original Markov",
+               "ewma": "EWMA", "historical": "Historical frequency"}
+_web_pcts = (10, 20, 35)
+_web_rows = []
+for _i, _r in evaluation_windows_df.iterrows():
+    _date = _r["date"].strftime("%Y-%m-%d")
+    _end = _r["future_date"].strftime("%Y-%m-%d")
+    _p = {
+        _key: [float(m8_pred[_label][_pct][_i]) for _pct in _web_pcts]
+        for _key, _label in _web_models.items()
+    }
+    _events = [int(_r[f"event_{_pct}"]) for _pct in _web_pcts]
+    _web_rows.append({
+        "date": _date,
+        "end": _end,
+        "price": float(_r["close"]),
+        "future": float(_r["future_close"]),
+        "regime": int(_r["initial_regime"]),
+        "variance": float(m8_origin_var[_i]),
+        "events": _events,
+        "p": _p
+    })
+_web_scores = {}
+for _j, _pct in enumerate(_web_pcts):
+    _observed = evaluation_windows_df[f"event_{_pct}"].to_numpy(dtype=float)
+    _web_scores[str(_pct)] = {
+        "observed": float(_observed.mean()),
+        "events": int(_observed.sum()),
+        "models": {
+            _key: {
+                "mean": float(np.mean(m8_pred[_label][_pct])),
+                "brier": float(np.mean((m8_pred[_label][_pct]-_observed)**2))
+            }
+            for _key, _label in _web_models.items()
+        }
+    }
+_web_bootstraps = [
+    {"threshold": _rec["Threshold"],
+     "compared": _rec["Compared"], "reference": _rec["Reference"],
+     "difference": float(_rec["Brier difference"]),
+     "low": float(_rec["95% lower"]), "high": float(_rec["95% upper"])}
+    for _rec in m8_bootstrap.to_dict(orient="records")
+]
+_web_export = {
+    "meta": {
+        "dataset": "Binance spot BTC/USDT daily UTC",
+        "originFirst": "2025-01-01",
+        "originLast": "2025-12-01",
+        "evaluation": "2025 retrospective (selected Markov/EWMA comparisons exploratory)",
+        "horizon": 30, "origins": 335, "thresholds": list(_web_pcts),
+        "modelOrder": ["gbm", "markov", "ewma", "historical"],
+        "calibration": "2022-2024 frozen original model parameters",
+        "markovPathsPerState": int(OOS_MC_PATHS),
+        "ewmaPathsPerOrigin": int(M8_EWMA_PATHS),
+        "source": "Executed notebook/cryptorisk-lab.ipynb, original evaluations"
+    },
+    "rows": _web_rows,
+    "scores": _web_scores,
+    "bootstrap": _web_bootstraps
+}
+assert len(_web_rows)==335
+assert _web_rows[0]["date"]=="2025-01-01"
+assert _web_rows[-1]["date"]=="2025-12-01"
+assert [_web_scores[str(p)]["events"] for p in _web_pcts]==[62,8,0]
+for _row in _web_rows:
+    assert _row["price"]>0 and _row["future"]>0 and _row["variance"]>0
+    assert _row["events"]==[
+        int(1-_row["future"]/_row["price"]>=p/100) for p in _web_pcts
+    ]
+    for _model in _web_models:
+        assert len(_row["p"][_model])==3
+        assert all(0<=x<=1 for x in _row["p"][_model])
+        assert (_row["p"][_model][0]>=_row["p"][_model][1]>=_row["p"][_model][2])
+for _rec in m8_results.to_dict(orient="records"):
+    if _rec["Model"] not in _web_models.values():
+        continue  # Exploratory selected-Markov candidate is NOT a primary model.
+    _key = next(k for k,v in _web_models.items() if v==_rec["Model"])
+    _pct = int(_rec["Threshold"].strip(">=%"))
+    assert abs(_web_scores[str(_pct)]["models"][_key]["brier"]-_rec["Brier"])<1e-12
+print("WEB_BACKTEST_JSON=" + _crl_export_json.dumps(
+    _web_export, separators=(",", ":"), allow_nan=False
+))
+"""
 print("Notebook source:", source, "cells", len(nb.cells), flush=True)
 t0 = time.monotonic()
 try:
@@ -104,6 +191,31 @@ web_calibration = json.loads(calibration_json_line.group(1))
 assert web_calibration["origin_date"] == "2024-12-31"
 assert 0 < web_calibration["ewma_initial_variance"] < 1
 report["web_calibration"] = web_calibration
+backtest_match = re.search(r"WEB_BACKTEST_JSON=(\{[^\n]+\})", text_output)
+assert backtest_match, "Missing executed notebook per-origin forecasts"
+backtest = json.loads(backtest_match.group(1))
+assert backtest["meta"]["origins"] == 335
+assert len(backtest["rows"]) == 335
+assert backtest["meta"]["thresholds"] == [10, 20, 35]
+assert [backtest["scores"][str(t)]["events"] for t in (10,20,35)] == [62,8,0]
+from pathlib import Path
+target = Path("docs/v2-validation-data.js")
+target.parent.mkdir(exist_ok=True, parents=True)
+target.write_text(
+    "/* Frozen 2025 30-day historical predictions and actual outcomes, exported "
+    "from the executed 97-cell notebook. 335 overlapping windows. */\n"
+    "window.CRL_VALIDATION = " + json.dumps(backtest, separators=(",", ":"), allow_nan=False) + ";\n",
+    encoding="utf-8"
+)
+Path("docs/v2-validation-data.json").write_text(
+    json.dumps(backtest, indent=2, allow_nan=False) + "\n", encoding="utf-8"
+)
+report["historical_validation_export"] = {
+    "rows": len(backtest["rows"]), "thresholds": [10,20,35],
+    "brier_scores": backtest["scores"],
+    "paths": ["docs/v2-validation-data.js", "docs/v2-validation-data.json"]
+}
+print("PASS: Exported all 335 frozen per-origin forecasts, outcomes, EWMA states and Brier scores", flush=True)
 print("PASS: Exact notebook-derived 2024-12-31 EWMA initial variance exported", flush=True)
 print("PHASE1_VERIFIED_RESULTS=" + json.dumps(phase1_results, separators=(",", ":")), flush=True)
 

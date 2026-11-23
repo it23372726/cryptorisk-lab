@@ -32,11 +32,107 @@ try:
         assert page.evaluate("() => window.CRL_HISTORY.candles.at(-1).date") == "2025-12-31"
         assert "2025-12-31" in page.locator("#actual2025Summary").inner_text()
         print("PASS: 396 authentic daily Binance candles, complete 2025, origin preserved", flush=True)
+        # New Predictions vs Reality verification: these numbers are exported
+        # by an executed scientific notebook, never hardcoded in the UI.
+        page.wait_for_function("() => window.CRLValidation && window.CRL_VALIDATION.rows.length===335", timeout=30000)
+        evidence = page.evaluate("""() => {
+          const d=window.CRL_VALIDATION,r=d.rows,s=d.scores;
+          const mean=(a)=>a.reduce((x,y)=>x+y,0)/a.length;
+          const brier=(p,e)=>mean(p.map((x,i)=>(x-e[i])**2));
+          return {
+            first:r[0].date,last:r.at(-1).date,origins:r.length,
+            event10:r.reduce((a,x)=>a+x.events[0],0),
+            event20:r.reduce((a,x)=>a+x.events[1],0),
+            event35:r.reduce((a,x)=>a+x.events[2],0),
+            markovBrier10:brier(r.map(x=>x.p.markov[0]),r.map(x=>x.events[0])),
+            gbmBrier10:brier(r.map(x=>x.p.gbm[0]),r.map(x=>x.events[0])),
+            ewmaBrier20:brier(r.map(x=>x.p.ewma[1]),r.map(x=>x.events[1])),
+            notebookMarkov10:s["10"].models.markov.brier,
+            notebookGbm10:s["10"].models.gbm.brier,
+            notebookEwma20:s["20"].models.ewma.brier,
+            sameOriginPrice:Math.abs(r[0].price-window.CRL_HISTORY.candles[31].close)<.01,
+            bootstrap:d.bootstrap.length,
+            calibrationOrigin:window.CRLCore.origin,
+          };
+        }""")
+        assert evidence["first"]=="2025-01-01" and evidence["last"]=="2025-12-01"
+        assert evidence["origins"]==335
+        assert (evidence["event10"],evidence["event20"],evidence["event35"])==(62,8,0)
+        assert evidence["sameOriginPrice"] and evidence["calibrationOrigin"]==93576
+        for computed,expected in [
+            ("markovBrier10","notebookMarkov10"),
+            ("gbmBrier10","notebookGbm10"),
+            ("ewmaBrier20","notebookEwma20"),
+        ]:
+            assert abs(evidence[computed]-evidence[expected])<1e-12, (computed,expected)
+        assert evidence["bootstrap"]>=3
+        assert "0.151176" in page.locator("#rvScoreTable").inner_text()
+        print("PASS: 335 genuine notebook origins, 62/8/0 events, exact Brier parity", flush=True)
+
+        page.locator('button[data-rv-threshold="20"]').click()
+        assert "0.024159" in page.locator("#rvScoreTable").inner_text()
+        page.locator("#rvDateSlider").evaluate(
+            "(e) => {e.value=334;e.dispatchEvent(new Event('input',{bubbles:true}));}"
+        )
+        assert page.locator("#rvOrigin").inner_text()=="2025-12-01"
+        assert "2025-12-31" in page.locator("#rvEnd").inner_text()
+        page.locator("#rvReveal").click()
+        assert "Hidden" not in page.locator("#rvFinalPrice").inner_text()
+        assert "Day 30 / 30" in page.locator("#rvDayLabel").inner_text()
+        final_dated_close = page.evaluate("""() => {
+           const d=window.CRLValidation;
+           return {expected:d.rows.at(-1).future,
+                   observed:window.CRL_HISTORY.candles.at(-1).close,
+                   revealed:d.state.revealDay};
+        }""")
+        assert abs(final_dated_close["expected"]-final_dated_close["observed"])<.01
+        assert final_dated_close["revealed"]==30
+        page.locator("#rvHide").click()
+        assert "Hidden" in page.locator("#rvFinalPrice").inner_text()
+        print("PASS: Date selector and observed 30-day price reveal/hide without lookahead", flush=True)
+
+        # Selecting one date does not recalculate the frozen Brier figures.
+        page.locator("#rvPrev").click()
+        assert "0.024159" in page.locator("#rvScoreTable").inner_text()
+        page.locator('button[data-rv-threshold="35"]').click()
+        assert page.locator("#rvFindEvent").is_disabled()
+        page.locator('button[data-rv-threshold="10"]').click()
+        assert page.locator("#rvFindEvent").is_enabled()
+        page.locator("#rvFindEvent").click()
+        selected_loss = page.evaluate("""() => {
+          const d=window.CRLValidation;return d.rows[d.state.index].events[0];
+        }""")
+        assert selected_loss == 1
+        print("PASS: Event filtering, threshold-dependent accuracy and frozen scoring", flush=True)
+
+        fans = page.evaluate("""() => {
+           const v=window.CRLValidation,d=v.rows[v.state.index],b=v.getForecastBands(v.state.index);
+           return {initial:d.price,ends:["gbm","markov","ewma"].map(m=>b[m][30]),
+                   starts:["gbm","markov","ewma"].map(m=>b[m][0])};
+        }""")
+        for band in fans["starts"]:
+            assert all(abs(q-fans["initial"])<.01 for q in band)
+        for band in fans["ends"]:
+            assert all(band[k]<=band[k+1] for k in range(4))
+            assert all(v>0 for v in band)
+        assert page.locator("#rvTimelineChart").is_visible()
+        assert page.locator("#rvReplayChart").is_visible()
+        page.locator("#validation").scroll_into_view_if_needed()
+        page.screenshot(path="browser-verification-predictions-reality.png", full_page=False)
+        page.locator("#rvReveal").click()
+        page.locator("#rvReplayChart").scroll_into_view_if_needed()
+        page.screenshot(path="browser-verification-validation-replay.png", full_page=False)
+        page.locator("#rvHide").click()
+        print("PASS: Simulation percentile envelopes are positive, ordered and match origin", flush=True)
+        page.evaluate("() => window.scrollTo({top:0,behavior:'instant'})")
+        page.locator("#mainChart").scroll_into_view_if_needed()
+        page.wait_for_timeout(100)
         # Verify the price-level crosshair numerically, not merely the OHLC tooltip.
         box = page.locator("#mainChart").bounding_box()
         assert box is not None
         hover_x, hover_y = box["width"] * .59, box["height"] * .44
         page.locator("#mainChart").hover(position={"x": hover_x, "y": hover_y})
+        box = page.locator("#mainChart").bounding_box()  # Hover can change scroll position
         page.wait_for_function("() => Number.isFinite(window.CRLApp.chart.crosshairPrice)")
         crosshair = page.evaluate("""() => {
             const c = window.CRLApp.chart, a = c.axis;

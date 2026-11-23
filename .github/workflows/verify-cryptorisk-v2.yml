@@ -2,7 +2,7 @@ name: Verify CryptoRisk Lab v2
 
 on:
   push:
-    branches: [research-web-v2-2026-11-23, phase1-research-ewma-2026-11-23, website-v2-animated-lab-2026-11-23]
+    branches: [research-web-v2-2026-11-23, phase1-research-ewma-2026-11-23, website-v2-animated-lab-2026-11-23, historical-validation-lab-2026-11-23]
   pull_request:
     branches: [main]
   workflow_dispatch:
@@ -29,6 +29,16 @@ jobs:
         env:
           MPLBACKEND: Agg
         run: python scripts/verify_notebook.py
+      - name: Upload historical evidence and notebook verification
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: notebook-2025-per-origin-forecast-data
+          path: |
+            docs/v2-validation-data.js
+            docs/v2-validation-data.json
+            verification-results.json
+          if-no-files-found: error
       - name: Upload verification report
         if: always()
         uses: actions/upload-artifact@v4
@@ -69,5 +79,7 @@ jobs:
             browser-verification.png
             browser-verification-full-year.png
             browser-verification-crosshair.png
+            browser-verification-predictions-reality.png
+            browser-verification-validation-replay.png
             browser-verification-mobile.png
           if-no-files-found: ignore
