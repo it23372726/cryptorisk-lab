@@ -84,6 +84,7 @@ jobs:
             browser-verification-predictions-reality.png
             browser-verification-validation-replay.png
             browser-verification-2026.png
+            browser-verification-2026-overview.png
             browser-verification-2026-replay.png
             browser-verification-mobile.png
           if-no-files-found: ignore
