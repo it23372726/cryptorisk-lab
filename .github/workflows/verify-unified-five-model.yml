@@ -1,0 +1,54 @@
+name: Build audited exploratory 2025 five-model forecasts
+
+on:
+  push:
+    branches: [website-v4-unified-2025-2026-five-model-validation]
+    paths:
+      - 'research/phase4_2025/run_exploratory.py'
+      - 'research/phase4_2025/verify_extension.py'
+      - 'research/phase4_2025/EXPLORATORY_PROTOCOL.md'
+      - '.github/workflows/verify-unified-five-model.yml'
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  generate:
+    name: Generate and audit 2025 exploratory five-model forecasts
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+      - name: Install pinned scientific libraries
+        run: |
+          python -m pip install numpy==1.26.4 scipy==1.14.1
+      - name: Reconstruct added 2025 forecasts with frozen GARCH parameters
+        run: python research/phase4_2025/run_exploratory.py
+      - name: Audit against original notebook values and 2025 BTC data
+        run: python research/phase4_2025/verify_extension.py
+      - name: Archive 2025 exploratory research and UI evidence
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: audited-exploratory-five-model-2025
+          path: |
+            research/phase4_2025/results/
+            docs/v4-evidence-2025.js
+          if-no-files-found: error
+      - name: Commit audited outputs to feature branch only
+        if: success() && github.event_name == 'push' && github.ref == 'refs/heads/website-v4-unified-2025-2026-five-model-validation'
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add research/phase4_2025/results/ docs/v4-evidence-2025.js
+          if ! git diff --cached --quiet; then
+            git commit -m 'Store reproducible exploratory five-model 2025 forecasts and historical evidence'
+            git push origin HEAD:${{ github.ref_name }}
+          fi

@@ -63,6 +63,8 @@ jobs:
           python -m playwright install --with-deps chromium
       - name: Check 2026 standalone evidence reproduces frozen research ledger
         run: python scripts/verify_v3_evidence.py
+      - name: Check exploratory 2025 five-model dataset preserves original notebook
+        run: python research/phase4_2025/verify_extension.py
       - name: Stress-test 30,000 paths per model at 90-day horizon
         run: node --max-old-space-size=4096 scripts/verify_v3_models.cjs
       - name: Run end-to-end Chromium checks
@@ -71,7 +73,7 @@ jobs:
         if: success()
         uses: actions/upload-artifact@v4
         with:
-          name: website-v3-five-model-standalone-preview
+          name: website-v4-unified-five-model-standalone-preview
           path: docs/
           if-no-files-found: error
       - name: Upload browser screenshot
@@ -87,6 +89,11 @@ jobs:
             browser-verification-validation-replay.png
             browser-verification-2026.png
             browser-verification-2026-overview.png
+            browser-verification-selector-2025.png
+            browser-verification-selector-2026.png
+            browser-verification-unified-2025.png
+            browser-verification-unified-2026.png
+            browser-verification-unified-replay.png
             browser-verification-2026-replay.png
             browser-verification-mobile.png
           if-no-files-found: ignore

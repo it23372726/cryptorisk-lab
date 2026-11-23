@@ -238,7 +238,7 @@ const dialog=$("helpDialog");
 $("helpOpen").addEventListener("click",()=>dialog.showModal());
 $("helpClose").addEventListener("click",()=>dialog.close());
 dialog.addEventListener("click",e=>{if(e.target===dialog)dialog.close();});
-const sections=["simulation","comparison","validation","validation2026","methodology"];
+const sections=["simulation","comparison","validation","methodology"];
 if("IntersectionObserver" in window){const observer=new IntersectionObserver(entries=>{for(let e of entries)if(e.isIntersecting){document.querySelectorAll(".nav a").forEach(a=>a.classList.toggle("active",a.hash==="#"+e.target.id));}},{rootMargin:"-20% 0px -65% 0px"});sections.forEach(id=>observer.observe($(id)));}
 window.addEventListener("resize",drawDistribution);
 labels();clearResults();chart.resetZoom();updateActualSummary();
