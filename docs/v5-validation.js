@@ -97,8 +97,12 @@ function stopPlayback(){
 function metadata(){
  const year=state.year,h=state.horizon,is2025=year===2025,original=h===30;
  const hDetails=extended.years[String(year)][String(h)];
- global.document.querySelectorAll("[data-validation-year]").forEach(b=>
-   b.setAttribute("aria-pressed",String(Number(b.dataset.validationYear)===year)));
+ global.document.querySelectorAll("[data-validation-year]").forEach(b=>{
+   const chosen=Number(b.dataset.validationYear);
+   b.setAttribute("aria-pressed",String(chosen===year));
+   const count=inspected[chosen][h].rows.length;
+   b.querySelector("span").textContent=count+" completed "+h+"-day forecasts"+(h===30?" · original benchmark":" · exploratory");
+ });
  global.document.querySelectorAll("[data-validation-horizon]").forEach(b=>
    b.setAttribute("aria-pressed",String(Number(b.dataset.validationHorizon)===h)));
  $("holdoutDateSlider").max=String(rows.length-1);
@@ -263,9 +267,11 @@ function renderScores(){
  setText("holdoutInferenceHeadline",state.year===2026&&state.horizon===30?
   "Neither new adaptive model established better ≥10% 30-day forecasts than constant GBM.":
   "Exploratory horizon comparisons do not establish statistically proven superiority.");
- const lowest=Object.entries(data.scores["10"].models).sort((a,b)=>a[1].brier-b[1].brier)[0];
+ const lowest=Object.entries(info.models).sort((a,b)=>a[1].brier-b[1].brier)[0];
+ setText("holdoutBestLabel","LOWEST ≥"+t+"% BRIER SCORE");
+ setText("holdoutEventLabel","ACTUAL ≥"+t+"% LOSS EVENTS");
  setText("holdoutBestHeadline",named[lowest[0]]+" · "+lowest[1].brier.toFixed(6));
- setText("holdoutEventHeadline",data.scores["10"].events+" / "+rows.length);
+ setText("holdoutEventHeadline",info.events+" / "+rows.length);
 }
 function stage(canvas){
  const w=canvas.clientWidth,h=canvas.clientHeight;
