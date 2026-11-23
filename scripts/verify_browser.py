@@ -120,6 +120,8 @@ try:
         page.locator("#validation").scroll_into_view_if_needed()
         page.screenshot(path="browser-verification-predictions-reality.png", full_page=False)
         print("PASS: Simulation percentile envelopes are positive, ordered and match origin", flush=True)
+        page.evaluate("() => window.scrollTo(0, 0)")
+        page.wait_for_timeout(150)
         # Verify the price-level crosshair numerically, not merely the OHLC tooltip.
         box = page.locator("#mainChart").bounding_box()
         assert box is not None
