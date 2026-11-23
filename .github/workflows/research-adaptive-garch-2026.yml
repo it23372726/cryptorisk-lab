@@ -32,8 +32,8 @@ jobs:
       - name: Install pinned GARCH and original scientific dependencies
         run: |
           python -m pip install --upgrade pip
-          python -m pip install -r requirements.txt 'arch==7.2.0'
-          python -c "import arch; assert arch.__version__ == '7.2.0'"
+          python -m pip install -r research/phase3_2026/requirements-lock.txt
+          python -c "import arch, numpy, pandas; assert arch.__version__ == '7.2.0'; assert numpy.__version__ == '1.26.4'; assert pandas.__version__ == '2.2.3'"
       - name: Compile and run deterministic model self-tests without holdout data
         run: |
           python -m py_compile research/phase3_2026/run_research.py research/phase3_2026/check_results.py
