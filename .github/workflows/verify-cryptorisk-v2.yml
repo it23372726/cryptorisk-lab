@@ -67,5 +67,6 @@ jobs:
           name: browser-verification
           path: |
             browser-verification.png
+            browser-verification-full-year.png
             browser-verification-mobile.png
           if-no-files-found: ignore
