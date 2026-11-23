@@ -155,8 +155,73 @@ try:
         assert "0.151176" in page.locator("#rvScoreTable").inner_text()
         print("PASS: 335 genuine notebook origins, 62/8/0 events, exact Brier parity", flush=True)
 
+        # Preserve the three original frozen notebook models while displaying
+        # two independently generated post-hoc 2025 research candidates.
+        extra2025=page.evaluate("""() => {
+          const base=window.CRL_VALIDATION,ext=window.CRL_EXPLORATORY_2025,v=window.CRLValidation;
+          const score=(m,t)=>v.rows.reduce((x,r)=>x+(r.p[m][[10,20,35].indexOf(t)]-
+                       r.events[[10,20,35].indexOf(t)])**2,0)/v.rows.length;
+          return {
+            status:ext.meta.status,n:ext.rows.length,
+            originalModels:Object.keys(base.rows[0].p).sort(),
+            visibleModels:Object.keys(v.rows[0].p).sort(),
+            originalMarkov:base.scores["10"].models.markov.brier,
+            garch:ext.scores["10"].models.garch.brier,
+            adaptive:ext.scores["10"].models.adaptive_gbm.brier,
+            garchCalculated:score("garch",10),
+            adaptiveCalculated:score("adaptive_gbm",10),
+            firstGarch:ext.rows[0].p.garch,lastAdaptive:ext.rows.at(-1).p.adaptive_gbm,
+            garchSource:ext.meta.garch_fit_source,
+            actualEvents:ext.scores["10"].events,
+          };
+        }""")
+        assert extra2025["n"]==335 and extra2025["actualEvents"]==62
+        assert extra2025["originalModels"]==["gbm","historical","markov","ewma"]
+        assert extra2025["visibleModels"]==["adaptive_gbm","ewma","garch","gbm","historical","markov"]
+        assert "EXPLORATORY POST-HOC" in extra2025["status"]
+        assert abs(extra2025["originalMarkov"]-0.15117624634268656)<1e-12
+        assert abs(extra2025["garch"]-extra2025["garchCalculated"])<1e-11
+        assert abs(extra2025["adaptive"]-extra2025["adaptiveCalculated"])<1e-11
+        assert abs(extra2025["garch"]-0.15162250197761193)<1e-11
+        assert abs(extra2025["adaptive"]-0.15491189554586093)<1e-11
+        assert all(0<=x<=1 for x in extra2025["firstGarch"])
+        assert all(0<=x<=1 for x in extra2025["lastAdaptive"])
+        assert extra2025["garchSource"].endswith("metrics_2026.json")
+        assert page.locator("#rvPredictionBars .rv-bar-row").count()==6
+        assert page.locator("#rvFrequencyTable tbody tr").count()==3
+        assert page.locator("#rvScoreTable tbody tr").count()==6
+        assert "0.154912" in page.locator("#rvScoreTable").inner_text()
+        assert "0.151623" in page.locator("#rvScoreTable").inner_text()
+        assert "Post-hoc 2025 candidates" in page.locator("#rvExtensionText").inner_text()
+        print("PASS: All five 2025 models, original 335-day notebook intact and separate exploratory scoring", flush=True)
+
+        # Both added historical models must produce valid price-percentile fans,
+        # anchored to the observed origin, without borrowing future actual closes.
+        new_fans=page.evaluate("""() => {
+           const v=window.CRLValidation,r=v.rows[0],b=v.getForecastBands(0);
+           return {startingPrice:r.price,
+                   models:Object.keys(b),
+                   starts:["adaptive_gbm","garch"].map(m=>b[m][0]),
+                   ends:["adaptive_gbm","garch"].map(m=>b[m][30])};
+        }""")
+        assert all(m in new_fans["models"] for m in ("adaptive_gbm","garch"))
+        for arr in new_fans["starts"]:
+            assert all(abs(p-new_fans["startingPrice"])<.01 for p in arr)
+        for arr in new_fans["ends"]:
+            assert all(0<arr[k]<=arr[k+1] for k in range(4))
+            assert arr[-1]>0
+        for model in ("adaptive_gbm","garch"):
+            tab=page.locator(f'button[data-rv-model="{model}"]')
+            tab.click()
+            assert tab.get_attribute("aria-pressed")=="true"
+            assert page.locator("#rvReplayChart").is_visible()
+        page.locator('button[data-rv-model="all"]').click()
+        print("PASS: Adaptive GBM/GARCH illustrated future-price percentile envelopes and 2025 replay tabs", flush=True)
+
         page.locator('button[data-rv-threshold="20"]').click()
         assert "0.024159" in page.locator("#rvScoreTable").inner_text()
+        assert "0.024071" in page.locator("#rvScoreTable").inner_text()
+        assert "0.024677" in page.locator("#rvScoreTable").inner_text()
         page.locator("#rvDateSlider").evaluate(
             "(e) => {e.value=334;e.dispatchEvent(new Event('input',{bubbles:true}));}"
         )
@@ -205,6 +270,9 @@ try:
         assert page.locator("#rvReplayChart").is_visible()
         page.locator("#validation").scroll_into_view_if_needed()
         page.screenshot(path="browser-verification-predictions-reality.png", full_page=False)
+        page.locator('button[data-rv-model="garch"]').click()
+        page.screenshot(path="browser-verification-2025-garch-range.png",full_page=False)
+        page.locator('button[data-rv-model="all"]').click()
         page.locator("#rvReveal").click()
         page.locator("#rvReplayChart").scroll_into_view_if_needed()
         page.screenshot(path="browser-verification-validation-replay.png", full_page=False)
