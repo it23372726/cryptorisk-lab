@@ -486,6 +486,14 @@
     <!-- Results -->
     <div class="main-content">
 
+      <nav class="research-navigation" aria-label="Dashboard sections">
+        <a href="#historicalPanel">Market history</a>
+        <a href="#simulationPanel">Monte Carlo</a>
+        <a href="#playbackPanel">Playback</a>
+        <a href="#regimePanel">Regime theory</a>
+        <a href="#validationPanel">2025 validation</a>
+      </nav>
+
       <section class="panel research-section" id="historicalPanel">
         <div class="research-head"><div><h2>Bitcoin Market: Actual Historical Prices</h2>
           <p class="subheading">Real BTC/USDT daily candlesticks from Binance, surrounding the 31 Dec 2024 forecast origin. This is observed history, not a live price feed.</p></div>
@@ -495,7 +503,7 @@
         <p id="historicalOutcome" class="research-caption"></p>
       </section>
 
-      <section class="panel">
+      <section class="panel" id="simulationPanel">
 
         <h2>Simulated Bitcoin Price Paths</h2>
         <p class="subheading">
@@ -611,7 +619,8 @@
         <div class="legend"><span>GBM · solid teal</span><span>Markov · dashed rust</span></div>
       </section>
 
-      <section class="panel research-section">
+      <div class="research-pair">
+      <section class="panel research-section" id="playbackPanel">
         <div class="research-head"><div><h2>Simulation Playback: One Markov Scenario</h2>
           <p class="subheading">Inspect one genuine simulated path as it evolves. Price movement and regime switches come from the same calibrated simulation as the risk table, not invented animation.</p></div>
           <span id="replayRegime" class="state-calm">CALM</span></div>
@@ -624,7 +633,7 @@
         <p id="replayDescription" class="research-caption" role="status">Run a simulation to generate a replayable Markov path.</p>
       </section>
 
-      <section class="panel research-section">
+      <section class="panel research-section" id="regimePanel">
         <div class="research-head"><div><h2>Markov Regime Explorer</h2>
           <p class="subheading">The transition probabilities are calibrated on 2022–2024. Theoretical day-by-day regime probabilities are computed from powers of the Markov transition matrix.</p></div>
           <span class="research-chip">Pᵈ MATHEMATICS</span></div>
@@ -638,7 +647,8 @@
         <p class="research-caption">Note: regime durations are properties of the fitted state labels; 14-day rolling windows overlap, so some persistence is mechanical.</p>
       </section>
 
-      <section class="panel research-section">
+      </div>
+      <section class="panel research-section" id="validationPanel">
         <div class="research-head"><div><h2>Historical Evaluation: 2025</h2>
           <p class="subheading">Retrospective 30-day loss forecasts compared with observed Bitcoin outcomes. This panel reports fixed notebook results; its values do not change with the simulation controls.</p></div>
           <span class="research-chip">OUT-OF-SAMPLE BACKTEST</span></div>
