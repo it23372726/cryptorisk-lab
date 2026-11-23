@@ -89,7 +89,7 @@ assert len(phase1_results["candidate_markov_2024_ranking"]) == 12
 assert len(phase1_results["ewma_2024_ranking"]) == 4
 assert len(phase1_results["retrospective_2025_comparison"]) == 15
 report["phase1_results"] = phase1_results
-calibration_json_line = re.search(r"WEB_CALIBRATION_JSON=(\\{[^\\n]+\\})", text_output)
+calibration_json_line = re.search(r"WEB_CALIBRATION_JSON=(\{[^\n]+\})", text_output)
 assert calibration_json_line, "Missing notebook-derived browser calibration state"
 web_calibration = json.loads(calibration_json_line.group(1))
 assert web_calibration["origin_date"] == "2024-12-31"
