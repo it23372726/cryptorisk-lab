@@ -81,6 +81,42 @@
  </div>
 </section>
 <section class="section" id="validation"><div class="section-heading"><div><div class="overline">02 · Historical evidence</div><h2>Predictions vs Reality</h2><p>Explore all 335 dated, 30-day 2025 forecasts from the executed notebook and see what Bitcoin actually did.</p></div><span class="pill">RESEARCH EVIDENCE</span></div>
+
+ <div class="rv-intro"><strong>Which model estimated Bitcoin downside risk most reliably?</strong><span>Compare original GBM and Markov predictions against actual 2025 losses, with EWMA as an exploratory benchmark. The 335 forecast windows overlap.</span></div>
+ <div class="rv-grid">
+  <div class="card">
+    <div class="card-head"><div><h2>Explore historical forecasts</h2><p>Choose an actual 2025 forecast origin · 30-day outcome</p></div><span class="pill">335 DATES</span></div>
+    <div class="rv-pad">
+      <div class="rv-between"><div><span class="rv-kicker">FORECAST ORIGIN</span><strong id="rvOrigin" class="rv-date">2025-01-01</strong><span id="rvEnd" class="rv-muted">Outcome: 2025-01-31</span></div><div class="rv-inline"><button id="rvPrev" class="button-secondary" type="button">‹ Prev</button><button id="rvNext" class="button-secondary" type="button">Next ›</button></div></div>
+      <label class="rv-label" for="rvDateSlider">Scrub through forecast dates</label><input id="rvDateSlider" type="range" min="0" max="334" value="0" step="1" aria-label="Selected forecast origin date" class="rv-range">
+      <div class="rv-between rv-muted"><span>1 Jan 2025</span><span>1 Dec 2025</span></div>
+      <div class="rv-between rv-threshold-row"><div><div class="rv-kicker">LOSS THRESHOLD</div><div class="rv-segment" role="group" aria-label="Loss threshold"><button data-rv-threshold="10" type="button" aria-pressed="true">≥10%</button><button data-rv-threshold="20" type="button" aria-pressed="false">≥20%</button><button data-rv-threshold="35" type="button" aria-pressed="false">≥35%</button></div></div><button id="rvFindEvent" class="button-secondary" type="button">Find loss event</button></div>
+      <div id="rvOutcome" class="rv-outcome" role="status">Select a date to inspect its outcome.</div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-head"><div><h2>Predicted probability vs actual result</h2><p>What did each model estimate for this date?</p></div></div>
+    <div class="rv-pad"><div class="rv-between rv-actual"><span class="rv-kicker">ACTUAL 30-DAY LOSS EVENT</span><strong id="rvActualStatus">—</strong></div><div id="rvPredictionBars" class="rv-pred-bars"></div><p id="rvPredictionExplanation" class="rv-muted">The outcome is yes/no, while model predictions are probabilities. Accuracy is assessed over many forecasts.</p></div>
+  </div>
+ </div>
+ <div class="card rv-timeline-card">
+   <div class="card-head"><div><h2>How predictions changed across 2025</h2><p>Three recorded forecast probability series; red markers indicate dates when the loss actually occurred</p></div><span class="pill">CLICK TO EXPLORE</span></div>
+   <div class="rv-pad"><canvas id="rvTimelineChart" class="rv-timeline-canvas" aria-label="2025 forecast probability curves and observed loss events. Select a date by clicking." role="img"></canvas><div class="rv-legend"><span><i style="background:#63aafd"></i>GBM</span><span><i style="background:#efbd6a"></i>Markov</span><span><i style="background:#35d4ac"></i>EWMA</span><span><i style="background:#ee8291"></i>Actual loss event</span></div><p id="rvTimelineHover" class="rv-muted" aria-live="polite">Click a date in the timeline to inspect that forecast.</p></div>
+ </div>
+ <div class="card rv-replay-card">
+   <div class="card-head"><div><h2>Historical forecast replay: predicted price ranges vs reality</h2><p>Simulated closing-price percentiles at the selected origin; actual subsequent BTC prices revealed separately</p></div><span class="pill">NO LOOKAHEAD</span></div>
+   <div class="rv-pad rv-replay-top"><div class="rv-segment rv-model-tabs" role="group" aria-label="Forecast overlay model"><button type="button" data-rv-model="all" aria-pressed="true">All medians</button><button type="button" data-rv-model="gbm" aria-pressed="false">GBM range</button><button type="button" data-rv-model="markov" aria-pressed="false">Markov range</button><button type="button" data-rv-model="ewma" aria-pressed="false">EWMA range</button></div></div>
+   <div class="rv-pad rv-chart-pad"><canvas id="rvReplayChart" class="rv-replay-canvas" aria-label="Actual 30-day historical Bitcoin closing prices against simulated forecast percentile distributions" role="img"></canvas><div class="rv-legend"><span><i style="background:#f4f9ff"></i>Observed BTC closes</span><span><i style="background:#63aafd"></i>GBM median</span><span><i style="background:#efbd6a"></i>Markov median</span><span><i style="background:#35d4ac"></i>EWMA median</span><span class="rv-muted">Shading: projected 5th–95th price percentiles</span></div></div>
+   <div class="rv-pad rv-replay-controls"><div class="rv-between rv-controls-wrap"><div class="rv-inline"><button id="rvPlay" class="button-primary" type="button">▶ Play actual outcome</button><button id="rvReveal" class="button-secondary" type="button">Show day 30</button><button id="rvHide" class="button-secondary" type="button">↺ Hide actual</button></div><strong id="rvDayLabel">Day 0 / 30</strong></div><input id="rvReplaySlider" type="range" class="rv-range" min="0" max="30" step="1" value="0" aria-label="Reveal actual daily BTC closing prices"><p id="rvReplayStatus" class="rv-muted" role="status">Forecasts are shown before actual subsequent prices are revealed.</p>
+    <div class="rv-replay-stats"><div><span>Origin BTC close</span><strong id="rvStartPrice">—</strong></div><div><span>Observed day-30 close</span><strong id="rvFinalPrice">Hidden</strong></div><div><span>Actual 30-day return</span><strong id="rvReturn">Hidden</strong></div><div><span>Starting Markov state</span><strong id="rvRegime">—</strong></div></div>
+    <p class="rv-footnote">The forecast probabilities above are frozen notebook results (GBM analytic, Markov 200,000 paths per initial state, EWMA 10,000 paths per origin). <strong>Chart bands are independently simulated illustrative forecast percentiles</strong> using the frozen 2022–2024 parameters and each origin's known starting state, not confidence intervals for the probability forecasts.</p>
+   </div>
+ </div>
+ <div class="rv-grid rv-scores-grid">
+  <div class="card"><div class="card-head"><div><h2>Historical forecast accuracy</h2><p>Brier scores across 335 forecast dates · smaller is better</p></div></div><div class="rv-pad"><p class="rv-muted" id="rvScoreSummary"></p><div id="rvScoreBars" class="rv-score-bars"></div><div class="table-scroll"><table id="rvScoreTable"><thead><tr><th>Forecast source</th><th>Mean probability</th><th>Brier score</th></tr></thead><tbody></tbody></table></div></div></div>
+  <div class="card"><div class="card-head"><div><h2>Is the difference meaningful?</h2><p>Historical uncertainty, overlapping outcomes and caveats</p></div></div><div class="rv-pad"><p id="rvBrierDifference" class="rv-score-lead"></p><p id="rvEvidenceText" class="rv-muted"></p><div class="rv-hairline"></div><p class="rv-muted"><strong>Research limitation:</strong> These 335 forecasts overlap because their 30-day windows share dates. A lower Brier score does not establish a statistically proven winner. The additional EWMA 2025 comparisons are exploratory because 2025 outcomes had already been examined.</p><a href="https://github.com/it23372726/cryptorisk-lab/blob/main/research/PHASE1_FINDINGS.md" target="_blank" rel="noopener noreferrer">Read full scientific findings</a></div></div>
+ </div>
+ <p class="rv-footnote rv-provenance" id="rvDataProvenance">Historical forecast rows and outcomes come from the executed 97-cell notebook. Actual prices are from verified Binance daily candles.</p>
  <div class="card"><div class="card-head"><div><h2>30-day terminal loss probabilities</h2><p>Observed frequency versus average model forecast · Binance 2025</p></div><span class="pill">FIXED BACKTEST</span></div>
   <div class="content-pad table-scroll"><table><thead><tr><th>Threshold</th><th>Observed</th><th>Historical freq.</th><th class="color-gbm">GBM</th><th class="color-markov">Markov</th><th class="color-ewma">EWMA</th></tr></thead>
  <tbody><tr><td>≥10% loss</td><td>18.51% (62/335)</td><td>19.23%</td><td>21.35%</td><td>20.05%</td><td>11.91%</td></tr>
