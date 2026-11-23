@@ -29,6 +29,12 @@ For every scenario model, a volatility stress multiplier !=1 is *hypothetical*, 
 
 **2025 original:** all 335 30-day origins and binary actual outcomes from the executed 97-cell notebook. ≥10% Brier scores: historical baseline 0.150874; Markov 0.151176; GBM 0.151631; EWMA 0.159060. The Markov advantage over GBM was **not statistically conclusive**. The original 2025 display and its no-lookahead notes are preserved.
 
+**2025 exploratory five-model add-on (implemented after viewing 2025 outcomes):** Apply the *later frozen 2026* Adaptive GBM (causal rolling 30-return SD, analytical loss CDF) and fitted Gaussian GARCH(1,1) (2022–2024 coefficients and next-day variance; 20,000 seeded paths/origin) to **exactly the same 335 original 2025 dates**. The source 2025 notebook, original GBM/Markov/EWMA forecast probabilities, event counts and Brier scores are untouched. The additional model results are stored separately in `docs/v4-exploratory-2025-data.json` and `research/phase4_2025/FINDINGS.md`, with the method declared in `research/phase4_2025/EXPLORATORY_PROTOCOL.md`. The browser joins the results **only for display**.
+
+For 2025 ≥10% terminal loss: historical baseline 0.150874; Markov 0.151176; **GARCH (exploratory) 0.151623**; GBM 0.151631; **Adaptive GBM (exploratory) 0.154912**; EWMA 0.159060. The GARCH-versus-GBM difference is only about −0.000009 and the exploratory block-bootstrap interval includes zero. Do not claim a GARCH accuracy advantage. The post-hoc 2025 results **do not replace 2026's separate retrospective holdout** or establish any statistically confirmed winner.
+
+The 2025 web explorer now presents five probability curves, individual forecasts, historical score rows, all six sources including the calibration-only frequency benchmark, and independently simulated illustrative price bands for Adaptive GBM/GARCH. The only valid observed candle records are the verified Binance daily OHLC files. New past-only conditional sigma/GARCH variance estimates are fixed from the 2022–2024-calibrated research definition and **never generated from future actual prices**.
+
 **2026 separated retrospective holdout:** all 274 origins (2026-01-01 through 2026-10-01), real final closes through 2026-10-31. 62/274 events at ≥10%, 38/274 at ≥20%, 0/274 at ≥35%.
 
 For 2026 ≥10% loss, verified Brier scores (lower is better):
@@ -53,6 +59,7 @@ The 2026 explorer embeds **exact** archived predictions and outcomes from the ve
 The following checks run in GitHub Actions:
 - scripts/verify_v3_evidence.py checks *every* embedded 2026 forecast and observed outcome against the frozen CSV ledger, exact Brier score parity, GARCH fit, threshold events and sample dates.
 - scripts/verify_browser.py checks all five models, exact seeded reproducibility, model risk table, 2025 notebook-derived scores, new 2026 score and event explorer, actual-price replay, crosshair, drag/zoom, mobile responsiveness and standalone file:// loading.
+- scripts/verify_v4_evidence.py and research/phase4_2025/build_exploratory.py check every new 2025 model origin, 30-return sigma, frozen GARCH state, original 2025 source integrity, exact model score reconstruction, deterministic Monte Carlo reproducibility, post-hoc labelling and 2025 browser data consistency.
 - scripts/verify_notebook.py executes the original scientific notebook and verifies its calculations, without overwriting notebook source.
 
 To run locally, open docs/index.html in a modern browser. To develop further, serve docs/ with a basic local HTTP server. No chart CDN, Binance API key, Node server or trading connection is required.
