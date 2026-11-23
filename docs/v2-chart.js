@@ -243,11 +243,17 @@ class ForecastChart {
     if(i<=this.originIdx||reveal){let row=this.candles[i];values.push(row.low,row.high);}
   }
   if(result)for(let m of displayed){let bs=result.models[m].bands;for(let d=0;d<bs.length;d++){const i=this.originIdx+d;if(i>=leftIndex&&i<=rightIndex)values.push(bs[d][0],bs[d][4]);}}
-  if(!values.length)values.push(93576*.75,93576*1.25);
-  values.push(93576,93576*(1-threshold));
-  let min=Math.min(...values),max=Math.max(...values);const span=Math.max(250,max-min);min-=span*.095;max+=span*.095;
+  // Autoscale to visible candles and the displayed forecast. A far-away loss
+  // threshold must not compress real BTC candles into a tiny flat line.
+  if(this.originIdx>=leftIndex&&this.originIdx<=rightIndex)values.push(93576);
+  if(!values.length)values.push(93576*.9,93576*1.1);
+  let min=Math.min(...values),max=Math.max(...values);
+  const span=Math.max(300,max-min);
+  min-=span*.07;max+=span*.07;
+  if(this.manualPriceRange){min=this.manualPriceRange.min;max=this.manualPriceRange.max;}
   const y=v=>P.bottom-(v-min)/(max-min)*(P.bottom-P.top);
-  this.axis={y,pad,graphW};
+  const priceAtY=py=>min+(P.bottom-py)/(P.bottom-P.top)*(max-min);
+  this.axis={y,priceAtY,pad,graphW,min,max,top:P.top,bottom:P.bottom};
   const regionStart=Math.max(pad.l,x(this.originIdx)+barW/2);
   g.fillStyle="#192b43";g.globalAlpha=.33;g.fillRect(regionStart,P.top,Math.max(0,w-pad.r-regionStart),volumeBottom-P.top);g.globalAlpha=1;
   g.font="11px ui-sans-serif,system-ui,sans-serif";g.textBaseline="middle";g.textAlign="right";
@@ -310,18 +316,67 @@ class ForecastChart {
   // Month/date ticks.
   const n=Math.max(this.candles.length,this.originIdx+horizon+1),stride=Math.max(1,Math.ceil(this.view.count/7));g.textAlign="center";g.fillStyle="#9aaec1";g.font="10px ui-sans-serif,system-ui";
   for(let i=0;i<n;i+=stride){const xx=x(i);if(xx<22||xx>w-pad.r)continue;const date=new Date(Date.UTC(2024,11,1+i)).toISOString().slice(5,10);g.fillText(date,xx,h-17);}
-  if(this.cursor&&this.cursor.x>=pad.l&&this.cursor.x<=w-pad.r){
-   const index=Math.round((this.cursor.x-pad.l)/graphW*this.view.count+this.view.start-.5),cx=x(index);
-   g.save();g.setLineDash([3,4]);g.strokeStyle="#b6c7d7aa";g.beginPath();g.moveTo(cx,P.top);g.lineTo(cx,volumeBottom);if(this.cursor.y>=P.top&&this.cursor.y<P.bottom){g.moveTo(pad.l,this.cursor.y);g.lineTo(w-pad.r,this.cursor.y);}g.stroke();g.restore();
-   const date=new Date(Date.UTC(2024,11,1+index)).toISOString().slice(0,10);
-   let parts=[date];
-   if(index>=0&&index<this.candles.length&&(index<=this.originIdx||reveal)){
-    const row=this.candles[index];parts.push("OBSERVED Binance daily candle","O "+row.open.toLocaleString()+"   H "+row.high.toLocaleString(),"L "+row.low.toLocaleString()+"   C "+row.close.toLocaleString());
-   }else if(index>this.originIdx&&result&&index<=this.originIdx+Math.floor(dmax)){
-    parts.push("SIMULATED close percentiles");
-    for(let m of displayed){const b=result.models[m].bands[index-this.originIdx];parts.push(m.toUpperCase()+" median "+Math.round(b[2]).toLocaleString()+" USDT","  5th–95th "+Math.round(b[0]).toLocaleString()+" – "+Math.round(b[4]).toLocaleString());}
-   }else parts.push("Future region · no actual candle displayed");
-   this.tooltip.textContent=parts.join("\n");this.tooltip.style.display="block";this.tooltip.style.left=Math.max(6,Math.min(w-235,this.cursor.x+12))+"px";this.tooltip.style.top=Math.max(7,Math.min(h-120,this.cursor.y+10))+"px";
+  // Full crosshair: the right-hand price label is the exact inverse of the
+  // vertical pixel coordinate, with the same scale as the actual candles.
+  const cursor=this.cursor;
+  const cursorInTime=!!cursor&&cursor.x>=pad.l&&cursor.x<=w-pad.r;
+  const cursorInPrice=!!cursor&&cursor.y>=P.top&&cursor.y<=P.bottom;
+  this.crosshairPrice=cursorInPrice?priceAtY(cursor.y):null;
+  if(cursorInTime||cursorInPrice){
+    g.save();
+    g.setLineDash([4,4]);
+    g.strokeStyle="#abc7df95";
+    g.lineWidth=1;
+    if(cursorInTime){
+      g.beginPath();g.moveTo(cursor.x,P.top);g.lineTo(cursor.x,volumeBottom);g.stroke();
+    }
+    if(cursorInPrice){
+      g.beginPath();g.moveTo(pad.l,cursor.y);g.lineTo(w-pad.r,cursor.y);g.stroke();
+    }
+    g.restore();
+    if(cursorInPrice){
+      const price=priceAtY(cursor.y);
+      const value=price.toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2});
+      const labelTop=Math.max(P.top+1,Math.min(P.bottom-22,cursor.y-11));
+      g.fillStyle="#327ca4";
+      g.fillRect(w-pad.r,labelTop,pad.r,22);
+      g.strokeStyle="#76b9df";
+      g.strokeRect(w-pad.r+.5,labelTop+.5,pad.r-1,21);
+      g.font="700 11px ui-sans-serif,system-ui";
+      g.textBaseline="middle";
+      g.textAlign="right";
+      g.fillStyle="#ffffff";
+      g.fillText(value,w-5,labelTop+11);
+    }
+    if(cursorInTime){
+      const index=Math.round((cursor.x-pad.l)/graphW*this.view.count+this.view.start-.5);
+      const date=new Date(Date.UTC(2024,11,1+index)).toISOString().slice(0,10);
+      const dateX=Math.min(w-pad.r-44,Math.max(pad.l+44,cursor.x));
+      g.fillStyle="#294b66";
+      g.fillRect(dateX-42,h-32,84,23);
+      g.textAlign="center";
+      g.font="700 10px ui-sans-serif,system-ui";
+      g.fillStyle="#effaff";
+      g.fillText(date,dateX,h-20);
+      const parts=[date];
+      if(index>=0&&index<this.candles.length&&(index<=this.originIdx||reveal)){
+        const row=this.candles[index];
+        parts.push("OBSERVED Binance daily candle",
+          "O "+row.open.toLocaleString()+"   H "+row.high.toLocaleString(),
+          "L "+row.low.toLocaleString()+"   C "+row.close.toLocaleString());
+      }else if(index>this.originIdx&&result&&index<=this.originIdx+Math.floor(dmax)){
+        parts.push("SIMULATED closing-price percentiles");
+        for(let m of displayed){
+          const b=result.models[m].bands[index-this.originIdx];
+          parts.push(m.toUpperCase()+" median "+Math.round(b[2]).toLocaleString()+" USDT",
+            "  5th–95th "+Math.round(b[0]).toLocaleString()+" – "+Math.round(b[4]).toLocaleString());
+        }
+      }else parts.push("Future region · no observed candle displayed");
+      this.tooltip.textContent=parts.join("\n");
+      this.tooltip.style.display="block";
+      this.tooltip.style.left=Math.max(6,Math.min(w-235,cursor.x+12))+"px";
+      this.tooltip.style.top=Math.max(7,Math.min(h-132,cursor.y+10))+"px";
+    }else this.tooltip.style.display="none";
   }else this.tooltip.style.display="none";
  }
 }
