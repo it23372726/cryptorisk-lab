@@ -7,6 +7,7 @@ on:
       - 'research/phase3_2026/PRE_REGISTERED_PROTOCOL.md'
       - 'research/phase3_2026/run_research.py'
       - 'research/phase3_2026/check_results.py'
+      - 'research/phase3_2026/check_reproducibility.py'
       - 'research/phase3_2026/requirements-lock.txt'
       - 'notebook/cryptorisk-adaptive-gbm-garch-2026.ipynb'
       - '.github/workflows/research-adaptive-garch-2026.yml'
@@ -39,15 +40,14 @@ jobs:
           python -c "import arch, numpy, pandas; assert arch.__version__ == '7.2.0'; assert numpy.__version__ == '1.26.4'; assert pandas.__version__ == '2.2.3'"
       - name: Compile and run deterministic model self-tests without holdout data
         run: |
-          python -m py_compile research/phase3_2026/run_research.py research/phase3_2026/check_results.py
+          python -m py_compile research/phase3_2026/run_research.py research/phase3_2026/check_results.py research/phase3_2026/check_reproducibility.py
           python research/phase3_2026/run_research.py --self-test
       - name: Execute frozen 2026 holdout research without model retuning
         run: python research/phase3_2026/run_research.py --run
       - name: Independently recompute and audit saved model scores and dates
         run: python research/phase3_2026/check_results.py
-      - name: Verify the full 2026 result is reproducible with frozen committed values
-        run: |
-          git diff --exit-code -- research/phase3_2026/results/
+      - name: Audit regenerated 2026 results against published research evidence
+        run: python research/phase3_2026/check_reproducibility.py
       - name: Verify the independent Colab notebook is valid and runs all default cells
         env:
           MPLBACKEND: Agg
