@@ -1,0 +1,60 @@
+name: Verify CryptoRisk Lab v2
+
+on:
+  push:
+    branches: [research-web-v2-2026-11-23]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  notebook:
+    name: Run scientific notebook
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+      - name: Install scientific dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt nbclient nbformat ipykernel
+      - name: Execute all notebook cells and verify research extensions
+        env:
+          MPLBACKEND: Agg
+        run: python scripts/verify_notebook.py
+      - name: Upload verification report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: notebook-verification
+          path: verification-results.json
+          if-no-files-found: ignore
+
+  browser:
+    name: Exercise interactive dashboard
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+      - name: Install browser test dependencies
+        run: |
+          python -m pip install playwright
+          python -m playwright install --with-deps chromium
+      - name: Run end-to-end Chromium checks
+        run: python scripts/verify_browser.py
+      - name: Upload browser screenshot
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: browser-verification
+          path: browser-verification.png
+          if-no-files-found: ignore
