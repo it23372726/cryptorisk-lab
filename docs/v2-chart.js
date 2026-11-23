@@ -14,6 +14,7 @@ class ForecastChart {
   this.selectedPath=null;this.onSelectPath=null;this.axis=null;this.crosshairPrice=null;
   this.manualPriceRange=null;this.lastDragAt=0;this.suppressNextClick=false;
   this.drawQueued=false;this.renderFrame=null;this.inertiaFrame=null;
+  this.zoomTarget=null;this.zoomFrame=null;
   this.reduceMotion=!!global.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
   canvas.tabIndex=0;
   canvas.style.touchAction="none";
@@ -47,6 +48,34 @@ class ForecastChart {
    this.renderFrame=global.requestAnimationFrame(()=>{this.drawQueued=false;this.renderFrame=null;this.draw();});
  }
  stopInertia(){if(this.inertiaFrame!==null){global.cancelAnimationFrame(this.inertiaFrame);this.inertiaFrame=null;}}
+ stopZoom(){
+   if(this.zoomFrame!==null){global.cancelAnimationFrame(this.zoomFrame);this.zoomFrame=null;}
+   this.zoomTarget=null;
+ }
+ smoothZoomAt(factor,px){
+   this.stopInertia();
+   if(!this.zoomTarget)this.zoomTarget={...this.view};
+   const target=this.zoomTarget;
+   const f=Math.max(0,Math.min(1,(px-13)/this.plotWidth));
+   const old=target.count;
+   target.count=Math.max(12,Math.min(this.totalBars+14,old*factor));
+   target.start+=f*(old-target.count);
+   const maxStart=Math.max(-4,this.totalBars-target.count+7);
+   target.start=Math.max(-4,Math.min(maxStart,target.start));
+   if(this.zoomFrame===null)this.zoomFrame=global.requestAnimationFrame(()=>this.animateZoom());
+ }
+ animateZoom(){
+   if(!this.zoomTarget){this.zoomFrame=null;return;}
+   const target=this.zoomTarget;
+   const amount=this.reduceMotion?1:.3;
+   this.view.count+=(target.count-this.view.count)*amount;
+   this.view.start+=(target.start-this.view.start)*amount;
+   this.clampView();
+   this.queueDraw();
+   if(Math.abs(target.count-this.view.count)<.01&&Math.abs(target.start-this.view.start)<.01){
+     this.view={...target};this.zoomFrame=null;this.zoomTarget=null;this.queueDraw();
+   }else this.zoomFrame=global.requestAnimationFrame(()=>this.animateZoom());
+ }
  clampView(){
    const n=this.totalBars;
    this.view.count=Math.max(12,Math.min(n+14,this.view.count));
@@ -54,13 +83,13 @@ class ForecastChart {
    this.view.start=Math.max(low,Math.min(high,this.view.start));
  }
  panByPixels(dx){
-   this.stopInertia();
+   this.stopInertia();this.stopZoom();
    this.view.start-=dx/this.plotWidth*this.view.count;
    this.clampView();this.queueDraw();
  }
  zoomAt(factor,px){
    if(!Number.isFinite(factor)||factor<=0)return;
-   this.stopInertia();
+   this.stopInertia();this.stopZoom();
    const fraction=Math.max(0,Math.min(1,(px-13)/this.plotWidth));
    const previous=this.view.count;
    this.view.count=Math.max(12,Math.min(this.totalBars+14,previous*factor));
@@ -86,14 +115,14 @@ class ForecastChart {
    }else if((Math.abs(dx)>Math.abs(dy)*.68&&!e.ctrlKey)||e.shiftKey){
      this.panByPixels(e.shiftKey&&dx===0?-dy:dx);
    }else{
-     this.zoomAt(Math.exp(Math.max(-.5,Math.min(.5,dy*.0015))),point.x);
+     this.smoothZoomAt(Math.exp(Math.max(-.5,Math.min(.5,dy*.0015))),point.x);
    }
    this.cursor=point;
    this.queueDraw();
  }
  onPointerDown(e){
    if(e.pointerType==="mouse"&&e.button!==0)return;
-   this.stopInertia();
+   this.stopInertia();this.stopZoom();
    const pos=this.local(e),now=global.performance.now();
    this.pointers.set(e.pointerId,{...pos,type:e.pointerType});
    try{this.canvas.setPointerCapture(e.pointerId);}catch(_err){}
@@ -216,11 +245,11 @@ class ForecastChart {
    this.queueDraw();
  }
  fitFullYear(){
-   this.stopInertia();this.view={start:0,count:this.candles.length};
+   this.stopInertia();this.stopZoom();this.view={start:0,count:this.candles.length};
    this.manualPriceRange=null;this.clampView();this.draw();
  }
  resetZoom(){
-   this.stopInertia();
+   this.stopInertia();this.stopZoom();
    this.view={start:0,count:Math.max(61,this.originIdx+this.state.horizon+1)};
    this.manualPriceRange=null;this.clampView();this.draw();
  }
