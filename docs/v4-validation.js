@@ -310,7 +310,7 @@ const modelLegend=codes.filter(m=>m!=="historical").map(m=>
  '<span><i style="background:'+colors[m]+'"></i>'+named[m]+'</span>').join("")+
  '<span><i style="background:#fa8598"></i>Actual ≥threshold loss dates</span>';
 $("holdoutLegend").innerHTML=modelLegend;
-global.document.querySelectorAll("[data-validation-year]").forEach(b=>b.addEventListener("click",()=>setYear(Number(b.dataset.validationYear))));
+global.document.querySelectorAll("[data-validation-year]").forEach(b=>b.addEventListener("click",()=>{setYear(Number(b.dataset.validationYear));global.document.querySelectorAll(".nav a").forEach(a=>a.classList.toggle("active",a.hash==="#validation"));}));
 global.document.querySelectorAll("[data-holdout-threshold]").forEach(b=>b.addEventListener("click",()=>switchThreshold(Number(b.dataset.holdoutThreshold))));
 $("holdoutPrev").addEventListener("click",()=>switchDate(state.index-1));
 $("holdoutNext").addEventListener("click",()=>switchDate(state.index+1));
