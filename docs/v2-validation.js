@@ -5,16 +5,35 @@
  * remain the only values used for scoring. Runs offline with file://.
  */
 (function(global){"use strict";
-const data=global.CRL_VALIDATION, core=global.CRLCore, history=global.CRL_HISTORY;
+const data=global.CRL_VALIDATION, addition=global.CRL_EXPLORATORY_2025, core=global.CRLCore, history=global.CRL_HISTORY;
 const $=id=>document.getElementById(id);
-if(!data||!core||!history){
+if(!data||!addition||!core||!history){
  const msg=$("rvDataProvenance");
  if(msg)msg.textContent="Verified per-origin notebook data has not been bundled. Historical forecast explorer is unavailable in this build.";
  return;
 }
-const rows=data.rows,thresholds=data.meta.thresholds,models=["gbm","markov","ewma"];
-const labels={gbm:"GBM",markov:"Original Markov",ewma:"EWMA",historical:"Historical frequency"};
-const colors={gbm:"#63aafd",markov:"#efbd6a",ewma:"#35d4ac",historical:"#a5b5c9"};
+// Original notebook records remain untouched. Candidate probabilities are
+// combined in a new display-only array, with a distinct exploratory source.
+if(addition.rows.length!==335||addition.meta.not_independent_holdout!==true)
+  throw Error("Missing signed exploratory 2025 research extension");
+const thresholds=data.meta.thresholds;
+const models=["gbm","markov","ewma","adaptive_gbm","garch"];
+const forecastSources=[...models,"historical"];
+const rows=data.rows.map((r,i)=>{
+ const newer=addition.rows[i];
+ if(newer.date!==r.date)throw Error("Exploratory 2025 date contradicts original notebook: "+r.date);
+ return {...r,p:{...r.p,adaptive_gbm:newer.p.adaptive_gbm,garch:newer.p.garch}};
+});
+for(let j=0;j<thresholds.length;j++){
+ const key=String(thresholds[j]);
+ for(const m of ["adaptive_gbm","garch"]){
+  const brier=rows.reduce((sum,r)=>sum+(r.p[m][j]-r.events[j])**2,0)/rows.length;
+  if(Math.abs(brier-addition.scores[key].models[m].brier)>1e-10)
+   throw Error("Exploratory 2025 Brier parity failed: "+m+"/"+key);
+ }
+}
+const labels={gbm:"GBM",markov:"Original Markov",ewma:"EWMA",adaptive_gbm:"Adaptive GBM · exploratory",garch:"GARCH · exploratory",historical:"Historical frequency"};
+const colors={gbm:"#63aafd",markov:"#efbd6a",ewma:"#35d4ac",adaptive_gbm:"#a59cff",garch:"#f39bd4",historical:"#a5b5c9"};
 const fmt=n=>Number(n).toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2});
 const pct=n=>(Number(n)*100).toFixed(2)+"%";
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
@@ -54,15 +73,25 @@ function bandsFor(index){
    byDay[0].fill(row.price);
    for(let k=0;k<bandN;k++){
      let price=row.price,variance=row.variance,regime=row.regime;
+    const extra=addition.rows[index];
+    let garchVar=extra.garch_nextvar_pct2;
      for(let day=1;day<=H;day++){
        let r=0;
        if(model==="gbm")r=c.gbm.mu+c.gbm.sigma*gaussian();
        else if(model==="markov"){
          r=c.markov.mu[regime]+c.markov.sigma[regime]*gaussian();
          regime=transitions()<c.markov.nextCalm[regime]?0:1;
-       }else{
+       }else if(model==="ewma"){
          r=c.ewma.mu+Math.sqrt(Math.max(variance,0))*gaussian();
          variance=.90*variance+.10*(r-c.ewma.mu)**2;
+       }else if(model==="adaptive_gbm"){
+         r=c.gbm.mu+extra.rolling_sigma*gaussian();
+       }else if(model==="garch"){
+         // Fit is frozen from 2022–2024, beginning state uses only this origin.
+         // Future variance uses simulated innovations, not observed 2025 returns.
+         const eps=Math.sqrt(Math.max(garchVar,0))*gaussian();
+         r=c.garch.mu+eps/100;
+         garchVar=c.garch.omega+c.garch.alpha*eps*eps+c.garch.beta*garchVar;
        }
        price*=Math.exp(r);
        byDay[day][k]=price;
@@ -111,12 +140,11 @@ function updateUI(){
  const actualLoss=(1-row.future/row.price)*100;
  $("rvOutcome").className="rv-outcome "+(actual?"rv-outcome--loss":"rv-outcome--safe");
  $("rvOutcome").textContent="Actual 30-day return: "+(actualLoss<=0?"+":"−")+Math.abs(actualLoss).toFixed(2)+"%"+(actual?" · Loss ≥"+state.threshold+"% happened.":" · Loss ≥"+state.threshold+"% did not happen.");
- $("rvPredictionExplanation").textContent="These are notebook-recorded 30-day forecasts for "+row.date+", scored against a binary "+(actual?"YES":"NO")+" event. A single result cannot establish model accuracy.";
- const colorsMap={gbm:colors.gbm,markov:colors.markov,ewma:colors.ewma,historical:colors.historical};
- $("rvPredictionBars").innerHTML=["gbm","markov","ewma","historical"].map(m=>{
+ $("rvPredictionExplanation").textContent="Original GBM, Markov and EWMA forecasts are recorded notebook results. Adaptive GBM and GARCH were calculated later using the same frozen settings and are explicitly exploratory for 2025. A single YES/NO outcome does not establish accuracy.";
+ $("rvPredictionBars").innerHTML=forecastSources.map(m=>{
    const p=row.p[m][j],label=labels[m];
    return '<div class="rv-bar-row"><div class="rv-bar-head"><span>'+label+'</span><strong>'+pct(p)+'</strong></div>'+
-    '<div class="rv-bar-track"><div class="rv-bar-fill" style="width:'+clamp(p*100,0,100)+'%;background:'+colorsMap[m]+'"></div></div></div>';
+    '<div class="rv-bar-track"><div class="rv-bar-fill" style="width:'+clamp(p*100,0,100)+'%;background:'+colors[m]+'"></div></div></div>';
  }).join("");
  $("rvRegime").textContent=row.regime===0?"Calm":"Volatile";
  $("rvStartPrice").textContent=fmt(row.price)+" USDT";
@@ -134,22 +162,24 @@ function updateUI(){
  $("rvReplaySlider").value=String(state.revealDay);
  $("rvDataProvenance").textContent=data.meta.origins+" forecast dates. "+data.meta.source+
    ". Original Markov forecast uses "+data.meta.markovPathsPerState.toLocaleString()+" Monte Carlo paths per initial state; "+
-   "EWMA uses "+data.meta.ewmaPathsPerOrigin.toLocaleString()+" paths per forecast origin. The 2025 windows overlap and were evaluated retrospectively.";
+   "EWMA uses "+data.meta.ewmaPathsPerOrigin.toLocaleString()+" paths per forecast origin. Adaptive GBM is analytical; GARCH adds "+addition.meta.mc_paths_per_date.toLocaleString()+" seeded paths per origin. Its 2025 results are post-hoc exploratory because 2025 was previously examined. All 30-day windows overlap.";
 }
 function updateScores(){
- const key=String(state.threshold),summary=data.scores[key];
+ const key=String(state.threshold),summary=data.scores[key],ext=addition.scores[key];
+ const modelScore=m=>summary.models[m]||ext.models[m];
  $("rvScoreSummary").textContent="Observed loss events: "+summary.events+" / "+data.meta.origins+
-   " windows ("+pct(summary.observed)+"). This compares the full year, not just the selected forecast.";
- const order=["historical","gbm","markov","ewma"];
- const biggest=Math.max(...order.map(m=>summary.models[m].brier));
+   " windows ("+pct(summary.observed)+"). GBM, Markov and EWMA: original research. Adaptive GBM and GARCH: later exploratory additions.";
+ const order=[...forecastSources].sort((a,b)=>modelScore(a).brier-modelScore(b).brier);
+ const biggest=Math.max(...order.map(m=>modelScore(m).brier),1e-10);
  $("rvScoreBars").innerHTML=order.map(m=>{
-   const v=summary.models[m].brier;
+   const v=modelScore(m).brier;
    return '<div class="rv-score-row"><span>'+labels[m]+'</span><div class="rv-bar-track"><div class="rv-bar-fill" style="width:'+
      (v/biggest*100).toFixed(3)+'%;background:'+colors[m]+'"></div></div><strong>'+v.toFixed(6)+'</strong></div>';
  }).join("");
- $("rvScoreTable").querySelector("tbody").innerHTML=order.map(m=>
-   "<tr><td>"+labels[m]+"</td><td>"+pct(summary.models[m].mean)+"</td><td>"+summary.models[m].brier.toFixed(6)+"</td></tr>"
- ).join("");
+ $("rvScoreTable").querySelector("tbody").innerHTML=order.map(m=>{
+   const metric=modelScore(m);
+   return "<tr><td>"+labels[m]+"</td><td>"+pct(metric.mean)+"</td><td>"+metric.brier.toFixed(6)+"</td></tr>";
+ }).join("");
  const markov=summary.models.markov.brier,gbm=summary.models.gbm.brier;
  const diff=markov-gbm,ci=data.bootstrap.find(x=>x.threshold===">="+state.threshold+"%"&&x.compared==="Original Markov"&&x.reference==="GBM");
  $("rvBrierDifference").textContent="Original Markov − GBM Brier difference: "+(diff>=0?"+":"")+diff.toFixed(6)+". "+(diff<0?"Markov scored slightly lower historically.":"GBM scored lower historically.");
@@ -157,11 +187,29 @@ function updateScores(){
    $("rvEvidenceText").textContent="No 35% terminal losses occurred in the 335 observed windows. Scores at this extreme threshold do not demonstrate useful extreme-loss detection.";
  }else if(ci){
    const overlapsZero=ci.low<=0&&ci.high>=0;
-   $("rvEvidenceText").textContent="30-day block-bootstrap 95% interval: ["+ci.low.toFixed(6)+", "+ci.high.toFixed(6)+
-     "]. "+(overlapsZero?"The interval crosses zero, so the Markov-versus-GBM advantage is not conclusive.":"The interval excludes zero, but overlapping windows, modelling assumptions and selection require cautious interpretation.")+
-     " The historical-frequency baseline is included as a benchmark, not another volatility model.";
+   $("rvEvidenceText").textContent="Original 30-day block-bootstrap 95% interval: ["+ci.low.toFixed(6)+", "+ci.high.toFixed(6)+
+     "]. "+(overlapsZero?"It crosses zero; the Markov-versus-GBM advantage was not conclusive.":"It excludes zero, but overlapping windows and prior choices require caution.")+
+     " The historical-frequency baseline is the training-period benchmark.";
  }else{
-   $("rvEvidenceText").textContent="Model forecasts come from the same historical test windows. Evaluate forecast accuracy with repeated proper scoring rules, not the prediction nearest to a single outcome.";
+   $("rvEvidenceText").textContent="Forecasts share actual historical dates. Test accuracy with proper scoring rules across repeated outcomes, not a single date.";
+ }
+ const extraLines=["adaptive_gbm","garch"].map(m=>{
+   const score=ext.models[m],diff=ext.differences[m+"_minus_gbm"];
+   return labels[m]+": Brier "+score.brier.toFixed(6)+
+     " · difference versus original GBM "+(diff.mean>=0?"+":"")+diff.mean.toFixed(6)+
+     " (exploratory 95% interval ["+diff.ci95[0].toFixed(5)+", "+diff.ci95[1].toFixed(5)+"]).";
+ }).join(" ");
+ $("rvExtensionText").textContent="Post-hoc 2025 candidates. "+extraLines+
+  " The previously separate 2026 holdout showed no statistically established adaptive-model improvement. Do not treat the 2025 extension as confirmatory testing.";
+ const bottom=$("rvFrequencyTable");
+ if(bottom){
+   bottom.querySelector("thead").innerHTML="<tr><th>Terminal loss</th><th>Observed</th>"+
+      forecastSources.map(m=>"<th>"+labels[m]+"</th>").join("")+"</tr>";
+   bottom.querySelector("tbody").innerHTML=thresholds.map(t=>{
+     const j=thresholds.indexOf(t),sum=data.scores[String(t)],latest=addition.scores[String(t)];
+     return "<tr><td>≥"+t+"% loss</td><td>"+pct(sum.observed)+" ("+sum.events+"/335)</td>"+
+       forecastSources.map(m=>"<td>"+pct((sum.models[m]||latest.models[m]).mean)+"</td>").join("")+"</tr>";
+   }).join("");
  }
 }
 function fitCanvas(canvas){
@@ -203,7 +251,7 @@ function drawTimeline(){
  g.fillStyle="#ee8291";for(let i=0;i<rows.length;i++)if(rows[i].events[j]){
    const xx=x(i);g.fillRect(xx-1,eventY-8,2,8);
  }
- for(let model of models)line(g,rows.map((r,i)=>[x(i),y(r.p[model][j])]),colors[model],model==="ewma"?2:1.8,.9);
+ for(let model of models)line(g,rows.map((r,i)=>[x(i),y(r.p[model][j])]),colors[model],model==="ewma"||model==="garch"?2:1.6,.9);
  const ix=state.index,xx=x(ix);
  g.save();g.strokeStyle="#e7f4ff";g.setLineDash([4,4]);g.lineWidth=1;g.beginPath();g.moveTo(xx,top);g.lineTo(xx,bottom);g.stroke();g.restore();
  for(let model of models){
@@ -338,8 +386,8 @@ $("rvTimelineChart").addEventListener("pointermove",e=>{
  const b=$("rvTimelineChart").getBoundingClientRect(),fraction=clamp((e.clientX-b.left-51)/(b.width-51-18),0,1);
  state.hoverIndex=Math.round(fraction*334);
  const r=rows[state.hoverIndex],t=thresholds.indexOf(state.threshold);
- $("rvTimelineHover").textContent=r.date+" · GBM "+pct(r.p.gbm[t])+" · Markov "+pct(r.p.markov[t])+
-   " · EWMA "+pct(r.p.ewma[t])+" · Actual event: "+(r.events[t]?"Yes":"No");
+ $("rvTimelineHover").textContent=r.date+" · "+models.map(m=>labels[m]+": "+pct(r.p[m][t])).join(" · ")+
+   " · Actual event: "+(r.events[t]?"Yes":"No");
  drawTimeline();
 });
 $("rvTimelineChart").addEventListener("pointerleave",()=>{state.hoverIndex=null;$("rvTimelineHover").textContent="Click any date in the chart to inspect its historical forecast.";drawTimeline();});
