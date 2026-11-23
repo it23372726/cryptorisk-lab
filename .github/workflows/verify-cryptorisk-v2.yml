@@ -63,6 +63,8 @@ jobs:
           python -m playwright install --with-deps chromium
       - name: Check 2026 standalone evidence reproduces frozen research ledger
         run: python scripts/verify_v3_evidence.py
+      - name: Stress-test 30,000 paths per model at 90-day horizon
+        run: node --max-old-space-size=4096 scripts/verify_v3_models.cjs
       - name: Run end-to-end Chromium checks
         run: python scripts/verify_browser.py
       - name: Upload standalone local preview
