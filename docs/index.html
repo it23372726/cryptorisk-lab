@@ -362,6 +362,7 @@
     #modelView {max-width:300px;margin-top:16px}
     @media(forced-colors:active){.choices input:checked + span {outline:2px solid Highlight}}
   </style>
+  <link rel="stylesheet" href="research-panels.css">
 </head>
 
 <body>
@@ -485,6 +486,15 @@
     <!-- Results -->
     <div class="main-content">
 
+      <section class="panel research-section" id="historicalPanel">
+        <div class="research-head"><div><h2>Bitcoin Market: Actual Historical Prices</h2>
+          <p class="subheading">Real BTC/USDT daily candlesticks from Binance, surrounding the 31 Dec 2024 forecast origin. This is observed history, not a live price feed.</p></div>
+          <span class="research-chip">REAL MARKET DATA</span></div>
+        <div class="historical-wrap"><canvas id="historicalCandles" aria-label="Historical BTC USDT open high low close candlesticks"></canvas></div>
+        <p id="historicalStatus" class="research-caption" role="status">Loading published historical OHLC data…</p>
+        <p id="historicalOutcome" class="research-caption"></p>
+      </section>
+
       <section class="panel">
 
         <h2>Simulated Bitcoin Price Paths</h2>
@@ -599,6 +609,52 @@
         <p class="subheading">Cumulative share of simulated investments ending at or below each return. The three vertical markers locate the loss thresholds in the table.</p>
         <canvas id="distribution" aria-label="Cumulative terminal returns by model"></canvas>
         <div class="legend"><span>GBM · solid teal</span><span>Markov · dashed rust</span></div>
+      </section>
+
+      <section class="panel research-section">
+        <div class="research-head"><div><h2>Simulation Playback: One Markov Scenario</h2>
+          <p class="subheading">Inspect one genuine simulated path as it evolves. Price movement and regime switches come from the same calibrated simulation as the risk table, not invented animation.</p></div>
+          <span id="replayRegime" class="state-calm">CALM</span></div>
+        <canvas id="replayChart" aria-label="One Monte Carlo Bitcoin path played day by day"></canvas>
+        <div class="playback-bar">
+          <button id="replayPlay" type="button" disabled>Play</button>
+          <input id="replayDay" type="range" min="0" max="30" step="1" value="0" aria-label="Replay day">
+          <strong id="replayDayText">Day 0 / 30</strong>
+        </div>
+        <p id="replayDescription" class="research-caption" role="status">Run a simulation to generate a replayable Markov path.</p>
+      </section>
+
+      <section class="panel research-section">
+        <div class="research-head"><div><h2>Markov Regime Explorer</h2>
+          <p class="subheading">The transition probabilities are calibrated on 2022–2024. Theoretical day-by-day regime probabilities are computed from powers of the Markov transition matrix.</p></div>
+          <span class="research-chip">Pᵈ MATHEMATICS</span></div>
+        <div class="research-grid">
+          <div class="research-stat"><span>Calm → Calm</span><strong id="calmStay">—</strong><p class="note">Expected duration: <span id="calmDuration">—</span></p></div>
+          <div class="research-stat"><span>Volatile → Volatile</span><strong id="volatileStay">—</strong><p class="note">Expected duration: <span id="volatileDuration">—</span></p></div>
+        </div>
+        <canvas id="regimeChart" aria-label="Markov future calm and volatile state occupancy probabilities"></canvas>
+        <div class="legend"><span class="legend-item"><span class="legend-line gbm"></span>Calm</span><span class="legend-item"><span class="legend-line markov"></span>Volatile</span></div>
+        <p id="day30Regime" class="research-caption"></p>
+        <p class="research-caption">Note: regime durations are properties of the fitted state labels; 14-day rolling windows overlap, so some persistence is mechanical.</p>
+      </section>
+
+      <section class="panel research-section">
+        <div class="research-head"><div><h2>Historical Evaluation: 2025</h2>
+          <p class="subheading">Retrospective 30-day loss forecasts compared with observed Bitcoin outcomes. This panel reports fixed notebook results; its values do not change with the simulation controls.</p></div>
+          <span class="research-chip">OUT-OF-SAMPLE BACKTEST</span></div>
+        <div class="table-scroll"><table class="validation-table">
+          <thead><tr><th>Loss threshold</th><th>Observed in 2025</th><th>GBM forecast</th><th>Markov forecast</th></tr></thead>
+          <tbody>
+            <tr><td>Loss ≥ 10%</td><td>18.51% (62/335)</td><td>21.35%</td><td>Regime-dependent; ≈ 19.6–21.9%</td></tr>
+            <tr><td>Loss ≥ 20%</td><td>2.39% (8/335)</td><td>6.06%</td><td>Regime-dependent; ≈ 5.16–6.64%</td></tr>
+            <tr><td>Loss ≥ 35%</td><td>0% (0/335)</td><td>0.20%</td><td>Regime-dependent; ≈ 0.16–0.29%</td></tr>
+          </tbody></table></div>
+        <div class="research-grid" style="margin-top:16px">
+          <div class="research-stat"><span>Brier score · loss ≥ 10% (lower is better)</span><strong style="font:600 14px system-ui">GBM 0.151631<br>Markov 0.151176<br>Historical 0.150874</strong></div>
+          <div class="research-stat"><span>Brier score · loss ≥ 20% (lower is better)</span><strong style="font:600 14px system-ui">GBM 0.024658<br>Markov 0.024159<br>Historical 0.024360</strong></div>
+        </div>
+        <p id="validationNote" class="research-caption"></p>
+        <p class="research-caption"><strong>Interpretation:</strong> Markov's small Brier-score improvements over GBM were not statistically confirmed across all three thresholds after adjusting for multiple comparisons. The historical-frequency benchmark was better at ≥10%. The 2025 backtest does not prove superiority. Figures are rounded from the existing notebook.</p>
       </section>
     </div>
 
@@ -762,6 +818,7 @@
     let state = settings.initialRegime;
 
     const path = [price];
+    const regimePath = [state];
 
     for (let day = 0; day < settings.horizon; day++) {
 
@@ -786,8 +843,10 @@
         MARKOV.probabilityNextCalm[state];
 
       state = uniform < probabilityCalm ? 0 : 1;
+      regimePath.push(state);
     }
 
+    path.regimes = regimePath;
     return path;
   }
 
@@ -1571,8 +1630,7 @@
   window.addEventListener("resize",()=>{drawChart();drawDistribution();});
   resetSimulation();
 </script>
-
-
+<script src="research-panels.js" defer></script>
 
 </body>
 </html>
