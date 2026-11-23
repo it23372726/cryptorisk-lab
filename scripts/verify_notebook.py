@@ -21,6 +21,31 @@ required_markers = [
 cells = ["".join(c.get("source", "")) for c in nb.cells]
 for marker in required_markers:
     assert any(marker in content for content in cells), marker
+# Add a read-only provenance probe to the in-memory executed copy.
+# The committed scientific notebook is unchanged and still contains 97 cells.
+last_code_index = max(i for i, cell in enumerate(nb.cells) if cell.cell_type == "code")
+nb.cells[last_code_index].source += """
+import json as _crl_export_json
+print("WEB_CALIBRATION_JSON=" + _crl_export_json.dumps({
+  "origin_date": "2024-12-31",
+  "origin_price": float(S0),
+  "mu": float(mu_cal),
+  "sigma": float(sigma_cal),
+  "markov_mu": [float(x) for x in regime_mu],
+  "markov_sigma": [float(x) for x in regime_sigma],
+  "markov_transition": [[float(x) for x in row] for row in transition_matrix],
+  "ewma_decay": float(M7_SELECTED_DECAY),
+  "ewma_initial_variance": float(m9_origin_var),
+  "ewma_variance_by_decay": {
+    f"{i/100:.2f}": float(pd.Series(
+      ewma_nextday_variances(price_df["log_return"].to_numpy(), mu_cal,
+                             i/100, sigma_cal**2),
+      index=price_df["date"]
+    ).loc[pd.Timestamp("2024-12-31", tz="UTC")])
+    for i in range(80, 100)
+  }
+}, separators=(",", ":")))
+"""
 print("Notebook source:", source, "cells", len(nb.cells), flush=True)
 t0 = time.monotonic()
 try:
@@ -73,6 +98,13 @@ assert len(phase1_results["candidate_markov_2024_ranking"]) == 12
 assert len(phase1_results["ewma_2024_ranking"]) == 4
 assert len(phase1_results["retrospective_2025_comparison"]) == 15
 report["phase1_results"] = phase1_results
+calibration_json_line = re.search(r"WEB_CALIBRATION_JSON=(\{[^\n]+\})", text_output)
+assert calibration_json_line, "Missing notebook-derived browser calibration state"
+web_calibration = json.loads(calibration_json_line.group(1))
+assert web_calibration["origin_date"] == "2024-12-31"
+assert 0 < web_calibration["ewma_initial_variance"] < 1
+report["web_calibration"] = web_calibration
+print("PASS: Exact notebook-derived 2024-12-31 EWMA initial variance exported", flush=True)
 print("PHASE1_VERIFIED_RESULTS=" + json.dumps(phase1_results, separators=(",", ":")), flush=True)
 
 report_path.write_text(json.dumps(report, indent=2) + "\n")

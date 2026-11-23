@@ -2,7 +2,9 @@ name: Verify CryptoRisk Lab v2
 
 on:
   push:
-    branches: [research-web-v2-2026-11-23, phase1-research-ewma-2026-11-23]
+    branches: [research-web-v2-2026-11-23, phase1-research-ewma-2026-11-23, website-v2-animated-lab-2026-11-23]
+  pull_request:
+    branches: [main]
   workflow_dispatch:
 
 permissions:
@@ -51,10 +53,19 @@ jobs:
           python -m playwright install --with-deps chromium
       - name: Run end-to-end Chromium checks
         run: python scripts/verify_browser.py
+      - name: Upload standalone local preview
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: website-v2-standalone-preview
+          path: docs/
+          if-no-files-found: error
       - name: Upload browser screenshot
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: browser-verification
-          path: browser-verification.png
+          path: |
+            browser-verification.png
+            browser-verification-mobile.png
           if-no-files-found: ignore
