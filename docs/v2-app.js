@@ -237,6 +237,6 @@ dialog.addEventListener("click",e=>{if(e.target===dialog)dialog.close();});
 const sections=["simulation","comparison","validation","methodology"];
 if("IntersectionObserver" in window){const observer=new IntersectionObserver(entries=>{for(let e of entries)if(e.isIntersecting){document.querySelectorAll(".nav a").forEach(a=>a.classList.toggle("active",a.hash==="#"+e.target.id));}},{rootMargin:"-20% 0px -65% 0px"});sections.forEach(id=>observer.observe($(id)));}
 window.addEventListener("resize",drawDistribution);
-labels();clearResults();chart.resetZoom();
+labels();clearResults();chart.resetZoom();updateActualSummary();
 window.CRLApp={get result(){return result;},get phase(){return phase;},get chart(){return chart;}};
 })();
