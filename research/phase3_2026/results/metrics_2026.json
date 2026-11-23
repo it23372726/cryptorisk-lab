@@ -1,0 +1,510 @@
+{
+  "experiment": "Frozen 2026 Jan-Oct retrospective holdout, 30-day forecasts",
+  "protocol": "research/phase3_2026/PRE_REGISTERED_PROTOCOL.md",
+  "not_prospective": true,
+  "no_parameter_tuning_on_2026": true,
+  "evaluation_start": "2026-01-01",
+  "evaluation_last_origin": "2026-10-01",
+  "last_actual_close": "2026-10-31",
+  "origins": 274,
+  "model_calibration": "2022-01-01 through 2024-12-31",
+  "horizon_days": 30,
+  "primary_threshold_pct": 10,
+  "secondary_thresholds_pct": [
+    20,
+    35
+  ],
+  "forecast_paths_each_origin": {
+    "ewma": 20000,
+    "garch": 20000
+  },
+  "bootstrap": {
+    "circular_block_size": 30,
+    "replications": 3000,
+    "seed": 20261124
+  },
+  "garch_fit": {
+    "omega_pct2": 1.7429241072532673,
+    "alpha": 0.1689729613867537,
+    "beta": 0.6255015699659665,
+    "persistence": 0.7944745313527202,
+    "calibration_mean_return": 0.0006149477738712015,
+    "loglikelihood": -2659.6985016723625,
+    "n_train": 1095,
+    "arch_version": "7.2.0",
+    "fit_converged": true,
+    "fit_next_variance_2025_01_01_pct2": 5.547208876802669
+  },
+  "scores": {
+    "10": {
+      "n": 274,
+      "events": 62,
+      "frequency": 0.22627737226277372,
+      "models": {
+        "historical": {
+          "brier": 0.17622986222087852,
+          "mean_probability": 0.19230769230769232,
+          "min_probability": 0.19230769230769232,
+          "max_probability": 0.19230769230769232,
+          "probability_std": 0.0
+        },
+        "gbm": {
+          "brier": 0.17523855385691434,
+          "mean_probability": 0.2135246944151026,
+          "min_probability": 0.21352469441510258,
+          "max_probability": 0.21352469441510258,
+          "probability_std": 2.7755575615628914e-17
+        },
+        "markov": {
+          "brier": 0.17822108986861313,
+          "mean_probability": 0.20200992700729925,
+          "min_probability": 0.19584,
+          "max_probability": 0.21932,
+          "probability_std": 0.010334499835792052
+        },
+        "ewma": {
+          "brier": 0.21588507987226277,
+          "mean_probability": 0.12692226277372262,
+          "min_probability": 0.0099,
+          "max_probability": 0.3444,
+          "probability_std": 0.07038409816458473
+        },
+        "adaptive_gbm": {
+          "brier": 0.21891869439590766,
+          "mean_probability": 0.14167442246558307,
+          "min_probability": 0.024469016191091465,
+          "max_probability": 0.30332139202041564,
+          "probability_std": 0.07243196853952798
+        },
+        "garch": {
+          "brier": 0.17666360216240878,
+          "mean_probability": 0.20790492700729926,
+          "min_probability": 0.1958,
+          "max_probability": 0.27075,
+          "probability_std": 0.008376478156632457
+        }
+      },
+      "differences": {
+        "markov_minus_gbm": {
+          "mean": 0.0029825360116988047,
+          "ci95": [
+            -0.003093838582145276,
+            0.01020737604880158
+          ],
+          "two_sided_centered_bootstrap_p": 0.4055314895034988,
+          "bootstrap_block": 30
+        },
+        "markov_minus_historical": {
+          "mean": 0.001991227647734622,
+          "ci95": [
+            -0.0005443506629784665,
+            0.004442419840435355
+          ],
+          "two_sided_centered_bootstrap_p": 0.11396201266244585,
+          "bootstrap_block": 30
+        },
+        "ewma_minus_gbm": {
+          "mean": 0.04064652601534845,
+          "ci95": [
+            -0.01087372766984335,
+            0.10257665072033531
+          ],
+          "two_sided_centered_bootstrap_p": 0.16427857380873043,
+          "bootstrap_block": 30
+        },
+        "ewma_minus_markov": {
+          "mean": 0.03766399000364963,
+          "ci95": [
+            -0.007407957006979918,
+            0.0926150079527555
+          ],
+          "two_sided_centered_bootstrap_p": 0.1432855714761746,
+          "bootstrap_block": 30
+        },
+        "ewma_minus_historical": {
+          "mean": 0.03965521765138425,
+          "ci95": [
+            -0.004233907139551304,
+            0.09210307558853334
+          ],
+          "two_sided_centered_bootstrap_p": 0.10996334555148284,
+          "bootstrap_block": 30
+        },
+        "adaptive_gbm_minus_gbm": {
+          "mean": 0.043680140538993315,
+          "ci95": [
+            -0.005052397900498483,
+            0.102579194117902
+          ],
+          "two_sided_centered_bootstrap_p": 0.11796067977340886,
+          "bootstrap_block": 30
+        },
+        "adaptive_gbm_minus_markov": {
+          "mean": 0.04069760452729451,
+          "ci95": [
+            -0.0020746444760662034,
+            0.09262736560134985
+          ],
+          "two_sided_centered_bootstrap_p": 0.09563478840386538,
+          "bootstrap_block": 30
+        },
+        "adaptive_gbm_minus_historical": {
+          "mean": 0.04268883217502913,
+          "ci95": [
+            0.0013239036046643424,
+            0.09232923918166201
+          ],
+          "two_sided_centered_bootstrap_p": 0.06797734088637121,
+          "bootstrap_block": 30
+        },
+        "garch_minus_gbm": {
+          "mean": 0.0014250483054944255,
+          "ci95": [
+            -0.0016887874388393574,
+            0.005196162284307696
+          ],
+          "two_sided_centered_bootstrap_p": 0.43385538153948683,
+          "bootstrap_block": 30
+        },
+        "garch_minus_markov": {
+          "mean": -0.0015574877062043795,
+          "ci95": [
+            -0.005354841012728108,
+            0.0014515509181204436
+          ],
+          "two_sided_centered_bootstrap_p": 0.38487170943018995,
+          "bootstrap_block": 30
+        },
+        "garch_minus_historical": {
+          "mean": 0.00043373994153024216,
+          "ci95": [
+            -0.005401117338333608,
+            0.005200424097920627
+          ],
+          "two_sided_centered_bootstrap_p": 0.882705764745085,
+          "bootstrap_block": 30
+        }
+      }
+    },
+    "20": {
+      "n": 274,
+      "events": 38,
+      "frequency": 0.1386861313868613,
+      "models": {
+        "historical": {
+          "brier": 0.12624220542791242,
+          "mean_probability": 0.05628517823639775,
+          "min_probability": 0.05628517823639775,
+          "max_probability": 0.05628517823639775,
+          "probability_std": 0.0
+        },
+        "gbm": {
+          "brier": 0.12555138893106652,
+          "mean_probability": 0.06058939276571966,
+          "min_probability": 0.06058939276571967,
+          "max_probability": 0.06058939276571967,
+          "probability_std": 6.938893903907228e-18
+        },
+        "markov": {
+          "brier": 0.12748758280145986,
+          "mean_probability": 0.05549934306569343,
+          "min_probability": 0.05163,
+          "max_probability": 0.066355,
+          "probability_std": 0.006481069424277594
+        },
+        "ewma": {
+          "brier": 0.13912748578467152,
+          "mean_probability": 0.032312043795620436,
+          "min_probability": 0.0003,
+          "max_probability": 0.2214,
+          "probability_std": 0.039691162912431126
+        },
+        "adaptive_gbm": {
+          "brier": 0.14070125265099023,
+          "mean_probability": 0.031891511998792,
+          "min_probability": 6.091292018660517e-05,
+          "max_probability": 0.15752457761123168,
+          "probability_std": 0.04370664509243954
+        },
+        "garch": {
+          "brier": 0.12613185270072994,
+          "mean_probability": 0.06040036496350366,
+          "min_probability": 0.05275,
+          "max_probability": 0.12445,
+          "probability_std": 0.00727953835754153
+        }
+      },
+      "differences": {
+        "markov_minus_gbm": {
+          "mean": 0.0019361938703933719,
+          "ci95": [
+            -0.00022431671521485111,
+            0.004973851085233228
+          ],
+          "two_sided_centered_bootstrap_p": 0.13495501499500168,
+          "bootstrap_block": 30
+        },
+        "markov_minus_historical": {
+          "mean": 0.0012453773735474224,
+          "ci95": [
+            0.00011540764298053894,
+            0.002779320181677508
+          ],
+          "two_sided_centered_bootstrap_p": 0.05731422859046984,
+          "bootstrap_block": 30
+        },
+        "ewma_minus_gbm": {
+          "mean": 0.013576096853605042,
+          "ci95": [
+            0.0003347111228746552,
+            0.03150090519351046
+          ],
+          "two_sided_centered_bootstrap_p": 0.07397534155281572,
+          "bootstrap_block": 30
+        },
+        "ewma_minus_markov": {
+          "mean": 0.01163990298321167,
+          "ci95": [
+            0.0005978484602075709,
+            0.02654475651017334
+          ],
+          "two_sided_centered_bootstrap_p": 0.06731089636787738,
+          "bootstrap_block": 30
+        },
+        "ewma_minus_historical": {
+          "mean": 0.012885280356759092,
+          "ci95": [
+            0.0006992159164760698,
+            0.029337241144887692
+          ],
+          "two_sided_centered_bootstrap_p": 0.06564478507164279,
+          "bootstrap_block": 30
+        },
+        "adaptive_gbm_minus_gbm": {
+          "mean": 0.015149863719923726,
+          "ci95": [
+            0.001081605207025244,
+            0.03461615875195251
+          ],
+          "two_sided_centered_bootstrap_p": 0.06464511829390203,
+          "bootstrap_block": 30
+        },
+        "adaptive_gbm_minus_markov": {
+          "mean": 0.013213669849530355,
+          "ci95": [
+            0.001237025405545532,
+            0.029671849332639274
+          ],
+          "two_sided_centered_bootstrap_p": 0.0583138953682106,
+          "bootstrap_block": 30
+        },
+        "adaptive_gbm_minus_historical": {
+          "mean": 0.014459047223077778,
+          "ci95": [
+            0.001365940979133146,
+            0.03244862360792621
+          ],
+          "two_sided_centered_bootstrap_p": 0.0583138953682106,
+          "bootstrap_block": 30
+        },
+        "garch_minus_gbm": {
+          "mean": 0.0005804637696634354,
+          "ci95": [
+            2.301419917552584e-05,
+            0.0012471745964387187
+          ],
+          "two_sided_centered_bootstrap_p": 0.06464511829390203,
+          "bootstrap_block": 30
+        },
+        "garch_minus_markov": {
+          "mean": -0.0013557301007299368,
+          "ci95": [
+            -0.003753475690168815,
+            0.0002935239361884097
+          ],
+          "two_sided_centered_bootstrap_p": 0.18293902032655782,
+          "bootstrap_block": 30
+        },
+        "garch_minus_historical": {
+          "mean": -0.00011035272718251458,
+          "ci95": [
+            -0.0009658452623282221,
+            0.0004911324253908878
+          ],
+          "two_sided_centered_bootstrap_p": 0.7807397534155281,
+          "bootstrap_block": 30
+        }
+      }
+    },
+    "35": {
+      "n": 274,
+      "events": 0,
+      "frequency": 0.0,
+      "models": {
+        "historical": {
+          "brier": 2.20001478409935e-05,
+          "mean_probability": 0.004690431519699813,
+          "min_probability": 0.004690431519699813,
+          "max_probability": 0.004690431519699813,
+          "probability_std": 0.0
+        },
+        "gbm": {
+          "brier": 3.9067820001539545e-06,
+          "mean_probability": 0.001976558119599309,
+          "min_probability": 0.0019765581195993085,
+          "max_probability": 0.0019765581195993085,
+          "probability_std": 4.336808689942018e-19
+        },
+        "markov": {
+          "brier": 4.136158394160584e-06,
+          "mean_probability": 0.0019516058394160583,
+          "min_probability": 0.00161,
+          "max_probability": 0.00291,
+          "probability_std": 0.0005721826995966637
+        },
+        "ewma": {
+          "brier": 0.0001596912773722628,
+          "mean_probability": 0.004480656934306569,
+          "min_probability": 0.0,
+          "max_probability": 0.08885,
+          "probability_std": 0.011815878757388858
+        },
+        "adaptive_gbm": {
+          "brier": 7.699889841287531e-05,
+          "mean_probability": 0.0030614054842461524,
+          "min_probability": 4.504955595151757e-13,
+          "max_probability": 0.030869034042205347,
+          "probability_std": 0.008223545152420755
+        },
+        "garch": {
+          "brier": 1.6673731751824815e-05,
+          "mean_probability": 0.0037012773722627733,
+          "min_probability": 0.00215,
+          "max_probability": 0.0211,
+          "probability_std": 0.001724609395022651
+        }
+      },
+      "differences": {
+        "markov_minus_gbm": {
+          "mean": 2.293763940066293e-07,
+          "ci95": [
+            -6.069885694970202e-07,
+            1.1944128903569944e-06
+          ],
+          "two_sided_centered_bootstrap_p": 0.6401199600133289,
+          "bootstrap_block": 30
+        },
+        "markov_minus_historical": {
+          "mean": -1.7863989446832913e-05,
+          "ci95": [
+            -1.8700354410336565e-05,
+            -1.689895295048255e-05
+          ],
+          "two_sided_centered_bootstrap_p": 0.0003332222592469177,
+          "bootstrap_block": 30
+        },
+        "ewma_minus_gbm": {
+          "mean": 0.00015578449537210885,
+          "ci95": [
+            -2.2636206402256733e-07,
+            0.0004577554682279483
+          ],
+          "two_sided_centered_bootstrap_p": 0.14228590469843386,
+          "bootstrap_block": 30
+        },
+        "ewma_minus_markov": {
+          "mean": 0.00015555511897810218,
+          "ci95": [
+            2.9058987226277394e-07,
+            0.0004568677087591242
+          ],
+          "two_sided_centered_bootstrap_p": 0.13262245918027324,
+          "bootstrap_block": 30
+        },
+        "ewma_minus_historical": {
+          "mean": 0.0001376911295312693,
+          "ci95": [
+            -1.8319727904862106e-05,
+            0.0004396621023871087
+          ],
+          "two_sided_centered_bootstrap_p": 0.3915361546151283,
+          "bootstrap_block": 30
+        },
+        "adaptive_gbm_minus_gbm": {
+          "mean": 7.309211641272137e-05,
+          "ci95": [
+            -3.877804042569021e-06,
+            0.00020304514156188302
+          ],
+          "two_sided_centered_bootstrap_p": 0.22759080306564478,
+          "bootstrap_block": 30
+        },
+        "adaptive_gbm_minus_markov": {
+          "mean": 7.286274001871474e-05,
+          "ci95": [
+            -3.7270047493428893e-06,
+            0.00020163681224816846
+          ],
+          "two_sided_centered_bootstrap_p": 0.22292569143618793,
+          "bootstrap_block": 30
+        },
+        "adaptive_gbm_minus_historical": {
+          "mean": 5.499875057188185e-05,
+          "ci95": [
+            -2.1971169883408563e-05,
+            0.00018495177572104354
+          ],
+          "two_sided_centered_bootstrap_p": 0.3678773742085971,
+          "bootstrap_block": 30
+        },
+        "garch_minus_gbm": {
+          "mean": 1.2766949751670863e-05,
+          "ci95": [
+            7.948924204225608e-06,
+            2.1500011339262104e-05
+          ],
+          "two_sided_centered_bootstrap_p": 0.003332222592469177,
+          "bootstrap_block": 30
+        },
+        "garch_minus_markov": {
+          "mean": 1.2537573357664234e-05,
+          "ci95": [
+            8.099720164233576e-06,
+            2.0755617518248172e-05
+          ],
+          "two_sided_centered_bootstrap_p": 0.0013328890369876708,
+          "bootstrap_block": 30
+        },
+        "garch_minus_historical": {
+          "mean": -5.326416089168679e-06,
+          "ci95": [
+            -1.0144441636613933e-05,
+            3.4066454984225646e-06
+          ],
+          "two_sided_centered_bootstrap_p": 0.08330556481172942,
+          "bootstrap_block": 30
+        }
+      }
+    }
+  },
+  "primary_holm_tests": {
+    "adaptive_gbm_minus_gbm": {
+      "holm_adjusted_p": 0.23592135954681773,
+      "claim_supported": false,
+      "interpretation": "No statistically established improvement"
+    },
+    "garch_minus_gbm": {
+      "holm_adjusted_p": 0.43385538153948683,
+      "claim_supported": false,
+      "interpretation": "No statistically established improvement"
+    }
+  },
+  "provenance_manifest": "research/phase3_2026/results/archive_sha256_manifest.json",
+  "limitations": [
+    "Overlapping 30-day windows; uncertainty estimates are block-bootstrap approximations",
+    "Retrospective 2026 holdout, not forecasts committed prior to 2026 outcome dates",
+    "Gaussian shocks underrepresent some tail phenomena and may miscalibrate losses",
+    "Historical 2025 exploratory EWMA selection was previously inspected",
+    "No model is presumed superior; do not choose new parameter values based on this holdout"
+  ]
+}

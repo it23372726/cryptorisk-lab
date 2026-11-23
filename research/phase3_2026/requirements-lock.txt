@@ -1,0 +1,7 @@
+# Reproducible scientific environment for the frozen 2026 holdout.
+# The original notebook's requirements.txt is intentionally unchanged.
+numpy==1.26.4
+pandas==2.2.3
+scipy==1.14.1
+matplotlib==3.9.4
+arch==7.2.0

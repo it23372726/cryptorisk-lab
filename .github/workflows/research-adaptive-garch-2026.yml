@@ -1,0 +1,77 @@
+name: Frozen 2026 research - adaptive GBM and GARCH
+
+on:
+  push:
+    branches: [research-adaptive-gbm-garch-2026-holdout]
+    paths:
+      - 'research/phase3_2026/PRE_REGISTERED_PROTOCOL.md'
+      - 'research/phase3_2026/run_research.py'
+      - 'research/phase3_2026/check_results.py'
+      - 'research/phase3_2026/check_reproducibility.py'
+      - 'research/phase3_2026/requirements-lock.txt'
+      - 'notebook/cryptorisk-adaptive-gbm-garch-2026.ipynb'
+      - '.github/workflows/research-adaptive-garch-2026.yml'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'research/phase3_2026/**'
+      - 'notebook/cryptorisk-adaptive-gbm-garch-2026.ipynb'
+      - '.github/workflows/research-adaptive-garch-2026.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  holdout-2026:
+    name: Verify and execute frozen 2026 model comparison
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+      - name: Install pinned GARCH and original scientific dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r research/phase3_2026/requirements-lock.txt
+          python -c "import arch, numpy, pandas; assert arch.__version__ == '7.2.0'; assert numpy.__version__ == '1.26.4'; assert pandas.__version__ == '2.2.3'"
+      - name: Compile and run deterministic model self-tests without holdout data
+        run: |
+          python -m py_compile research/phase3_2026/run_research.py research/phase3_2026/check_results.py research/phase3_2026/check_reproducibility.py
+          python research/phase3_2026/run_research.py --self-test
+      - name: Execute frozen 2026 holdout research without model retuning
+        run: python research/phase3_2026/run_research.py --run
+      - name: Independently recompute and audit saved model scores and dates
+        run: python research/phase3_2026/check_results.py
+      - name: Audit regenerated 2026 results against published research evidence
+        run: python research/phase3_2026/check_reproducibility.py
+      - name: Verify the independent Colab notebook is valid and runs all default cells
+        env:
+          MPLBACKEND: Agg
+        run: |
+          python -m pip install 'nbformat==5.10.4' 'nbclient==0.10.2' ipykernel
+          python - <<'PY'
+          import nbformat
+          from nbclient import NotebookClient
+          source='notebook/cryptorisk-adaptive-gbm-garch-2026.ipynb'
+          notebook=nbformat.read(source,as_version=4)
+          nbformat.validate(notebook)
+          assert len(notebook.cells)>=12
+          executed=NotebookClient(notebook,timeout=180,kernel_name='python3',
+                   allow_errors=False,resources={'metadata':{'path':'.'}}).execute()
+          assert not any(
+              item.get('output_type')=='error'
+              for cell in executed.cells for item in cell.get('outputs',[])
+          )
+          print('PASS: Separate 2026 research notebook Run-all is executable')
+          PY
+      - name: Upload verified research reports and official source hashes
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: frozen-2026-adaptive-gbm-garch-research
+          path: research/phase3_2026/results/
+          if-no-files-found: error
