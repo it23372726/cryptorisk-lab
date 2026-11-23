@@ -3,6 +3,7 @@
 const $=id=>document.getElementById(id),core=window.CRLCore;
 if(!window.CRL_HISTORY||!core||!window.CRLForecastChart){document.body.textContent="CryptoRisk Lab failed to initialize its local assets.";throw Error("Missing local assets");}
 const chart=new window.CRLForecastChart($("mainChart"),$("chartTooltip"));
+chart.onSelectPath=()=>renderPathInspector();
 const modelNames=["gbm","markov","ewma"];
 let result=null,runner=null,token=0,phase="ready",paused=false,day=0,view="all",actual=false,animating=false,frame=null,lastFrame=null;
 const pct=v=>(100*v).toFixed(2)+"%",money=v=>v.toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2}),int=v=>Number(v).toLocaleString("en-US");
@@ -27,7 +28,7 @@ function setRunBtns(){const isComputing=phase==="computing",hasResult=!!result;
 }
 function clearResults(){
  token++;if(runner)runner.cancel();runner=null;if(frame!==null)cancelAnimationFrame(frame);frame=null;
- phase="ready";paused=false;animating=false;day=0;lastFrame=null;result=null;
+ phase="ready";paused=false;animating=false;day=0;lastFrame=null;result=null;chart.selectedPath=null;
  $("computeBar").style.width="0%";setStatus("Ready. Press Run simulation to generate paths.");
  for(let m of modelNames){
   $(m==="gbm"?"kpiGbm":m==="markov"?"kpiMarkov":"kpiEwma").textContent="—";
@@ -111,7 +112,24 @@ function updatePlay(){
  $("chartMode").textContent=result?"Animated forecast · "+int(result.settings.paths)+" paths per model"+(actual?" · actual January 2025 revealed":""):"Historical candles only · simulation not started";
  setRunBtns();
 }
-function renderDay(){chart.update({result,day,view,reveal:actual,threshold:readSettings().threshold,horizon:readSettings().horizon});updatePlay();}
+function renderPathInspector(){
+ const e=$("pathInspector"),selected=chart.selectedPath;
+ if(!result||!selected||view==="all"||selected.model!==view){
+   e.textContent=result?"Select a single model above and click one of its faint individual trajectories to inspect that simulated outcome.":"Choose one model, run the simulation and click a trajectory to inspect its daily prices and losses.";
+   return;
+ }
+ const obj=result.models[selected.model].paths[selected.index],prices=obj?.values;
+ if(!prices){e.textContent="No sample trajectory available.";return;}
+ const d=Math.min(result.settings.horizon,Math.max(0,Math.floor(day))),price=prices[d],investment=result.settings.investment,
+ value=investment*price/core.origin,pnl=value-investment;
+ let peak=prices[0],worst=0,touched=false;
+ for(let i=0;i<=d;i++){peak=Math.max(peak,prices[i]);worst=Math.max(worst,(peak-prices[i])/peak);if(prices[i]<=core.origin*(1-result.settings.threshold))touched=true;}
+ const state=selected.model==="markov"?(obj.states[d]===0?" · Calm state":" · Volatile state"):"";
+ e.textContent=selected.model.toUpperCase()+" path "+(selected.index+1)+" · Day "+d+
+ " · BTC "+money(price)+" USDT · Investment "+money(value)+" USDT · P/L "+(pnl>=0?"+":"")+money(pnl)+
+ " USDT · Max drawdown so far "+pct(worst)+" · Threshold touched: "+(touched?"Yes":"No")+state;
+}
+function renderDay(){chart.update({result,day,view,reveal:actual,threshold:readSettings().threshold,horizon:readSettings().horizon});updatePlay();renderPathInspector();}
 function animate(now){
  if(!animating||paused||!result){frame=null;return;}
  const dt=lastFrame===null?0:Math.min(80,now-lastFrame);lastFrame=now;
@@ -165,7 +183,7 @@ $("playBtn").addEventListener("click",()=>{
 $("restartPlayback").addEventListener("click",()=>{if(!result)return;day=0;paused=false;animating=true;lastFrame=null;if(frame!==null)cancelAnimationFrame(frame);renderDay();frame=requestAnimationFrame(animate);});
 $("dayScrub").addEventListener("input",e=>{if(!result)return;paused=true;animating=false;if(frame!==null)cancelAnimationFrame(frame);frame=null;day=Number(e.target.value);lastFrame=null;renderDay();setStatus("Inspecting simulated day "+day.toFixed(1));});
 $("speed").addEventListener("change",()=>{lastFrame=null;});
-document.querySelectorAll("[data-view]").forEach(b=>b.addEventListener("click",()=>{view=b.dataset.view;document.querySelectorAll("[data-view]").forEach(x=>x.setAttribute("aria-pressed",String(x===b)));renderDay();}));
+document.querySelectorAll("[data-view]").forEach(b=>b.addEventListener("click",()=>{view=b.dataset.view;chart.selectedPath=null;document.querySelectorAll("[data-view]").forEach(x=>x.setAttribute("aria-pressed",String(x===b)));renderDay();}));
 $("resetView").addEventListener("click",()=>chart.resetZoom());
 $("revealBtn").addEventListener("click",()=>{actual=!actual;$("revealBtn").setAttribute("aria-pressed",String(actual));$("revealBtn").textContent=actual?"Hide actual 2025":"Reveal actual 2025";renderDay();});
 function drawDistribution(){
