@@ -6,6 +6,8 @@ on:
     paths:
       - 'scripts/extend_btc_history_2025.py'
       - '.github/workflows/assemble-full-2025-candles.yml'
+  pull_request:
+    branches: [main]
   workflow_dispatch:
 
 permissions:
