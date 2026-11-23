@@ -17,7 +17,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
   horizons:
@@ -38,6 +38,8 @@ jobs:
         run: python research/phase5_horizons/generate.py
       - name: Independently verify original 30-day findings and all horizon scores
         run: python research/phase5_horizons/verify_horizons.py
+      - name: Confirm reproducible committed horizon datasets (no numerical drift)
+        run: git diff --exit-code -- docs/v5-evidence-horizons.js research/phase5_horizons/results/
       - name: Upload dated horizon evidence and results
         if: success()
         uses: actions/upload-artifact@v4
@@ -47,15 +49,3 @@ jobs:
             docs/v5-evidence-horizons.js
             research/phase5_horizons/results/
           if-no-files-found: error
-      - name: Commit first audited evidence onto isolated research branch
-        if: success() && ((github.event_name == 'push' && github.ref == 'refs/heads/research-web-v5-multi-horizon-7-14-30-60-90') || (github.event_name == 'pull_request' && github.head_ref == 'research-web-v5-multi-horizon-7-14-30-60-90' && github.event.pull_request.head.repo.full_name == github.repository))
-        run: |
-          git config user.name 'github-actions[bot]'
-          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add docs/v5-evidence-horizons.js research/phase5_horizons/results/
-          if ! git diff --cached --quiet; then
-            git commit -m 'Archive five-horizon verified BTC forecasts and descriptive validation'
-            git fetch origin "${{ github.head_ref || github.ref_name }}"
-            git rebase "origin/${{ github.head_ref || github.ref_name }}"
-            git push origin HEAD:${{ github.head_ref || github.ref_name }}
-          fi
