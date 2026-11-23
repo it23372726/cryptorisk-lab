@@ -1,0 +1,34 @@
+name: Build verified 2025 BTC/USDT chart history
+
+on:
+  push:
+    branches: [website-v2-full-2025-history-2026-11-23]
+    paths:
+      - 'scripts/extend_btc_history_2025.py'
+      - '.github/workflows/assemble-full-2025-candles.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-full-year-history:
+    name: Authenticate complete Binance daily candles
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Fetch and validate all 12 official monthly Binance archives
+        run: python scripts/extend_btc_history_2025.py
+      - name: Upload independently auditable updated site-data files
+        uses: actions/upload-artifact@v4
+        with:
+          name: binance-btcusdt-complete-2025
+          path: |
+            docs/btc-historical.json
+            docs/v2-history.js
+            docs/btc-2025-sources.json
+          if-no-files-found: error
