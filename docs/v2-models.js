@@ -1,25 +1,45 @@
 /* CryptoRisk Lab v2: independent browser Monte Carlo engine.
- * Frozen original GBM and Markov parameters from the 2022–2024 notebook.
- * EWMA 0.90 implemented with the documented variance recurrence.
- * NOTE: The current on-page EWMA warm start uses only the bundled December 2024
- * history, and is explicitly labelled exploratory until the complete
- * 2022–2024 EWMA state is exported from the notebook. */
+ * GBM/Markov parameters and EWMA origin variances exported from the executed
+ * 2022–2024 notebook in scripts/verify_notebook.py, CI run 45210897502.
+ * No 2025 return is used to initialize these forecasts.
+ * Historical fixed 2025 scoring remains separate from interactive scenarios. */
 (function(global){"use strict";
 const origin=93576, models=["gbm","markov","ewma"];
 const CAL={
-  gbm:{mu:0.000615,sigma:0.028460},
-  markov:{mu:[0.001171,0.000265],sigma:[0.024537,0.032033],nextCalm:[499/540,41/541]},
-  ewma:{mu:0.000615,lambda:0.90}
+  gbm:{mu:0.0006149477738712015,sigma:0.028459921644738977},
+  markov:{
+    mu:[0.0011709082452031764,0.0002649261708609547],
+    sigma:[0.02453708413230616,0.032033470949311985],
+    nextCalm:[499/540,41/541]
+  },
+  ewma:{mu:0.0006149477738712015,lambda:0.90}
 };
-const $candles=(global.CRL_HISTORY?.candles||[]).filter(c=>c.date<="2024-12-31");
+const EWMA_ORIGIN_VARIANCES=Object.freeze({
+  "0.80":0.0003385110048979631,
+  "0.81":0.00034928014258714195,
+  "0.82":0.00036035738638005193,
+  "0.83":0.00037173898177332527,
+  "0.84":0.0003834231240189628,
+  "0.85":0.00039541392305402775,
+  "0.86":0.0004077278720769488,
+  "0.87":0.0004204037243933131,
+  "0.88":0.00043351659254548853,
+  "0.89":0.0004471964502066686,
+  "0.90":0.0004616494175752784,
+  "0.91":0.000477176183632026,
+  "0.92":0.0004941741802628649,
+  "0.93":0.0005130976452044896,
+  "0.94":0.000534335804161528,
+  "0.95":0.0005579735603284235,
+  "0.96":0.0005834826264815467,
+  "0.97":0.0006096972012096493,
+  "0.98":0.0006364032658109027,
+  "0.99":0.0006696850129181795
+});
 function ewmaWarmStart(lambda){
-  let r=[];
-  for(let i=1;i<$candles.length;i++)r.push(Math.log($candles[i].close/$candles[i-1].close));
-  if(r.length<20)throw Error("Historical warm-start candles are incomplete");
-  const mean=r.reduce((a,b)=>a+b,0)/r.length;
-  let v=r.reduce((a,b)=>a+(b-mean)**2,0)/(r.length-1);
-  for(let x of r)v=lambda*v+(1-lambda)*(x-CAL.ewma.mu)**2;
-  return v;
+ const key=Number(lambda).toFixed(2),v=EWMA_ORIGIN_VARIANCES[key];
+ if(!Number.isFinite(v)||v<=0)throw Error("EWMA decay has no audited notebook variance: "+key);
+ return v;
 }
 function rng(seed){let x=seed>>>0;return ()=>{x=(x+0x6d2b79f5)|0;let t=Math.imul(x^(x>>>15),x|1);t^=t+Math.imul(t^(t>>>7),t|61);return ((t^(t>>>14))>>>0)/4294967296;};}
 function normal(gen){let spare=null;return ()=>{if(spare!==null){let v=spare;spare=null;return v;}let u=0;while(!u)u=gen();let v=gen();let R=Math.sqrt(-2*Math.log(u));spare=R*Math.sin(2*Math.PI*v);return R*Math.cos(2*Math.PI*v);};}
@@ -95,7 +115,7 @@ function createRunner(settings){
      for(let m of models)outputs[m]=summary(state.raw[m],s);
      // Drop all unneeded paths after aggregation to keep the application responsive.
      state.raw=null;
-     return {settings:s,models:outputs,warmVariance: warm,origin,experimentalEWMAWarmStart:true};
+     return {settings:s,models:outputs,warmVariance: warm,origin,experimentalEWMAWarmStart:false};
    },
    cancel(){state.cancelled=true;state.raw=null;}
  };
@@ -105,5 +125,5 @@ function verifyResult(result){
  for(let m of models){let x=result.models[m];if(x.n!==s.paths)errors.push(m+": path count");if(!Number.isFinite(x.var95)||!Number.isFinite(x.es95)||x.es95<x.var95)errors.push(m+": VaR/ES");for(let b of x.bands)if(b.some((v,i)=>!Number.isFinite(v)||(i>0&&v<b[i-1])))errors.push(m+": percentile order");for(let key of ["0.100","0.200","0.350"]){let p=x.prob[key]?.p;if(!Number.isFinite(p)||p<0||p>1)errors.push(m+": probability "+key);}}
  return {ok:errors.length===0,errors};
 }
-global.CRLCore={models,CAL,origin,createRunner,verifyResult,ewmaWarmStart,quantile};
+global.CRLCore={models,CAL,origin,createRunner,verifyResult,ewmaWarmStart,quantile,EWMA_ORIGIN_VARIANCES};
 })(window);
