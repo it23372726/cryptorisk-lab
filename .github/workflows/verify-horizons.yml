@@ -55,5 +55,7 @@ jobs:
           git add docs/v5-evidence-horizons.js research/phase5_horizons/results/
           if ! git diff --cached --quiet; then
             git commit -m 'Archive five-horizon verified BTC forecasts and descriptive validation'
+            git fetch origin "${{ github.ref_name }}"
+            git rebase "origin/${{ github.ref_name }}"
             git push origin HEAD:${{ github.ref_name }}
           fi
