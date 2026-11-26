@@ -8,7 +8,11 @@
 
 CryptoRisk Lab is a reproducible, self-contained scientific simulation environment. It compares five historical BTC/USDT downside-risk models, visualizes real daily-price candlesticks and modelled future paths, and makes the original 30-day GBM-versus-Markov research question empirically testable. It is **not** a live-market forecast, trade recommendation or account-connected financial service.
 
-## Research question and visual overview
+![Actual CryptoRisk Lab five-model research dashboard](figures/demo-screenshot.png)
+
+*Authentic Chromium screenshot captured from the working static research dashboard after a seeded five-model simulation. This is a verified interface, not a fabricated market forecast. Updated browser screenshots are archived by the [verification workflow](https://github.com/it23372726/cryptorisk-lab/actions/workflows/verify-cryptorisk-v2.yml).*
+
+## Research question
 
 **Primary question:** Does a two-state observed-regime Markov chain improve **30-day terminal Bitcoin loss probability forecasts** over a constant-volatility geometric Brownian motion baseline?
 
@@ -28,10 +32,6 @@ flowchart LR
     G --> H["Historical 2025 / 2026 validation"]
     H --> I["Brier scores, uncertainty, interpretation"]
 ~~~
-
-![Actual CryptoRisk Lab five-model research dashboard](figures/demo-screenshot.png)
-
-*Authentic Chromium screenshot captured from the working static research dashboard after a seeded five-model simulation. This is a verified interface, not a fabricated market forecast. Updated browser screenshots are archived by the [verification workflow](https://github.com/it23372726/cryptorisk-lab/actions/workflows/verify-cryptorisk-v2.yml).*
 
 ## Quick start
 
@@ -74,17 +74,27 @@ See [USER_GUIDE.md](USER_GUIDE.md) for every control, precise metric meanings, a
 | **Adaptive GBM** | Fixed drift, most recent 30 observed daily returns determine forecast volatility | Additional retrospective model |
 | **Gaussian GARCH(1,1)** | Conditional variance from prior shocks and lagged variance | Additional retrospective model |
 
-For example, GBM simulates daily log returns \(\mu+\sigma Z\); the Markov model uses \(\mu_{S_d}+\sigma_{S_d}Z_d\) and advances its regime with the fitted row-stochastic transition matrix. A Monte Carlo event probability is the fraction of simulated paths with terminal loss meeting the threshold. Analytic GBM loss probabilities, VaR and ES are independent numerical verification targets.
+For example, GBM simulates daily log returns $\mu+\sigma Z$; the Markov model uses $\mu_{S_d}+\sigma_{S_d}Z_d$ and advances its regime with the fitted row-stochastic transition matrix. A Monte Carlo event probability is the fraction of simulated paths with terminal loss meeting the threshold. Analytic GBM loss probabilities, VaR and ES are independent numerical verification targets.
 
 Read [THEORY.md](THEORY.md) for equations, variable definitions, regimes, algorithm order, units, verification and a generic **Concepts applied** table.
 
 ## Verification
 
-The main **101-cell** Colab notebook has passed a clean-kernel GitHub Actions run. It checks data integrity, independent analytical GBM probabilities and VaR/ES, Markov \(P^d\) state occupancy, limiting cases, random-seed reproducibility, sensitivity and dependent historical backtesting.
+The main **101-cell** Colab notebook has passed a clean-kernel GitHub Actions run. It checks data integrity, independent analytical GBM probabilities and VaR/ES, Markov $P^d$ state occupancy, limiting cases, random-seed reproducibility, sensitivity and dependent historical backtesting.
 
 The browser tests check local-file startup, controls, immutable historical evidence, exact archived Brier parity, mobile layout and a five-model stress scenario of **30,000 paths each for 90 days**.
 
 **Scientific caveat:** Verification demonstrates that code matches its stated mathematical model. It does **not** prove those model assumptions represent real-world Bitcoin crashes accurately.
+
+![Independent Monte Carlo error-scaling verification](figures/monte-carlo-error-scaling.png)
+
+*Saved X2 notebook output: independent repeated simulations test the expected inverse-square-root relationship between path count and sampling error. See the [figure index](figures/README.md) for other published plots and their provenance.*
+
+## Concepts applied
+
+This project applies **input modelling and random variate generation** (historical log returns and normal shocks), **discrete-time Markov chains** (fitted two-state transitions, state occupancy $P^d$), and **Monte Carlo integration and the law of large numbers** (risk probabilities, path sampling and convergence). It checks the stochastic simulator against analytical and limiting-case results and quantifies uncertainty from repeated random seeds and overlapping historical events.
+
+These concepts are used in the original 30-day scientific model, not merely mentioned in the UI.
 
 ## Results, limitations and future work
 
@@ -105,22 +115,16 @@ Model risk, training-period drift, normal shock assumptions, estimated state lab
 
 Source-of-truth evidence: [Phase 1 findings](research/PHASE1_FINDINGS.md), [2026 research](research/phase3_2026/results/FINDINGS.md), [2025 additions](research/phase4_2025/results/FINDINGS.md), [multi-horizon findings](research/phase5_horizons/results/FINDINGS.md).
 
-## Concepts applied
-
-This project applies **input modelling and random variate generation** (historical log returns and normal shocks), **discrete-time Markov chains** (fitted two-state transitions, state occupancy \(P^d\)), and **Monte Carlo integration and the law of large numbers** (risk probabilities, path sampling and convergence). It checks the stochastic simulator against analytical and limiting-case results and quantifies uncertainty from repeated random seeds and overlapping historical events.
-
-These concepts are used in the original 30-day scientific model, not merely mentioned in the UI.
-
-## References and data credits
+## Key references
 
 Key background: [Hamilton (1989)](https://doi.org/10.2307/1912559), [Ardia, Bluteau and Rüede (2019)](https://doi.org/10.1016/j.frl.2018.08.009), [Maciel (2021)](https://doi.org/10.1002/ijfe.2043), [Poon and Granger (2003)](https://doi.org/10.1257/jel.41.2.478), [Glasserman (2003)](https://doi.org/10.1007/978-0-387-21617-1), [Bollerslev (1986)](https://doi.org/10.1016/0304-4076(86)90063-1), and [Gneiting and Raftery (2007)](https://doi.org/10.1198/016214506000001437). Full IEEE entries and their modelling relevance are in [REFERENCES.md](REFERENCES.md).
 
-Historical BTCUSDT daily candles: [Binance Public Data](https://github.com/binance/binance-public-data). Archive hashes, derived-data provenance and third-party rights are detailed in [data/README.md](data/README.md).
-
 ## AI assistance
 
-ChatGPT assisted with explanations, simulation implementation, numerical verification, statistical interpretation, browser development, and documentation. Generated suggestions were evaluated against independent equations, executed source code and archived historical observations. Descriptive results were not selected to make any particular model appear superior. Detailed private interaction records are maintained separately from this public software repository.
+ChatGPT assisted with explanations, simulation implementation, numerical verification, statistical interpretation, browser development, and documentation. Generated suggestions were evaluated against independent equations, executed source code and archived historical observations. Descriptive results were not selected to make any particular model appear superior. An early Codex implementation attempt was discarded and rebuilt with ChatGPT. Detailed private interaction records are maintained separately from this public software repository.
 
-## Licence
+## Licence and data credits
 
 Source code is released under the [MIT License](LICENSE). Third-party historical market data and referenced research remain subject to their original provider/publisher terms.
+
+Historical BTCUSDT daily candles: [Binance Public Data](https://github.com/binance/binance-public-data). Archive hashes, derived-data provenance and third-party rights are detailed in [data/README.md](data/README.md).

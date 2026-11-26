@@ -1,7 +1,14 @@
-# Verification and results figures
+# Scientific figures and browser evidence
 
-The dashboard screenshot in this directory is an authentic browser capture. The main scientific notebook also produces the Monte Carlo convergence figures, X2 independently measured log–log \(N^{-1/2}\) error-scaling plot, X5 paired-seed sensitivity confidence intervals, validation charts, and historical descriptive figures.
+These PNG files are extracted from saved outputs in the [canonical notebook](../notebook/cryptorisk-lab.ipynb), source revision `cd1ea40d2243ed220e233fc2d05db595a85a6505`. Cell positions are one-based, including Markdown and the Colab badge. Its 51 executable code cell sources were compared with the verified revision `aebf3eb40da3dccadbb0906a0cbcb18d7c47faf9` and matched exactly. Saved plots are execution evidence, not newly generated forecasts or evidence of a fresh local execution.
 
-For the **latest executed figures**, use the `notebook-2025-per-origin-forecast-data` artifact produced by the [notebook and browser verification workflow](https://github.com/it23372726/cryptorisk-lab/actions/workflows/verify-cryptorisk-v2.yml). It contains `verification-artifacts/cryptorisk-lab-executed.ipynb`, which preserves the notebook's committed scientific cell sources while saving executed outputs from a clean kernel.
+| Figure | Notebook cell/output | Meaning |
+|---|---|---|
+| [historical-prices.png](historical-prices.png) | 21, output 1 | Historical BTC closes |
+| [rolling-volatility.png](rolling-volatility.png) | 21, output 3 | Rolling daily volatility |
+| [gbm-simulated-paths.png](gbm-simulated-paths.png) | 26, output 1 | GBM sample price paths |
+| [markov-simulated-paths.png](markov-simulated-paths.png) | 41, output 1 | Markov sample price paths |
+| [markov-regime-paths.png](markov-regime-paths.png) | 42, output 1 | Simulated Markov state paths |
+| [monte-carlo-error-scaling.png](monte-carlo-error-scaling.png) | 64, output 2 | X2 independent Monte Carlo convergence |
 
-Do not recreate or adjust scientific charts to obtain prettier results. Re-run the notebook and use the actual outputs. The distinct 2026 research plots are stored in `research/phase3_2026/results/`; the multi-horizon ledgers and analysis live in `research/phase5_horizons/results/`.
+[Actual dashboard screenshot](demo-screenshot.png) shows the working five-model browser simulation. More notebook plots, browser captures and verification JSON are archived in the [verification workflow artifacts](https://github.com/it23372726/cryptorisk-lab/actions/workflows/verify-cryptorisk-v2.yml). Historical comparisons and confidence intervals are documented in [research](../research/) and [THEORY.md](../THEORY.md).
